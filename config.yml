@@ -1,0 +1,102 @@
+# =============================================================================
+# config.yml
+#
+# Single source of truth for all parameters in the midurethral sling
+# pipeline.  Every script reads this file via config::get(); no magic
+# numbers are scattered across individual scripts.
+#
+# Usage in R:
+#   cfg <- config::get()
+#   cfg$hcpcs_sling_code   # "57288"
+#   cfg$puf_years          # c(2017, 2018, ..., 2023)
+#
+# Pattern from mkiang/opioid_geographic (JAMA Network Open 2019).
+# =============================================================================
+
+default:
+  # ── Procedure ──────────────────────────────────────────────────────────────
+  hcpcs_sling_code: "57288"
+
+  # ── Study years ────────────────────────────────────────────────────────────
+  puf_years:
+    - 2017
+    - 2018
+    - 2019
+    - 2020
+    - 2021
+    - 2022
+    - 2023
+  study_start_year: 2017
+  study_end_year:   2023
+  # Column name added to the merged PUF in 01_build_puf_cache.R.
+  # Must match the mutate() call in that script.
+  # Bug fix B8: hardcoded "puf_year" in 05_generate_abstract.R now
+  # reads this value so both scripts stay in sync.
+  year_col_name: "puf_year"
+
+  # ── Volume thresholds (sensitivity analysis grid) ──────────────────────────
+  # Primary threshold used in Table 1 and the abstract.
+  # The sensitivity_thresholds vector drives expand.grid() iteration.
+  #
+  # Bug fix B7: low_volume_threshold_primary and sensitivity_thresholds are
+  # tightly coupled — 04_run_sensitivity_analyses.R filters sensitivity_results
+  # on `sensitivity_threshold == low_volume_threshold_primary` to build the
+  # delta reference column. If low_volume_threshold_primary is changed here
+  # without also updating sensitivity_thresholds to include that value, the
+  # filter returns zero rows and ALL delta values become NA with no error.
+  #
+  # INVARIANT (enforced in 04_run_sensitivity_analyses.R):
+  #   low_volume_threshold_primary MUST appear in sensitivity_thresholds.
+  low_volume_threshold_primary: 10
+  sensitivity_thresholds:
+    - 5
+    - 10   # must include low_volume_threshold_primary (currently 10)
+    - 25
+
+  # ── Specialty classification ────────────────────────────────────────────────
+  # NOTE (Bug fix B3): specialty_regex was previously defined here but was
+  # NEVER READ by classify_provider_specialty() in analyze_sling_patterns.R,
+  # which hardcodes its patterns. Leaving YAML values that have no effect
+  # creates a false impression of parameterisation — a silent no-op if changed.
+  # The regex patterns remain hardcoded in the R function. This block has been
+  # removed to prevent confusion. To change classification, edit
+  # classify_provider_specialty() in R/analyze_sling_patterns.R directly.
+
+  # ── CMS data suppression threshold ─────────────────────────────────────────
+  # Bug fix B4: old comment said "Flag rows at or below this" (implying <=),
+  # but the code uses < threshold. With threshold=11 and <, rows 1-10 are
+  # flagged, which is correct. Comment updated to match the actual operator.
+  # CMS suppresses cells with 1-10 services (Tot_Srvcs < this value is flagged).
+  cms_suppression_threshold: 11
+
+  # ── File paths ──────────────────────────────────────────────────────────────
+  # All paths are relative to the project root.  Swap data_dir to point at
+  # your external drive when running on a Mac with PUF files mounted.
+  data_dir:       "data"
+  raw_data_dir:   "data/raw"
+  proc_data_dir:  "data/processed"
+  output_dir:     "output"
+  figures_dir:    "output/figures"
+  tables_dir:     "output/tables"
+  cache_dir:      "data/cache"
+
+  # ── Data provenance (Pattern 4: data_raw/ README) ──────────────────────────
+  # data_raw/ holds original CMS downloads; never modified after download.
+  # data_raw_readme documents exact URLs, file hashes, and download dates.
+  # Use here::here() (Pattern 4: mkiang lab) for portable path construction:
+  #   here::here("data", "raw", "Medicare_Provider_Utilization_2023.csv")
+  data_raw_readme: "data/raw/README.md"
+
+  # ── Parallelisation (Pattern 2: furrr/future) ──────────────────────────────
+  # Set proc_in_parallel: true and num_cores > 1 to parallelize the
+  # sensitivity grid (04_run_sensitivity_analyses.R) using furrr::future_map().
+  # On a 4-core Mac: num_cores: 4. On a 2-core machine: num_cores: 2.
+  # future::plan(sequential) is used when proc_in_parallel: false.
+  proc_in_parallel: false
+  num_cores: 1
+
+  # ── Reproducibility seed ────────────────────────────────────────────────────
+  seed: 20240101
+
+  # ── Logging ─────────────────────────────────────────────────────────────────
+  verbose: true

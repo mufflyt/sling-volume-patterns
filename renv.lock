@@ -1,0 +1,153 @@
+{
+  "R": {
+    "Version": "4.3.3",
+    "Repositories": [
+      {
+        "Name": "CRAN",
+        "URL": "https://cloud.r-project.org"
+      }
+    ]
+  },
+  "Packages": {
+    "assertthat": {
+      "Package": "assertthat",
+      "Version": "0.2.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "50c838a310445e954bc13f26f26a6ecf"
+    },
+    "broom": {
+      "Package": "broom",
+      "Version": "1.0.6",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "5b42f41f33d3caee3a7d32cf8fa3fdbb"
+    },
+    "config": {
+      "Package": "config",
+      "Version": "0.3.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "6cf7c4c9a07d10b8f2d8e34c28b4abc5"
+    },
+    "digest": {
+      "Package": "digest",
+      "Version": "0.6.35",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "698ece7ba5a8fa90b439b9b4f2f4e3b1"
+    },
+    "dplyr": {
+      "Package": "dplyr",
+      "Version": "1.1.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "fedd9d00c2944ff00a0e2696ccf048ec"
+    },
+    "furrr": {
+      "Package": "furrr",
+      "Version": "0.3.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "bd99f5ba27b2bed5c3f3e3d5a8d12f71"
+    },
+    "future": {
+      "Package": "future",
+      "Version": "1.33.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "ae4f1f7aa4d5ea86a78cef45b82c6750"
+    },
+    "ggplot2": {
+      "Package": "ggplot2",
+      "Version": "3.5.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "44c6a2f8202d5b7e3ea42582f669e08b"
+    },
+    "glue": {
+      "Package": "glue",
+      "Version": "1.7.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "e0b3a53876554bd45879e596cdb10a52"
+    },
+    "here": {
+      "Package": "here",
+      "Version": "1.0.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "e4d5f7a002aba9ac2e3bc3f03ae4e551"
+    },
+    "kableExtra": {
+      "Package": "kableExtra",
+      "Version": "1.4.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "29a0e5fc3756adb21d5bbed5b7b6b9c3"
+    },
+    "knitr": {
+      "Package": "knitr",
+      "Version": "1.47",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "eb2a5cc8555f44a0e74e75afae50c42d"
+    },
+    "parallelly": {
+      "Package": "parallelly",
+      "Version": "1.37.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "b7ece8394462aee7b0ba57fc5a6cad9a"
+    },
+    "purrr": {
+      "Package": "purrr",
+      "Version": "1.0.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "1cba04a4e9414bdefc9dcaa99649a8dc"
+    },
+    "readr": {
+      "Package": "readr",
+      "Version": "2.1.5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "9de96463d2117f6ac49980577939b662"
+    },
+    "renv": {
+      "Package": "renv",
+      "Version": "1.0.7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "397b7b2a265bc5a7a06852524dabae20"
+    },
+    "rlang": {
+      "Package": "rlang",
+      "Version": "1.1.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "3d28866f9d3bb6e3a8a03bc7f9b17361"
+    },
+    "stringr": {
+      "Package": "stringr",
+      "Version": "1.5.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "b3a7e95c6598de21f5b43ba7eb33d264"
+    },
+    "testthat": {
+      "Package": "testthat",
+      "Version": "3.2.1.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "40c15e8b6fd17e4e6b6ae98e47b52a26"
+    },
+    "tibble": {
+      "Package": "tibble",
+      "Version": "3.2.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "a030f70006caad39b36cd62571ca36e4"
+    }
+  }
+}

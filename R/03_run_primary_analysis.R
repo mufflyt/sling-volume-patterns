@@ -1,0 +1,84 @@
+# =============================================================================
+# 03_run_primary_analysis.R
+#
+# Step 3: Run the primary analysis at the default low-volume threshold
+# from config.yml. Reads puf_classified.rds, calls
+# analyze_midurethral_sling_patterns(), writes sub-artifacts.
+#
+# Phase chain:
+#   READS:  data/cache/puf_classified.rds   [Phase 2 artifact]
+#   WRITES: data/cache/specialty_summary.rds
+#           data/cache/provider_volume.rds
+#           data/cache/low_volume_burden.rds
+#           data/cache/time_trends.rds
+#           data/cache/primary_analysis.rds  (combined list)
+#
+# Authors: Tyler Muffly, MD
+# =============================================================================
+
+source("R/artifact_manifest.R")
+source("R/analyze_sling_patterns.R")
+
+cfg          <- config::get()
+phase_label  <- "03_primary_analysis"
+phase_script <- "R/03_run_primary_analysis.R"
+
+# ── Load Phase 2 artifact ────────────────────────────────────────────────
+input_path     <- file.path(cfg$cache_dir, "puf_classified.rds")
+puf_classified <- artifact_read(
+  artifact_name = "puf_classified",
+  file_path     = input_path,
+  cache_dir     = cfg$cache_dir,
+  verify_hash   = TRUE,
+  verbose       = cfg$verbose
+)
+
+message(glue::glue(
+  "[{format(Sys.time(), '%Y-%m-%d %H:%M:%S')}] ",
+  "[03] Loaded puf_classified: {format(nrow(puf_classified), big.mark = ',')} rows."
+))
+
+# ── Run primary analysis ─────────────────────────────────────────────────
+results <- analyze_midurethral_sling_patterns(
+  medicare_puf_data    = puf_classified,
+  year_col             = cfg$year_col_name,
+  low_volume_threshold = cfg$low_volume_threshold_primary,
+  verbose              = cfg$verbose
+)
+
+# ── Write sub-artifacts ──────────────────────────────────────────────────
+sub_artifacts <- list(
+  specialty_summary = results$specialty_summary,
+  provider_volume   = results$provider_volume,
+  low_volume_burden = results$low_volume_burden,
+  time_trends       = results$time_trends
+)
+
+for (name in names(sub_artifacts)) {
+  artifact_write(
+    object        = sub_artifacts[[name]],
+    artifact_name = name,
+    file_path     = file.path(cfg$cache_dir, paste0(name, ".rds")),
+    phase         = phase_label,
+    phase_script  = phase_script,
+    cache_dir     = cfg$cache_dir,
+    verbose       = cfg$verbose
+  )
+}
+
+# Combined list artifact for convenience
+artifact_write(
+  object        = results,
+  artifact_name = "primary_analysis",
+  file_path     = file.path(cfg$cache_dir, "primary_analysis.rds"),
+  phase         = phase_label,
+  phase_script  = phase_script,
+  cache_dir     = cfg$cache_dir,
+  verbose       = cfg$verbose
+)
+
+message(glue::glue(
+  "[{format(Sys.time(), '%Y-%m-%d %H:%M:%S')}] [03] Complete. ",
+  "{nrow(results$specialty_summary)} specialty groups, ",
+  "{nrow(results$provider_volume)} provider-year rows."
+))
