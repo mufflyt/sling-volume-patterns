@@ -21,26 +21,10 @@ cfg          <- config::get()
 phase_label  <- "05_generate_abstract"
 phase_script <- "R/05_generate_abstract.R"
 
-# ── Load Phase 3 sub-artifacts ───────────────────────────────────────────
-specialty_summary <- artifact_read(
-  artifact_name = "specialty_summary",
-  file_path     = file.path(cfg$cache_dir, "specialty_summary.rds"),
-  cache_dir     = cfg$cache_dir,
-  verify_hash   = TRUE,
-  verbose       = cfg$verbose
-)
-
-provider_volume <- artifact_read(
-  artifact_name = "provider_volume",
-  file_path     = file.path(cfg$cache_dir, "provider_volume.rds"),
-  cache_dir     = cfg$cache_dir,
-  verify_hash   = TRUE,
-  verbose       = cfg$verbose
-)
-
-time_trends <- artifact_read(
-  artifact_name = "time_trends",
-  file_path     = file.path(cfg$cache_dir, "time_trends.rds"),
+# ── Load Phase 3 combined artifact ─────────────────────────────────────
+primary_analysis <- artifact_read(
+  artifact_name = "primary_analysis",
+  file_path     = file.path(cfg$cache_dir, "primary_analysis.rds"),
   cache_dir     = cfg$cache_dir,
   verify_hash   = TRUE,
   verbose       = cfg$verbose
@@ -52,15 +36,15 @@ message(glue::glue(
 ))
 
 # ── Generate abstract ───────────────────────────────────────────────────
+# generate_sling_abstract() expects the full analysis list (output of
+# analyze_midurethral_sling_patterns()) containing: provider_volume,
+# specialty_summary, low_volume_burden, time_trends.
 abstract_text <- generate_sling_abstract(
-  specialty_summary    = specialty_summary,
-  provider_volume      = provider_volume,
-  time_trends          = time_trends,
-  low_volume_threshold = cfg$low_volume_threshold_primary,
-  year_col             = cfg$year_col_name,
-  study_start_year     = cfg$study_start_year,
-  study_end_year       = cfg$study_end_year,
-  verbose              = cfg$verbose
+  sling_analysis_output = primary_analysis,
+  low_volume_threshold  = cfg$low_volume_threshold_primary,
+  year_col              = cfg$year_col_name,
+  study_years           = c(cfg$study_start_year, cfg$study_end_year),
+  verbose               = cfg$verbose
 )
 
 # ── Write output ────────────────────────────────────────────────────────

@@ -34,7 +34,11 @@ puf_list <- purrr::map(years, function(yr) {
     file.path(raw_dir, glue::glue("Medicare_Physician_Other_Practitioners_{yr}.csv")),
     file.path(raw_dir, glue::glue("MUP_PHY_R{yr %% 100}_P05_V10_D{yr}_Prov_Svc.csv"))
   )
-  found <- candidates[file.exists(candidates)]
+  # Also search for actual CMS download filenames (e.g., MUP_PHY_R25_P05_V20_D23_Prov_Svc.csv)
+  # where D{yy} is the 2-digit data year and R/P/V vary by release
+  yr_short <- sprintf("%02d", yr %% 100)
+  glob_matches <- Sys.glob(file.path(raw_dir, glue::glue("MUP_PHY_*_D{yr_short}_Prov_Svc.csv")))
+  found <- c(candidates[file.exists(candidates)], glob_matches)
   assertthat::assert_that(
     length(found) >= 1L,
     msg = glue::glue(
