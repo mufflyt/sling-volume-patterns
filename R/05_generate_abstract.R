@@ -16,6 +16,7 @@
 
 source("R/artifact_manifest.R")
 source("R/generate_sling_abstract.R")
+source("R/reporting_stats_helpers.R")
 
 cfg          <- config::get()
 phase_label  <- "05_generate_abstract"
@@ -28,6 +29,11 @@ primary_analysis <- artifact_read(
   cache_dir     = cfg$cache_dir,
   verify_hash   = TRUE,
   verbose       = cfg$verbose
+)
+validate_reporting_analysis_output(
+  primary_analysis,
+  year_col = cfg$year_col_name,
+  required_specialty_groups = c("OB/GYN", "Urology")
 )
 
 message(glue::glue(
@@ -57,7 +63,15 @@ abstract_path <- file.path(cfg$output_dir, "abstract.txt")
 writeLines(abstract_text, con = abstract_path)
 
 # Also save the full result (stats_table + filled_values) for downstream use
-saveRDS(abstract_result, file.path(cfg$cache_dir, "abstract_result.rds"))
+artifact_write(
+  object        = abstract_result,
+  artifact_name = "abstract_result",
+  file_path     = file.path(cfg$cache_dir, "abstract_result.rds"),
+  phase         = phase_label,
+  phase_script  = phase_script,
+  cache_dir     = cfg$cache_dir,
+  verbose       = cfg$verbose
+)
 
 message(glue::glue(
   "[{format(Sys.time(), '%Y-%m-%d %H:%M:%S')}] ",

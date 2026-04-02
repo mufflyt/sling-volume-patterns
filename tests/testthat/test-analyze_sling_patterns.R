@@ -399,6 +399,26 @@ test_that("build_specialty_summary: sorted descending by total_slings", {
   )
 })
 
+test_that("build_specialty_summary: low-volume uses mean annual volume per provider", {
+  provider_vol <- tibble::tibble(
+    Rndrng_NPI = c("1001", "1001", "1002", "1002"),
+    specialty_group = c("FPMRS", "FPMRS", "OB/GYN", "OB/GYN"),
+    annual_sling_count = c(8L, 15L, 5L, 6L)
+  )
+  specialty_summary <- build_specialty_summary(
+    provider_vol,
+    low_volume_threshold = 10L,
+    verbose = FALSE
+  )
+  fpmrs_row <- dplyr::filter(specialty_summary, specialty_group == "FPMRS")
+  obgyn_row <- dplyr::filter(specialty_summary, specialty_group == "OB/GYN")
+
+  expect_equal(fpmrs_row$n_low_volume_providers, 0L)
+  expect_equal(fpmrs_row$pct_low_volume_providers, 0)
+  expect_equal(obgyn_row$n_low_volume_providers, 1L)
+  expect_equal(obgyn_row$pct_low_volume_providers, 100)
+})
+
 
 # =============================================================================
 # Tests: analyze_midurethral_sling_patterns() — integration
@@ -643,13 +663,13 @@ test_that(
 test_that(
   paste0(
     "Hall of Shame — multi-year n_low_volume_providers: ",
-    "counts unique NPIs, not NPI-year rows"
+    "uses mean annual volume per NPI"
   ),
   {
     # NPI 1001: low-volume in 2020 (8), high-volume in 2021 (15).
-    # Old bug: sum(count < 10) would count 1001 once (only the 2020 row).
+    # Mean annual volume is 11.5, so this provider must NOT be low-volume.
     # NPI 1002: low-volume in both years (5, 6) — counts as 1 unique provider.
-    # FPMRS n_low_volume_providers must be 1 (NPI 1001 was ever low-volume),
+    # FPMRS n_low_volume_providers must be 0,
     # OB/GYN n_low_volume_providers must be 1 (NPI 1002 always low-volume).
     puf <- make_multi_year_low_volume_hall_of_shame()
     result_list <- analyze_midurethral_sling_patterns(
@@ -663,8 +683,8 @@ test_that(
       result_list$specialty_summary,
       specialty_group == "OB/GYN"
     )
-    # 1 unique FPMRS provider was ever low-volume (NPI 1001 in 2020)
-    expect_equal(fpmrs_row$n_low_volume_providers, 1L)
+    # FPMRS provider 1001 has mean annual volume 11.5 and is not low-volume
+    expect_equal(fpmrs_row$n_low_volume_providers, 0L)
     # 1 unique OB/GYN provider was ever low-volume (NPI 1002 in both years)
     expect_equal(obgyn_row$n_low_volume_providers, 1L)
     # Total unique providers: 1 FPMRS, 1 OB/GYN
@@ -672,6 +692,214 @@ test_that(
     expect_equal(obgyn_row$n_providers, 1L)
   }
 )
+
+test_that("safe reporting helpers return NA rows instead of erroring on missing groups", {
+  provider_vol <- tibble::tibble(
+    Rndrng_NPI = c("1001", "1002"),
+    specialty_group = c("OB/GYN", "OB/GYN"),
+    annual_sling_count = c(12L, 18L)
+  )
+
+  pairwise_tidy <- safe_pairwise_wilcox_tidy(provider_vol)
+  chisq_tidy <- safe_low_volume_chisq_tidy(
+    provider_vol,
+    low_volume_threshold = 10L
+  )
+
+  expect_equal(nrow(pairwise_tidy), 1L)
+  expect_true(is.na(pairwise_tidy$p.value))
+  expect_match(pairwise_tidy$test, "not computed")
+
+  expect_equal(nrow(chisq_tidy), 1L)
+  expect_true(is.na(chisq_tidy$p.value))
+  expect_match(chisq_tidy$test, "not computed")
+})
+
+test_that("validate_reporting_analysis_output enforces required specialties and columns", {
+  result_list <- analyze_midurethral_sling_patterns(
+    make_minimal_puf(),
+    verbose = FALSE
+  )
+
+  expect_true(
+    validate_reporting_analysis_output(
+      result_list,
+      required_specialty_groups = c("OB/GYN", "Urology")
+    )
+  )
+
+  bad_result <- result_list
+  bad_result$provider_volume <- dplyr::select(
+    bad_result$provider_volume,
+    -volume_tier
+  )
+  expect_error(
+    validate_reporting_analysis_output(bad_result),
+    regexp = "volume_tier"
+  )
+})
+
+test_that("build_focal_stats_table returns publication-ready rows", {
+  result_list <- analyze_midurethral_sling_patterns(
+    make_puf_multiyear(),
+    year_col = "year",
+    verbose = FALSE
+  )
+
+  stats_table <- build_focal_stats_table(
+    result_list$provider_volume,
+    low_volume_threshold = 10L,
+    time_trends_tbl = result_list$time_trends,
+    year_col = "year"
+  )
+
+  expect_true(
+    all(c("test", "statistic", "df", "p_value", "p_formatted") %in% names(stats_table))
+  )
+  expect_true(any(stats_table$test == "Kruskal-Wallis: annual volume across specialty groups"))
+  expect_true(any(stats_table$test == "Chi-square: proportion low-volume across specialties"))
+  expect_true(any(stats_table$test == "Linear regression: OB/GYN market share ~ year"))
+})
+
+test_that("build_focal_stats_table handles missing focal specialty without error", {
+  provider_vol <- tibble::tibble(
+    Rndrng_NPI = c("1001", "1002"),
+    specialty_group = c("OB/GYN", "OB/GYN"),
+    annual_sling_count = c(12L, 18L),
+    volume_tier = c("Medium (10–24/yr)", "Medium (10–24/yr)")
+  )
+
+  stats_table <- build_focal_stats_table(
+    provider_vol,
+    low_volume_threshold = 10L
+  )
+
+  wilcox_row <- dplyr::filter(
+    stats_table,
+    test == "Wilcoxon (Bonferroni): OB/GYN vs Urology"
+  )
+  chisq_row <- dplyr::filter(
+    stats_table,
+    test == "Chi-square: proportion low-volume across specialties"
+  )
+
+  expect_equal(nrow(wilcox_row), 1L)
+  expect_equal(wilcox_row$p_formatted, "NA (not computed)")
+  expect_equal(nrow(chisq_row), 1L)
+  expect_equal(chisq_row$p_formatted, "NA (not computed)")
+})
+
+test_that("generate_sling_abstract handles non-computable chi-square and trend tests", {
+  puf <- tibble::tibble(
+    Rndrng_NPI        = c("1001", "1001", "1002", "1002"),
+    Rndrng_Prvdr_Type = c(
+      "Obstetrics & Gynecology", "Obstetrics & Gynecology",
+      "Urology", "Urology"
+    ),
+    HCPCS_Cd  = "57288",
+    Tot_Srvcs = c(12L, 14L, 15L, 18L),
+    year      = c(2021L, 2022L, 2021L, 2022L)
+  )
+  result_list <- analyze_midurethral_sling_patterns(
+    puf,
+    year_col = "year",
+    low_volume_threshold = 10L,
+    verbose = FALSE
+  )
+
+  abstract_result <- generate_sling_abstract(
+    sling_analysis_output = result_list,
+    low_volume_threshold = 10L,
+    year_col = "year",
+    study_years = c(2021L, 2022L),
+    verbose = FALSE
+  )
+
+  chisq_row <- dplyr::filter(
+    abstract_result$stats_table,
+    test == "Chi-square: proportion low-volume across specialties"
+  )
+  trend_row <- dplyr::filter(
+    abstract_result$stats_table,
+    test == "Linear regression: OB/GYN market share ~ year"
+  )
+
+  expect_equal(chisq_row$p_formatted, "NA (not computed)")
+  expect_equal(trend_row$p_formatted, "NA (not computed)")
+  expect_true(is.na(abstract_result$filled_values$chi_square_p))
+  expect_true(is.na(abstract_result$filled_values$obgyn_trend_p))
+})
+
+test_that("low-volume definition stays consistent across summary burden and abstract", {
+  result_list <- analyze_midurethral_sling_patterns(
+    make_puf_multiyear(),
+    year_col = "year",
+    low_volume_threshold = 10L,
+    verbose = FALSE
+  )
+  abstract_result <- generate_sling_abstract(
+    sling_analysis_output = result_list,
+    low_volume_threshold = 10L,
+    year_col = "year",
+    study_years = c(2020L, 2022L),
+    verbose = FALSE
+  )
+
+  burden_low_counts <- result_list$low_volume_burden |>
+    dplyr::filter(is_low_volume_provider) |>
+    dplyr::select(specialty_group, burden_n_low = n_providers)
+  comparison <- result_list$specialty_summary |>
+    dplyr::select(
+      specialty_group,
+      summary_n_low = n_low_volume_providers,
+      summary_pct_low = pct_low_volume_providers
+    ) |>
+    dplyr::left_join(burden_low_counts, by = "specialty_group") |>
+    dplyr::mutate(burden_n_low = dplyr::coalesce(burden_n_low, 0L))
+
+  expect_true(all(comparison$summary_n_low == comparison$burden_n_low))
+
+  obgyn_summary <- dplyr::filter(
+    result_list$specialty_summary,
+    specialty_group == "OB/GYN"
+  )
+  urology_summary <- dplyr::filter(
+    result_list$specialty_summary,
+    specialty_group == "Urology"
+  )
+
+  expect_equal(
+    abstract_result$filled_values$obgyn_pct_low_volume,
+    obgyn_summary$pct_low_volume_providers
+  )
+  expect_equal(
+    abstract_result$filled_values$urology_pct_low_volume,
+    urology_summary$pct_low_volume_providers
+  )
+})
+
+test_that("manifest_verify errors on missing artifacts", {
+  cache_dir <- tempfile("artifact-cache-")
+  dir.create(cache_dir, recursive = TRUE)
+  missing_path <- file.path(cache_dir, "missing.rds")
+
+  write_manifest(
+    list(example = list(
+      file_path = missing_path,
+      sha256 = "abc123",
+      phase = "test",
+      phase_script = "test",
+      timestamp = "2026-04-01T00:00:00",
+      size_bytes = 0
+    )),
+    cache_dir = cache_dir
+  )
+
+  expect_error(
+    manifest_verify(cache_dir, verbose = FALSE),
+    regexp = "missing artifact"
+  )
+})
 
 # ── Property invariant tests ─────────────────────────────────────────────────
 

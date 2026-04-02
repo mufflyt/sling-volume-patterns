@@ -23,6 +23,7 @@
 # =============================================================================
 
 source("R/artifact_manifest.R")
+source("R/reporting_stats_helpers.R")
 
 cfg <- config::get()
 set.seed(cfg$seed)
@@ -214,62 +215,37 @@ provider_volume <- artifact_read(
   verify_hash   = TRUE,
   verbose       = cfg$verbose
 )
+validate_reporting_analysis_output(
+  list(
+    provider_volume   = provider_volume,
+    specialty_summary = specialty_summary,
+    low_volume_burden = low_volume_burden,
+    time_trends       = time_trends
+  ),
+  year_col = cfg$year_col_name
+)
 
-# ── Kruskal-Wallis: annual volume across specialty groups ─────────────────
-kruskal_tidy <- stats::kruskal.test(
-  annual_sling_count ~ specialty_group,
-  data = provider_volume
-) |>
-  broom::tidy() |>
-  dplyr::mutate(comparison = "All specialty groups", test = "Kruskal-Wallis")
+# ── Publication stats table ────────────────────────────────────────────────
+raw_stats_table <- build_focal_stats_table(
+  provider_volume,
+  low_volume_threshold = cfg$low_volume_threshold_primary,
+  focal_groups = c("OB/GYN", "Urology"),
+  time_trends_tbl = time_trends,
+  year_col = cfg$year_col_name
+)
 
-# ── Pairwise Wilcoxon (Bonferroni) across focal specialty groups ──────────
-focal_groups   <- c("OB/GYN", "Urology")
-focal_volume   <- dplyr::filter(provider_volume, specialty_group %in% focal_groups)
-pairwise_tidy  <- stats::pairwise.wilcox.test(
-  x               = focal_volume$annual_sling_count,
-  g               = focal_volume$specialty_group,
-  p.adjust.method = "bonferroni",
-  exact           = FALSE
-) |>
-  broom::tidy() |>
-  # Bug fix B3: rename(group2 = group2) was a no-op self-rename that adds
-  # noise and warns in newer dplyr. Only rename group1 → comparison;
-  # group2 is referenced by name in the mutate below and removed by select.
-  dplyr::rename(comparison = group1) |>
-  dplyr::mutate(
-    comparison = paste(comparison, "vs", group2),
-    test       = "Wilcoxon rank-sum (Bonferroni)"
-  ) |>
-  dplyr::select(-group2)
-
-# ── Chi-square: proportion low-volume across focal groups ─────────────────
-npi_summary <- focal_volume |>
-  dplyr::group_by(Rndrng_NPI, specialty_group) |>
-  dplyr::summarise(
-    mean_vol = mean(annual_sling_count, na.rm = TRUE),
-    .groups  = "drop"
-  ) |>
-  dplyr::mutate(is_low_vol = mean_vol < cfg$low_volume_threshold_primary)
-
-chisq_tidy <- stats::chisq.test(
-  table(npi_summary$specialty_group, npi_summary$is_low_vol)
-) |>
-  broom::tidy() |>
-  dplyr::mutate(comparison = "OB/GYN vs Urology", test = "Chi-square")
-
-# ── Bind all tests into one publication-ready tibble ─────────────────────
-table_4_stats <- dplyr::bind_rows(kruskal_tidy, pairwise_tidy, chisq_tidy) |>
+table_4_stats <- raw_stats_table |>
   dplyr::transmute(
     Test                    = test,
-    Comparison              = comparison,
+    Comparison              = dplyr::case_when(
+      stringr::str_starts(test, "Kruskal-Wallis") ~ "All specialty groups",
+      stringr::str_starts(test, "Wilcoxon") ~ sub("^Wilcoxon \\(Bonferroni\\): ", "", test),
+      stringr::str_starts(test, "Chi-square") ~ "OB/GYN vs Urology",
+      TRUE ~ "OB/GYN market share over time"
+    ),
     `Test statistic`        = round(statistic, 2),
-    `Degrees of freedom`    = parameter,
-    `p-value`               = dplyr::case_when(
-      p.value < 0.001 ~ "<0.001",
-      p.value < 0.01  ~ sprintf("%.3f", p.value),
-      TRUE            ~ sprintf("%.2f",  p.value)
-    )
+    `Degrees of freedom`    = df,
+    `p-value`               = p_formatted
   )
 
 artifact_csv(

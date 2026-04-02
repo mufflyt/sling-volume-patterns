@@ -14,6 +14,7 @@
 # Authors: Tyler Muffly, MD
 # =============================================================================
 
+source("R/reporting_stats_helpers.R")
 
 # =============================================================================
 # HELPER FUNCTIONS (not exported)
@@ -331,6 +332,10 @@ build_specialty_summary <- function(
     low_volume_threshold,
     verbose = TRUE
 ) {
+  provider_low_volume_status <- compute_provider_low_volume_status(
+    provider_volume_data,
+    low_volume_threshold = low_volume_threshold
+  )
   grand_total_slings <- sum(
     provider_volume_data$annual_sling_count, na.rm = TRUE
   )
@@ -350,19 +355,21 @@ build_specialty_summary <- function(
       total_slings          = sum(annual_sling_count, na.rm = TRUE),
       median_annual_volume  = stats::median(annual_sling_count, na.rm = TRUE),
       mean_annual_volume    = mean(annual_sling_count, na.rm = TRUE),
-      # Bug fix: the previous code used sum(count < threshold) which, in
-      # multi-year data, counts NPI-year rows — not unique providers.
-      # An NPI low-volume in 2 of 3 years was counted twice.
-      # Fix: count distinct NPIs where the condition holds at least once.
-      n_low_volume_providers = dplyr::n_distinct(
-        Rndrng_NPI[annual_sling_count < low_volume_threshold]
-      ),
-      pct_low_volume_providers = dplyr::n_distinct(
-        Rndrng_NPI[annual_sling_count < low_volume_threshold]
-      ) / dplyr::n_distinct(Rndrng_NPI) * 100,
       .groups = "drop"
     ) |>
+    dplyr::left_join(
+      provider_low_volume_status |>
+        dplyr::group_by(specialty_group) |>
+        dplyr::summarise(
+          n_low_volume_providers = sum(is_low_volume_provider, na.rm = TRUE),
+          pct_low_volume_providers = mean(is_low_volume_provider, na.rm = TRUE) * 100,
+          .groups = "drop"
+        ),
+      by = "specialty_group"
+    ) |>
     dplyr::mutate(
+      n_low_volume_providers = dplyr::coalesce(n_low_volume_providers, 0L),
+      pct_low_volume_providers = dplyr::coalesce(pct_low_volume_providers, 0),
       pct_of_all_slings = total_slings / grand_total_slings * 100
     ) |>
     dplyr::arrange(dplyr::desc(total_slings))
@@ -383,27 +390,10 @@ build_low_volume_burden <- function(
     low_volume_threshold,
     verbose = TRUE
 ) {
-  # Bug fix B1: In multi-year mode, the previous code applied
-  # `is_low_volume_provider = annual_sling_count < threshold` per NPI-year
-  # row, then grouped by that flag. A provider low-volume in 2020 and
-  # high-volume in 2021 appeared in BOTH the TRUE and FALSE strata, causing
-  # n_providers to sum to more than the actual number of unique providers
-  # and pct_of_all_slings to potentially exceed 100.
-  #
-  # Fix: collapse to one row per NPI using mean annual sling count, then
-  # classify. Each NPI lands in exactly one stratum regardless of how many
-  # years of data are present. For single-year data (no year_col), mean of
-  # one value equals that value — behaviour is identical to before.
-  npi_mean_volume <- provider_volume_data |>
-    dplyr::group_by(Rndrng_NPI, specialty_group) |>
-    dplyr::summarise(
-      mean_annual_sling_count = mean(annual_sling_count, na.rm = TRUE),
-      total_slings_all_years  = sum(annual_sling_count,  na.rm = TRUE),
-      .groups = "drop"
-    ) |>
-    dplyr::mutate(
-      is_low_volume_provider = mean_annual_sling_count < low_volume_threshold
-    )
+  npi_mean_volume <- compute_provider_low_volume_status(
+    provider_volume_data,
+    low_volume_threshold = low_volume_threshold
+  )
 
   # Bug fix B3: Guard against division-by-zero when all sling counts are NA.
   total_slings_all <- sum(npi_mean_volume$total_slings_all_years, na.rm = TRUE)

@@ -24,6 +24,7 @@
 # Authors: Tyler Muffly, MD
 # =============================================================================
 
+source("R/reporting_stats_helpers.R")
 
 # =============================================================================
 # HELPER FUNCTIONS
@@ -204,21 +205,15 @@ compute_low_volume_chisq <- function(
     ),
     verbose
   )
-  # Collapse to one row per NPI (mean volume), restrict to focal groups
-  npi_summary <- provider_volume_tbl |>
-    dplyr::filter(specialty_group %in% focal_groups) |>
-    dplyr::group_by(Rndrng_NPI, specialty_group) |>
-    dplyr::summarise(
-      mean_vol = mean(annual_sling_count, na.rm = TRUE),
-      .groups  = "drop"
-    ) |>
-    dplyr::mutate(
-      is_low_volume = mean_vol < low_volume_threshold
-    )
+  npi_summary <- compute_provider_low_volume_status(
+    provider_volume_tbl,
+    low_volume_threshold = low_volume_threshold
+  ) |>
+    dplyr::filter(specialty_group %in% focal_groups)
 
   contingency_table <- table(
     npi_summary$specialty_group,
-    npi_summary$is_low_volume
+    npi_summary$is_low_volume_provider
   )
 
   # When all providers fall on the same side of the threshold the contingency
@@ -284,13 +279,25 @@ compute_obgyn_trend_test <- function(
     time_trends_tbl,
     specialty_group == "OB/GYN"
   )
-  assertthat::assert_that(
-    nrow(obgyn_trend_rows) >= 3L,
-    msg = paste0(
-      "compute_obgyn_trend_test: need at least 3 years of OB/GYN data; ",
-      "found ", nrow(obgyn_trend_rows), " rows."
+  if (nrow(obgyn_trend_rows) < 3L) {
+    log_msg(
+      paste0(
+        "  OB/GYN trend test skipped: need at least 3 years of data; found ",
+        nrow(obgyn_trend_rows), ". p.value set to NA."
+      ),
+      verbose
     )
-  )
+    return(list(
+      lm_object   = NULL,
+      slope       = NA_real_,
+      slope_p     = NA_real_,
+      start_pct   = NA_real_,
+      end_pct     = NA_real_,
+      start_year  = NA_real_,
+      end_year    = NA_real_,
+      trend_phrase = NA_character_
+    ))
+  }
   year_values       <- obgyn_trend_rows[[year_col]]
   obgyn_pct_values  <- obgyn_trend_rows$pct_slings_this_year
   trend_lm          <- stats::lm(obgyn_pct_values ~ year_values)
@@ -875,22 +882,6 @@ generate_sling_abstract <- function(
   log_msg("== generate_sling_abstract: START ==", verbose)
 
   assertthat::assert_that(
-    is.list(sling_analysis_output),
-    msg = "sling_analysis_output must be a named list (output of analyze_midurethral_sling_patterns)."
-  )
-  required_elements <- c(
-    "provider_volume", "specialty_summary",
-    "low_volume_burden", "time_trends"
-  )
-  missing_elements <- setdiff(required_elements, names(sling_analysis_output))
-  assertthat::assert_that(
-    length(missing_elements) == 0L,
-    msg = glue::glue(
-      "sling_analysis_output is missing required elements: ",
-      "{paste(missing_elements, collapse = ', ')}"
-    )
-  )
-  assertthat::assert_that(
     is.numeric(low_volume_threshold) && length(low_volume_threshold) == 1L &&
       low_volume_threshold > 0,
     msg = "low_volume_threshold must be a single positive number."
@@ -915,18 +906,12 @@ generate_sling_abstract <- function(
   low_volume_burden_tbl <- sling_analysis_output$low_volume_burden
   time_trends_tbl       <- sling_analysis_output$time_trends
 
-  # Verify required specialty groups are present
+  validate_reporting_analysis_output(
+    sling_analysis_output,
+    year_col = year_col,
+    required_specialty_groups = c("OB/GYN", "Urology")
+  )
   present_groups <- unique(specialty_summary_tbl$specialty_group)
-  for (required_group in c("OB/GYN", "Urology")) {
-    assertthat::assert_that(
-      required_group %in% present_groups,
-      msg = glue::glue(
-        "generate_sling_abstract: '{required_group}' not found in ",
-        "specialty_summary. Present groups: ",
-        "{paste(present_groups, collapse = ', ')}"
-      )
-    )
-  }
   log_msg(
     sprintf("[DEBUG] specialty groups present: %s",
             paste(present_groups, collapse = ", ")),
@@ -990,54 +975,12 @@ generate_sling_abstract <- function(
 
   # ── 2. Build stats table ──────────────────────────────────────────────────
   log_msg("Step 2 - Assembling stats_table.", verbose)
-
-  pairwise_rows <- purrr::map(
-    names(pairwise_p_list),
-    function(pair_label) {
-      tibble::tibble(
-        test        = glue::glue("Wilcoxon (Bonferroni): {pair_label}"),
-        statistic   = NA_real_,
-        df          = NA_real_,
-        p_value     = pairwise_p_list[[pair_label]],
-        p_formatted = fmt_p(pairwise_p_list[[pair_label]])
-      )
-    }
-  ) |>
-    dplyr::bind_rows()
-
-  trend_row <- if (!is.null(obgyn_trend)) {
-    tibble::tibble(
-      test        = "Linear regression: OB/GYN market share ~ year",
-      statistic   = obgyn_trend$slope,
-      df          = NA_real_,
-      p_value     = obgyn_trend$slope_p,
-      p_formatted = fmt_p(obgyn_trend$slope_p)
-    )
-  } else {
-    tibble::tibble(
-      test        = character(0), statistic = numeric(0),
-      df          = numeric(0),   p_value   = numeric(0),
-      p_formatted = character(0)
-    )
-  }
-
-  stats_table <- dplyr::bind_rows(
-    tibble::tibble(
-      test        = "Kruskal-Wallis: annual volume across specialty groups",
-      statistic   = as.numeric(kruskal_result$statistic),
-      df          = as.numeric(kruskal_result$parameter),
-      p_value     = kruskal_result$p.value,
-      p_formatted = fmt_p(kruskal_result$p.value)
-    ),
-    pairwise_rows,
-    tibble::tibble(
-      test        = "Chi-square: proportion low-volume across specialties",
-      statistic   = as.numeric(chisq_result$statistic),
-      df          = as.numeric(chisq_result$parameter),
-      p_value     = chisq_result$p.value,
-      p_formatted = fmt_p(chisq_result$p.value)
-    ),
-    trend_row
+  stats_table <- build_focal_stats_table(
+    provider_volume_tbl,
+    low_volume_threshold = low_volume_threshold,
+    focal_groups = c("OB/GYN", "Urology"),
+    time_trends_tbl = time_trends_tbl,
+    year_col = year_col
   )
   log_msg(
     glue::glue("  stats_table: {nrow(stats_table)} rows"),

@@ -18,6 +18,7 @@
 
 source("R/artifact_manifest.R")
 source("R/analyze_sling_patterns.R")
+source("R/reporting_stats_helpers.R")
 
 cfg          <- config::get()
 phase_label  <- "03_primary_analysis"
@@ -44,6 +45,10 @@ results <- analyze_midurethral_sling_patterns(
   year_col             = cfg$year_col_name,
   low_volume_threshold = cfg$low_volume_threshold_primary,
   verbose              = cfg$verbose
+)
+validate_reporting_analysis_output(
+  results,
+  year_col = cfg$year_col_name
 )
 
 # ── Write sub-artifacts ──────────────────────────────────────────────────

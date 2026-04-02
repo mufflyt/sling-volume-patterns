@@ -188,7 +188,7 @@ artifact_csv <- function(
 #'
 #' @param cache_dir Character. Directory containing the manifest JSON.
 #' @param verbose Logical.
-#' @return Invisible TRUE if all pass, stops on mismatch.
+#' @return Invisible TRUE if all pass, stops on missing artifacts or mismatch.
 manifest_verify <- function(cache_dir = "data/cache", verbose = TRUE) {
   manifest <- read_manifest(cache_dir)
   if (length(manifest) == 0L) {
@@ -227,10 +227,11 @@ manifest_verify <- function(cache_dir = "data/cache", verbose = TRUE) {
     ))
   }
 
-  if (n_failed > 0L) {
+  if (n_missing > 0L || n_failed > 0L) {
     stop(glue::glue(
-      "Artifact verification failed: {n_failed} hash mismatch(es). ",
-      "Re-run the pipeline to regenerate stale artifacts."
+      "Artifact verification failed: {n_missing} missing artifact(s), ",
+      "{n_failed} hash mismatch(es). Re-run the pipeline to regenerate ",
+      "stale or missing artifacts."
     ))
   }
   invisible(TRUE)
