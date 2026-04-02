@@ -224,7 +224,7 @@ kruskal_tidy <- stats::kruskal.test(
   dplyr::mutate(comparison = "All specialty groups", test = "Kruskal-Wallis")
 
 # ── Pairwise Wilcoxon (Bonferroni) across focal specialty groups ──────────
-focal_groups   <- c("FPMRS", "OB/GYN", "Urology")
+focal_groups   <- c("OB/GYN", "Urology")
 focal_volume   <- dplyr::filter(provider_volume, specialty_group %in% focal_groups)
 pairwise_tidy  <- stats::pairwise.wilcox.test(
   x               = focal_volume$annual_sling_count,
@@ -256,7 +256,7 @@ chisq_tidy <- stats::chisq.test(
   table(npi_summary$specialty_group, npi_summary$is_low_vol)
 ) |>
   broom::tidy() |>
-  dplyr::mutate(comparison = "FPMRS vs OB/GYN vs Urology", test = "Chi-square")
+  dplyr::mutate(comparison = "OB/GYN vs Urology", test = "Chi-square")
 
 # ── Bind all tests into one publication-ready tibble ─────────────────────
 table_4_stats <- dplyr::bind_rows(kruskal_tidy, pairwise_tidy, chisq_tidy) |>
@@ -342,11 +342,15 @@ table_1_kable <- specialty_summary |>
     general_title = ""
   )
 
-# Save HTML
-kableExtra::save_kable(table_1_kable, file = table_1_html_path)
-message(glue::glue(
-  "[06_tables] Table 1 HTML written: {table_1_html_path}"
-))
+# Save HTML (requires pandoc; skip gracefully if unavailable)
+if (rmarkdown::pandoc_available()) {
+  kableExtra::save_kable(table_1_kable, file = table_1_html_path)
+  message(glue::glue(
+    "[06_tables] Table 1 HTML written: {table_1_html_path}"
+  ))
+} else {
+  message("[06_tables] pandoc not found — skipping HTML table. CSV tables are complete.")
+}
 
 # ── Final manifest summary for this phase ──────────────────────────────────
 message(glue::glue(

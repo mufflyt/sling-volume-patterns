@@ -39,7 +39,7 @@ message(glue::glue(
 # generate_sling_abstract() expects the full analysis list (output of
 # analyze_midurethral_sling_patterns()) containing: provider_volume,
 # specialty_summary, low_volume_burden, time_trends.
-abstract_text <- generate_sling_abstract(
+abstract_result <- generate_sling_abstract(
   sling_analysis_output = primary_analysis,
   low_volume_threshold  = cfg$low_volume_threshold_primary,
   year_col              = cfg$year_col_name,
@@ -47,10 +47,17 @@ abstract_text <- generate_sling_abstract(
   verbose               = cfg$verbose
 )
 
+# generate_sling_abstract() returns a list with abstract_text, stats_table,
+# and filled_values. Extract the text for writing.
+abstract_text <- abstract_result$abstract_text
+
 # ── Write output ────────────────────────────────────────────────────────
 dir.create(cfg$output_dir, recursive = TRUE, showWarnings = FALSE)
 abstract_path <- file.path(cfg$output_dir, "abstract.txt")
 writeLines(abstract_text, con = abstract_path)
+
+# Also save the full result (stats_table + filled_values) for downstream use
+saveRDS(abstract_result, file.path(cfg$cache_dir, "abstract_result.rds"))
 
 message(glue::glue(
   "[{format(Sys.time(), '%Y-%m-%d %H:%M:%S')}] ",
