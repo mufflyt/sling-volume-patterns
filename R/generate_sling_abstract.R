@@ -215,7 +215,7 @@ compute_obgyn_trend_test <- function(
   )
 
   # Combine all gynecologic groups (FPMRS, General OB/GYN, OB/GYN)
-  gyn_groups <- c("OB/GYN", "FPMRS", "General OB/GYN")
+  gyn_groups <- c("OB/GYN", "FPMRS", "MIGS", "General OB/GYN")
   gyn_trend_rows <- time_trends_tbl |>
     dplyr::filter(specialty_group %in% gyn_groups) |>
     dplyr::group_by(dplyr::across(dplyr::all_of(year_col))) |>
@@ -321,9 +321,10 @@ build_abstract_methods <- function(
     "Physician and Other Practitioners Public Use File from {year_range[1]} ",
     "to {year_range[2]}. All providers billing CPT 57288 were identified and ",
     "classified into mutually exclusive specialty groups \u2014 Female Pelvic ",
-    "Medicine and Reconstructive Surgery (FPMRS), general obstetrics and ",
-    "gynecology (General OB/GYN), and urology \u2014 using CMS-reported provider ",
-    "type cross-referenced with the American Board of Obstetrics and ",
+    "Medicine and Reconstructive Surgery (FPMRS), Minimally Invasive ",
+    "Gynecologic Surgery (MIGS), general obstetrics and gynecology ",
+    "(General OB/GYN), and urology \u2014 using CMS-reported provider type ",
+    "cross-referenced with the American Board of Obstetrics and ",
     "Gynecology (ABOG) subspecialty registry. Annual sling volume was ",
     "calculated per provider per year. Descriptive statistics including median annual ",
     "volume with interquartile range (IQR) were computed by specialty group. ",

@@ -204,7 +204,11 @@ classify_abog_subspecialty <- function(subspecialty_vector) {
     stringr::str_detect(
       subspecialty_vector,
       stringr::regex("female pelvic medicine|reconstructive surgery", ignore_case = TRUE)
-    ) ~ "FPMRS / URPS",
+    ) ~ "FPMRS",
+    stringr::str_detect(
+      subspecialty_vector,
+      stringr::regex("^MIG$|minimally invasive gynecol", ignore_case = TRUE)
+    ) ~ "MIGS",
     TRUE ~ "General OBGYN"
   )
 }
@@ -851,21 +855,21 @@ analyze_midurethral_sling_patterns <- function(
       )
     }
 
-    # Step 2b: Split OB/GYN into FPMRS and General OB/GYN using ABOG lookup
-    fpmrs_npis <- abog_lookup$abog_npi[
-      abog_lookup$subspecialty_abog == "FPMRS / URPS"
-    ]
+    # Step 2b: Split OB/GYN into FPMRS, MIGS, and General OB/GYN using ABOG
+    fpmrs_npis <- abog_lookup$abog_npi[abog_lookup$subspecialty_abog == "FPMRS"]
+    migs_npis  <- abog_lookup$abog_npi[abog_lookup$subspecialty_abog == "MIGS"]
     obgyn_npis <- sling_claims |>
       dplyr::filter(specialty_group == "OB/GYN") |>
       dplyr::pull(Rndrng_NPI) |>
       na.omit() |>
       unique()
     n_fpmrs <- sum(obgyn_npis %in% fpmrs_npis)
-    n_gen   <- sum(!obgyn_npis %in% fpmrs_npis)
+    n_migs  <- sum(obgyn_npis %in% migs_npis)
+    n_gen   <- sum(!obgyn_npis %in% c(fpmrs_npis, migs_npis))
     log_msg(
       glue::glue(
         "  Splitting OB/GYN by ABOG subspecialty: ",
-        "{n_fpmrs} FPMRS, {n_gen} General OB/GYN."
+        "{n_fpmrs} FPMRS, {n_migs} MIGS, {n_gen} General OB/GYN."
       ),
       verbose
     )
@@ -873,6 +877,7 @@ analyze_midurethral_sling_patterns <- function(
       sling_claims,
       specialty_group = dplyr::case_when(
         specialty_group == "OB/GYN" & Rndrng_NPI %in% fpmrs_npis ~ "FPMRS",
+        specialty_group == "OB/GYN" & Rndrng_NPI %in% migs_npis  ~ "MIGS",
         specialty_group == "OB/GYN"                               ~ "General OB/GYN",
         TRUE ~ specialty_group
       )

@@ -197,7 +197,7 @@ safe_obgyn_trend_row <- function(time_trends_tbl, year_col) {
     "time_trends"
   )
 
-  gyn_groups <- c("OB/GYN", "FPMRS", "General OB/GYN")
+  gyn_groups <- c("OB/GYN", "FPMRS", "MIGS", "General OB/GYN")
   gyn_trend_rows <- time_trends_tbl |>
     dplyr::filter(specialty_group %in% gyn_groups) |>
     dplyr::group_by(dplyr::across(dplyr::all_of(year_col))) |>

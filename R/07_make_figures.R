@@ -60,6 +60,7 @@ theme_publication <- function() {
 # Color palette: colorblind-safe, distinct for specialty groups
 specialty_colors <- c(
   "FPMRS"          = "#E69F00",
+  "MIGS"           = "#CC79A7",
   "General OB/GYN" = "#56B4E9",
   "OB/GYN"         = "#56B4E9",
   "Urology"        = "#009E73",
@@ -74,7 +75,7 @@ if (!is.null(time_trends) && nrow(time_trends) > 0) {
   year_col <- cfg$year_col_name
 
   # Combine gynecologic groups for the area highlight
-  gyn_groups <- c("OB/GYN", "FPMRS", "General OB/GYN")
+  gyn_groups <- c("OB/GYN", "FPMRS", "MIGS", "General OB/GYN")
   area_data <- time_trends |>
     dplyr::filter(specialty_group %in% gyn_groups) |>
     dplyr::group_by(dplyr::across(dplyr::all_of(year_col))) |>
