@@ -97,24 +97,18 @@ run_sens_scheme <- function(
     puf_recoded,
     year_col = cfg_obj$year_col_name,
     verbose  = FALSE
-  ) |>
-    dplyr::mutate(
-      volume_tier = assign_volume_tier(
-        annual_sling_count,
-        cfg_obj$low_volume_threshold_primary
-      )
-    )
+  )
 
   results <- list(
-    provider_volume   = provider_volume_sens,
-    specialty_summary = build_specialty_summary(
+    provider_volume       = provider_volume_sens,
+    specialty_summary     = build_specialty_summary(
       provider_volume_sens,
-      low_volume_threshold = cfg_obj$low_volume_threshold_primary,
+      concentration_cutoffs = cfg_obj$concentration_cutoffs,
       verbose = FALSE
     ),
-    low_volume_burden = build_low_volume_burden(
+    concentration_metrics = build_concentration_metrics(
       provider_volume_sens,
-      low_volume_threshold = cfg_obj$low_volume_threshold_primary,
+      concentration_cutoffs = cfg_obj$concentration_cutoffs,
       verbose = FALSE
     ),
     time_trends = if (!is.null(cfg_obj$year_col_name) &&
@@ -236,15 +230,15 @@ if (file.exists(primary_summary_path) &&
     "  Primary (4 groups):\n"
   ))
   print(primary_ss[, c("specialty_group", "n_providers",
-                        "pct_low_volume_providers", "pct_of_all_slings")])
+                        "gini_coefficient", "pct_of_all_slings")])
 
   message("  Scheme A (gynecologic merged):")
   print(sens_a_ss[, c("specialty_group", "n_providers",
-                       "pct_low_volume_providers", "pct_of_all_slings")])
+                       "gini_coefficient", "pct_of_all_slings")])
 
   message("  Scheme B (binary FPMRS / Non-FPMRS):")
   print(sens_b_ss[, c("specialty_group", "n_providers",
-                       "pct_low_volume_providers", "pct_of_all_slings")])
+                       "gini_coefficient", "pct_of_all_slings")])
 }
 
 message(glue::glue(

@@ -98,9 +98,9 @@ run_step <- function(step_number, label, script_path) {
 # ── Pipeline ───────────────────────────────────────────────────────────────
 run_step(1,   "Build & cache merged PUF dataset",         "R/01_build_puf_cache.R")
 run_step(2,   "Classify provider specialties",             "R/02_classify_specialties.R")
-run_step(3,   "Primary analysis (threshold = 10/yr)",      "R/03_run_primary_analysis.R")
+run_step(3,   "Primary analysis (concentration metrics)",   "R/03_run_primary_analysis.R")
 run_step("3s","Primary analysis — _sens specialty schemes","R/03_run_primary_analysis_sens.R")
-run_step(4,   "Sensitivity analyses across threshold grid","R/04_run_sensitivity_analyses.R")
+run_step(4,   "Sensitivity analyses (cross-sectional vs multi-year)","R/04_run_sensitivity_analyses.R")
 run_step(5,   "Generate programmatic abstract",            "R/05_generate_abstract.R")
 run_step(6,   "Produce publication tables",                "R/06_make_tables.R")
 run_step(7,   "Produce publication figures",               "R/07_make_figures.R")

@@ -33,7 +33,7 @@ primary_analysis <- artifact_read(
 validate_reporting_analysis_output(
   primary_analysis,
   year_col = cfg$year_col_name,
-  required_specialty_groups = c("OB/GYN", "Urology")
+  required_specialty_groups = c("Urology")
 )
 
 message(glue::glue(
@@ -47,7 +47,6 @@ message(glue::glue(
 # specialty_summary, low_volume_burden, time_trends.
 abstract_result <- generate_sling_abstract(
   sling_analysis_output = primary_analysis,
-  low_volume_threshold  = cfg$low_volume_threshold_primary,
   year_col              = cfg$year_col_name,
   study_years           = c(cfg$study_start_year, cfg$study_end_year),
   verbose               = cfg$verbose

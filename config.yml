@@ -34,24 +34,13 @@ default:
   # reads this value so both scripts stay in sync.
   year_col_name: "puf_year"
 
-  # ── Volume thresholds (sensitivity analysis grid) ──────────────────────────
-  # Primary threshold used in Table 1 and the abstract.
-  # The sensitivity_thresholds vector drives expand.grid() iteration.
-  #
-  # Bug fix B7: low_volume_threshold_primary and sensitivity_thresholds are
-  # tightly coupled — 04_run_sensitivity_analyses.R filters sensitivity_results
-  # on `sensitivity_threshold == low_volume_threshold_primary` to build the
-  # delta reference column. If low_volume_threshold_primary is changed here
-  # without also updating sensitivity_thresholds to include that value, the
-  # filter returns zero rows and ALL delta values become NA with no error.
-  #
-  # INVARIANT (enforced in 04_run_sensitivity_analyses.R):
-  #   low_volume_threshold_primary MUST appear in sensitivity_thresholds.
-  low_volume_threshold_primary: 10
-  sensitivity_thresholds:
-    - 5
-    - 10   # must include low_volume_threshold_primary (currently 10)
-    - 25
+  # ── Concentration analysis ─────────────────────────────────────────────────
+  # Top-N% cutoffs for computing "share of procedures by top X% of providers".
+  # Gini coefficient is always computed (no cutoff needed).
+  concentration_cutoffs:
+    - 10
+    - 20
+    - 30
 
   # ── Specialty classification ────────────────────────────────────────────────
   # NOTE (Bug fix B3): specialty_regex was previously defined here but was

@@ -118,31 +118,83 @@ classify_provider_specialty <- function(provider_type_vector) {
 }
 
 #' @noRd
-assign_volume_tier <- function(annual_count_vector, low_volume_threshold) {
-  assertthat::assert_that(
-    is.numeric(annual_count_vector),
-    msg = "annual_count_vector must be numeric."
+#' Compute the Gini coefficient for a numeric vector of volumes.
+#' Uses the standard formula: G = (2 * sum(i * x_sorted)) / (n * sum(x)) - (n+1)/n
+#' Returns 0 for perfect equality, approaches 1 for perfect inequality.
+#' @noRd
+compute_gini <- function(x) {
+  x <- x[!is.na(x)]
+  n <- length(x)
+  if (n < 2L || sum(x) == 0) return(NA_real_)
+  x_sorted <- sort(x)
+  numerator <- 2 * sum(seq_along(x_sorted) * x_sorted)
+  denominator <- n * sum(x_sorted)
+  numerator / denominator - (n + 1) / n
+}
+
+#' Compute the share of total volume performed by the top `top_pct`
+#' fraction of providers (ranked by volume, descending).
+#' @noRd
+compute_top_pct_share <- function(x, top_pct = 0.20) {
+  x <- x[!is.na(x)]
+  n <- length(x)
+  if (n == 0L || sum(x) == 0) return(NA_real_)
+  x_sorted_desc <- sort(x, decreasing = TRUE)
+  n_top <- max(1L, ceiling(n * top_pct))
+  sum(x_sorted_desc[seq_len(n_top)]) / sum(x_sorted_desc) * 100
+}
+
+#' Build concentration metrics table by specialty group.
+#' Replaces the former build_low_volume_burden().
+#' @noRd
+build_concentration_metrics <- function(
+    provider_volume_data,
+    concentration_cutoffs = c(10, 20, 30),
+    verbose = TRUE
+) {
+  # Aggregate to unique NPI total volume
+  npi_totals <- provider_volume_data |>
+    dplyr::group_by(Rndrng_NPI, specialty_group) |>
+    dplyr::summarise(
+      total_slings = sum(annual_sling_count, na.rm = TRUE),
+      .groups = "drop"
+    )
+
+  # Compute Gini and top-N% share per specialty
+  # Note: compute_gini needs the per-NPI volume vector, not the aggregated sum.
+  # dplyr::summarise evaluates sequentially, so total_slings on the gini line
+  # would reference the just-computed sum. Use the original column name explicitly.
+  results <- npi_totals |>
+    dplyr::group_by(specialty_group) |>
+    dplyr::summarise(
+      n_providers      = dplyr::n(),
+      gini_coefficient = compute_gini(total_slings),
+      total_slings     = sum(total_slings, na.rm = TRUE),
+      .groups = "drop"
+    )
+
+  # Add top-N% columns dynamically
+
+  for (pct in concentration_cutoffs) {
+    col_name <- glue::glue("pct_by_top_{pct}")
+    results[[col_name]] <- purrr::map_dbl(
+      results$specialty_group,
+      function(sg) {
+        vols <- npi_totals$total_slings[npi_totals$specialty_group == sg]
+        compute_top_pct_share(vols, top_pct = pct / 100)
+      }
+    )
+  }
+
+  log_msg(
+    glue::glue(
+      "Concentration metrics built: {nrow(results)} groups | ",
+      "Gini range: {round(min(results$gini_coefficient, na.rm=TRUE), 3)}",
+      "\u2013{round(max(results$gini_coefficient, na.rm=TRUE), 3)}"
+    ),
+    verbose = verbose
   )
-  # NOTE: is.numeric() returns TRUE for integer vectors in R, so the
-  # is.integer() branch below is not needed — kept as is.numeric() only.
-  assertthat::assert_that(
-    is.numeric(low_volume_threshold),
-    msg = "low_volume_threshold must be numeric."
-  )
-  # Bug fix: floor() ensures the label boundary is always a whole number.
-  # Without floor(), threshold=7 would produce "Medium (7–16.5/yr)", which
-  # looks unprofessional in a published table and confuses readers.
-  medium_upper <- floor(low_volume_threshold * 2.5 - 1)
-  dplyr::case_when(
-    annual_count_vector < low_volume_threshold ~
-      glue::glue("Low (<{low_volume_threshold}/yr)"),
-    annual_count_vector <= medium_upper ~
-      glue::glue(
-        "Medium ({low_volume_threshold}\u2013{medium_upper}/yr)"
-      ),
-    TRUE ~
-      glue::glue("High (>{medium_upper}/yr)")
-  )
+  results
 }
 
 #' @noRd
@@ -181,9 +233,10 @@ load_abog_subspecialty_lookup <- function(abog_csv_path) {
   abog_tbl |>
     dplyr::mutate(
       abog_npi = trimws(npi),
-      subspecialty_abog = classify_abog_subspecialty(subspecialty)
+      subspecialty_abog = classify_abog_subspecialty(subspecialty),
+      subspecialty_raw  = subspecialty
     ) |>
-    dplyr::select(abog_npi, subspecialty_abog) |>
+    dplyr::select(abog_npi, subspecialty_abog, subspecialty_raw) |>
     dplyr::distinct(abog_npi, .keep_all = TRUE)
 }
 
@@ -371,18 +424,12 @@ aggregate_to_provider_level <- function(
 #' @noRd
 build_specialty_summary <- function(
     provider_volume_data,
-    low_volume_threshold,
+    concentration_cutoffs = c(10, 20, 30),
     verbose = TRUE
 ) {
-  provider_low_volume_status <- compute_provider_low_volume_status(
-    provider_volume_data,
-    low_volume_threshold = low_volume_threshold
-  )
   grand_total_slings <- sum(
     provider_volume_data$annual_sling_count, na.rm = TRUE
   )
-  # Bug fix B2: Guard against silent division-by-zero. sum(..., na.rm=TRUE)
-  # returns 0 when all values are NA, causing pct_of_all_slings = NaN/Inf.
   assertthat::assert_that(
     grand_total_slings > 0,
     msg = paste0(
@@ -397,21 +444,10 @@ build_specialty_summary <- function(
       total_slings          = sum(annual_sling_count, na.rm = TRUE),
       median_annual_volume  = stats::median(annual_sling_count, na.rm = TRUE),
       mean_annual_volume    = mean(annual_sling_count, na.rm = TRUE),
+      gini_coefficient      = compute_gini(annual_sling_count),
       .groups = "drop"
     ) |>
-    dplyr::left_join(
-      provider_low_volume_status |>
-        dplyr::group_by(specialty_group) |>
-        dplyr::summarise(
-          n_low_volume_providers = sum(is_low_volume_provider, na.rm = TRUE),
-          pct_low_volume_providers = mean(is_low_volume_provider, na.rm = TRUE) * 100,
-          .groups = "drop"
-        ),
-      by = "specialty_group"
-    ) |>
     dplyr::mutate(
-      n_low_volume_providers = dplyr::coalesce(n_low_volume_providers, 0L),
-      pct_low_volume_providers = dplyr::coalesce(pct_low_volume_providers, 0),
       pct_of_all_slings = total_slings / grand_total_slings * 100
     ) |>
     dplyr::arrange(dplyr::desc(total_slings))
@@ -426,48 +462,6 @@ build_specialty_summary <- function(
   specialty_level_summary
 }
 
-#' @noRd
-build_low_volume_burden <- function(
-    provider_volume_data,
-    low_volume_threshold,
-    verbose = TRUE
-) {
-  npi_mean_volume <- compute_provider_low_volume_status(
-    provider_volume_data,
-    low_volume_threshold = low_volume_threshold
-  )
-
-  # Bug fix B3: Guard against division-by-zero when all sling counts are NA.
-  total_slings_all <- sum(npi_mean_volume$total_slings_all_years, na.rm = TRUE)
-  assertthat::assert_that(
-    total_slings_all > 0,
-    msg = paste0(
-      "build_low_volume_burden: total slings across all providers is 0. ",
-      "Check that Tot_Srvcs contains at least some non-NA positive values."
-    )
-  )
-
-  low_volume_burden_summary <- npi_mean_volume |>
-    dplyr::group_by(specialty_group, is_low_volume_provider) |>
-    dplyr::summarise(
-      n_providers  = dplyr::n_distinct(Rndrng_NPI),
-      total_slings = sum(total_slings_all_years, na.rm = TRUE),
-      .groups      = "drop"
-    ) |>
-    dplyr::mutate(
-      pct_of_all_slings = total_slings / total_slings_all * 100
-    )
-
-  log_msg(
-    glue::glue(
-      "Low-volume burden table built ",
-      "(threshold = {low_volume_threshold}/yr, classification by mean ",
-      "annual volume per NPI): {nrow(low_volume_burden_summary)} rows"
-    ),
-    verbose = verbose
-  )
-  low_volume_burden_summary
-}
 
 #' @noRd
 build_time_trends <- function(
@@ -787,16 +781,12 @@ build_time_trends <- function(
 #' @export
 analyze_midurethral_sling_patterns <- function(
     medicare_puf_data,
-    year_col             = NULL,
-    low_volume_threshold = 10L,
-    verbose              = TRUE,
-    abog_npi_csv         = NULL
+    year_col               = NULL,
+    concentration_cutoffs  = c(10, 20, 30),
+    verbose                = TRUE,
+    abog_npi_csv           = NULL
 ) {
   # ── 0. Input validation ────────────────────────────────────────────────────
-  # Bug fix: verbose must be validated FIRST because log_msg() depends on it.
-  # Previously the is.logical(verbose) check appeared after two log_msg()
-  # calls and after validate_sling_input() — passing verbose = "yes" would
-  # silently not log, then fail only when the explicit assertion was reached.
   assertthat::assert_that(
     is.logical(verbose) && length(verbose) == 1L,
     msg = "verbose must be a single TRUE or FALSE value."
@@ -812,23 +802,13 @@ analyze_midurethral_sling_patterns <- function(
       "nrow(medicare_puf_data): {nrow(medicare_puf_data)}, ",
       "ncol: {ncol(medicare_puf_data)}, ",
       "year_col: {if (is.null(year_col)) 'NULL' else year_col}, ",
-      "low_volume_threshold: {low_volume_threshold}, ",
+      "concentration_cutoffs: {paste(concentration_cutoffs, collapse=', ')}, ",
       "verbose: {verbose}"
     ),
     verbose
   )
 
   validate_sling_input(medicare_puf_data, year_col = year_col)
-
-  assertthat::assert_that(
-    is.numeric(low_volume_threshold) &&
-      length(low_volume_threshold) == 1L,
-    msg = "low_volume_threshold must be a single numeric or integer value."
-  )
-  assertthat::assert_that(
-    low_volume_threshold > 0,
-    msg = "low_volume_threshold must be a positive number."
-  )
 
   abog_lookup <- NULL
   if (!is.null(abog_npi_csv)) {
@@ -847,6 +827,7 @@ analyze_midurethral_sling_patterns <- function(
   )
 
   if (!is.null(abog_lookup)) {
+    # Step 2a: Reclassify "Other" NPIs not in ABOG → Urology
     other_npis <- sling_claims |>
       dplyr::filter(specialty_group == "Other") |>
       dplyr::pull(Rndrng_NPI) |>
@@ -869,6 +850,33 @@ analyze_midurethral_sling_patterns <- function(
         )
       )
     }
+
+    # Step 2b: Split OB/GYN into FPMRS and General OB/GYN using ABOG lookup
+    fpmrs_npis <- abog_lookup$abog_npi[
+      abog_lookup$subspecialty_abog == "FPMRS / URPS"
+    ]
+    obgyn_npis <- sling_claims |>
+      dplyr::filter(specialty_group == "OB/GYN") |>
+      dplyr::pull(Rndrng_NPI) |>
+      na.omit() |>
+      unique()
+    n_fpmrs <- sum(obgyn_npis %in% fpmrs_npis)
+    n_gen   <- sum(!obgyn_npis %in% fpmrs_npis)
+    log_msg(
+      glue::glue(
+        "  Splitting OB/GYN by ABOG subspecialty: ",
+        "{n_fpmrs} FPMRS, {n_gen} General OB/GYN."
+      ),
+      verbose
+    )
+    sling_claims <- dplyr::mutate(
+      sling_claims,
+      specialty_group = dplyr::case_when(
+        specialty_group == "OB/GYN" & Rndrng_NPI %in% fpmrs_npis ~ "FPMRS",
+        specialty_group == "OB/GYN"                               ~ "General OB/GYN",
+        TRUE ~ specialty_group
+      )
+    )
   }
 
   specialty_record_counts <- dplyr::count(sling_claims, specialty_group)
@@ -885,19 +893,20 @@ analyze_midurethral_sling_patterns <- function(
     }
   )
 
-  n_unclassified <- sum(sling_claims$specialty_group == "Other", na.rm = TRUE)
-  if (n_unclassified > 0) {
+  n_other <- sum(sling_claims$specialty_group == "Other", na.rm = TRUE)
+  if (n_other > 0) {
     other_types <- sling_claims |>
       dplyr::filter(specialty_group == "Other") |>
       dplyr::distinct(Rndrng_Prvdr_Type) |>
       dplyr::pull(Rndrng_Prvdr_Type)
     log_msg(
       glue::glue(
-        "  Note: {n_unclassified} 'Other' records from provider types: ",
+        "  Excluding {n_other} 'Other' records from provider types: ",
         "{paste(other_types, collapse = '; ')}"
       ),
       verbose
     )
+    sling_claims <- dplyr::filter(sling_claims, specialty_group != "Other")
   }
 
   # ── 3. Provider-level volume aggregation ───────────────────────────────────
@@ -909,13 +918,7 @@ analyze_midurethral_sling_patterns <- function(
     sling_claims,
     year_col = year_col,
     verbose  = verbose
-  ) |>
-    dplyr::mutate(
-      volume_tier = assign_volume_tier(
-        annual_sling_count,
-        low_volume_threshold
-      )
-    )
+  )
 
   if (!is.null(abog_lookup)) {
     provider_volume <- provider_volume |>
@@ -923,19 +926,12 @@ analyze_midurethral_sling_patterns <- function(
         abog_lookup,
         by = c("Rndrng_NPI" = "abog_npi")
       ) |>
-      dplyr::select(-abog_npi) |>
+      dplyr::select(-dplyr::any_of("abog_npi")) |>
       dplyr::relocate(subspecialty_abog, .after = Rndrng_NPI)
   } else {
     provider_volume <- provider_volume |>
       dplyr::mutate(subspecialty_abog = NA_character_)
   }
-
-  log_msg(
-    glue::glue(
-      "  Volume tiers assigned with threshold = {low_volume_threshold}/yr"
-    ),
-    verbose
-  )
 
   # ── 4. Specialty summary table ─────────────────────────────────────────────
   log_msg(
@@ -944,22 +940,19 @@ analyze_midurethral_sling_patterns <- function(
   )
   specialty_summary <- build_specialty_summary(
     provider_volume,
-    low_volume_threshold = low_volume_threshold,
-    verbose              = verbose
+    concentration_cutoffs = concentration_cutoffs,
+    verbose               = verbose
   )
 
-  # ── 5. Low-volume burden table ─────────────────────────────────────────────
+  # ── 5. Concentration metrics ───────────────────────────────────────────────
   log_msg(
-    glue::glue(
-      "Step 5 ▸ Building low-volume burden table ",
-      "(threshold = {low_volume_threshold}/yr)."
-    ),
+    "Step 5 ▸ Building concentration metrics (Gini, top-N% share).",
     verbose
   )
-  low_volume_burden <- build_low_volume_burden(
+  concentration_metrics <- build_concentration_metrics(
     provider_volume,
-    low_volume_threshold = low_volume_threshold,
-    verbose              = verbose
+    concentration_cutoffs = concentration_cutoffs,
+    verbose               = verbose
   )
 
   # ── 6. Time trends (optional) ──────────────────────────────────────────────
@@ -986,37 +979,37 @@ analyze_midurethral_sling_patterns <- function(
 
   # ── 7. Assemble and log output ─────────────────────────────────────────────
   analysis_output <- list(
-    provider_volume   = provider_volume,
-    specialty_summary = specialty_summary,
-    low_volume_burden = low_volume_burden,
-    time_trends       = time_trends
+    provider_volume       = provider_volume,
+    specialty_summary     = specialty_summary,
+    concentration_metrics = concentration_metrics,
+    time_trends           = time_trends
   )
 
   log_msg("── Output summary ──────────────────────────────────", verbose)
   log_msg(
     glue::glue(
-      "  provider_volume:   {nrow(analysis_output$provider_volume)} rows x ",
+      "  provider_volume:       {nrow(analysis_output$provider_volume)} rows x ",
       "{ncol(analysis_output$provider_volume)} cols"
     ),
     verbose
   )
   log_msg(
     glue::glue(
-      "  specialty_summary: {nrow(analysis_output$specialty_summary)} rows x ",
+      "  specialty_summary:     {nrow(analysis_output$specialty_summary)} rows x ",
       "{ncol(analysis_output$specialty_summary)} cols"
     ),
     verbose
   )
   log_msg(
     glue::glue(
-      "  low_volume_burden: {nrow(analysis_output$low_volume_burden)} rows x ",
-      "{ncol(analysis_output$low_volume_burden)} cols"
+      "  concentration_metrics: {nrow(analysis_output$concentration_metrics)} rows x ",
+      "{ncol(analysis_output$concentration_metrics)} cols"
     ),
     verbose
   )
   log_msg(
     glue::glue(
-      "  time_trends:       ",
+      "  time_trends:           ",
       "{if (is.null(time_trends)) 'NULL' else ",
       "paste0(nrow(time_trends), ' rows x ', ncol(time_trends), ' cols')}"
     ),

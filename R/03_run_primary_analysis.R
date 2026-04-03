@@ -1,15 +1,15 @@
 # =============================================================================
 # 03_run_primary_analysis.R
 #
-# Step 3: Run the primary analysis at the default low-volume threshold
-# from config.yml. Reads puf_classified.rds, calls
-# analyze_midurethral_sling_patterns(), writes sub-artifacts.
+# Step 3: Run the primary analysis with concentration metrics.
+# Reads puf_classified.rds, calls analyze_midurethral_sling_patterns(),
+# writes sub-artifacts.
 #
 # Phase chain:
 #   READS:  data/cache/puf_classified.rds   [Phase 2 artifact]
 #   WRITES: data/cache/specialty_summary.rds
 #           data/cache/provider_volume.rds
-#           data/cache/low_volume_burden.rds
+#           data/cache/concentration_metrics.rds
 #           data/cache/time_trends.rds
 #           data/cache/primary_analysis.rds  (combined list)
 #
@@ -41,11 +41,11 @@ message(glue::glue(
 
 # ── Run primary analysis ─────────────────────────────────────────────────
 results <- analyze_midurethral_sling_patterns(
-  medicare_puf_data    = puf_classified,
-  year_col             = cfg$year_col_name,
-  low_volume_threshold = cfg$low_volume_threshold_primary,
-  verbose              = cfg$verbose,
-  abog_npi_csv         = cfg$abog_npi_csv
+  medicare_puf_data     = puf_classified,
+  year_col              = cfg$year_col_name,
+  concentration_cutoffs = cfg$concentration_cutoffs,
+  verbose               = cfg$verbose,
+  abog_npi_csv          = cfg$abog_npi_csv
 )
 validate_reporting_analysis_output(
   results,
@@ -54,10 +54,10 @@ validate_reporting_analysis_output(
 
 # ── Write sub-artifacts ──────────────────────────────────────────────────
 sub_artifacts <- list(
-  specialty_summary = results$specialty_summary,
-  provider_volume   = results$provider_volume,
-  low_volume_burden = results$low_volume_burden,
-  time_trends       = results$time_trends
+  specialty_summary     = results$specialty_summary,
+  provider_volume       = results$provider_volume,
+  concentration_metrics = results$concentration_metrics,
+  time_trends           = results$time_trends
 )
 
 for (name in names(sub_artifacts)) {

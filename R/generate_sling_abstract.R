@@ -191,68 +191,6 @@ compute_pairwise_volume_tests <- function(
   pair_list
 }
 
-#' @noRd
-compute_low_volume_chisq <- function(
-    provider_volume_tbl,
-    low_volume_threshold,
-    focal_groups = c("OB/GYN", "Urology"),
-    verbose      = TRUE
-) {
-  log_msg(
-    glue::glue(
-      "Computing chi-square test: proportion low-volume (<{low_volume_threshold}/yr) ",
-      "across focal specialty groups."
-    ),
-    verbose
-  )
-  npi_summary <- compute_provider_low_volume_status(
-    provider_volume_tbl,
-    low_volume_threshold = low_volume_threshold
-  ) |>
-    dplyr::filter(specialty_group %in% focal_groups)
-
-  contingency_table <- table(
-    npi_summary$specialty_group,
-    npi_summary$is_low_volume_provider
-  )
-
-  # When all providers fall on the same side of the threshold the contingency
-  # table has only one column. Return a mock htest with p.value = NA_real_ and
-  # a diagnostic message so the abstract can still be generated with
-  # appropriate "not computed" language in the chi-square sentence.
-  if (ncol(contingency_table) < 2L) {
-    log_msg(
-      glue::glue(
-        "  Chi-square skipped: all focal-group providers are on the same ",
-        "side of the {low_volume_threshold}/yr threshold ",
-        "(contingency table has only one column). p.value set to NA."
-      ),
-      verbose
-    )
-    na_htest <- structure(
-      list(
-        statistic  = stats::setNames(NA_real_, "X-squared"),
-        parameter  = stats::setNames(NA_real_, "df"),
-        p.value    = NA_real_,
-        method     = "Chi-squared test (skipped: single-level table)",
-        data.name  = "npi_summary"
-      ),
-      class = "htest"
-    )
-    return(na_htest)
-  }
-
-  chisq_result <- stats::chisq.test(contingency_table)
-  log_msg(
-    glue::glue(
-      "  Chi-square X\u00b2 = {round(chisq_result$statistic, 2)}, ",
-      "df = {chisq_result$parameter}, ",
-      "p {fmt_p(chisq_result$p.value)}"
-    ),
-    verbose
-  )
-  chisq_result
-}
 
 #' @noRd
 compute_obgyn_trend_test <- function(
@@ -272,18 +210,25 @@ compute_obgyn_trend_test <- function(
     )
   )
   log_msg(
-    "Computing linear trend test: OB/GYN market share (pct_slings_this_year) ~ year.",
+    "Computing linear trend test: gynecologic market share ~ year.",
     verbose
   )
-  obgyn_trend_rows <- dplyr::filter(
-    time_trends_tbl,
-    specialty_group == "OB/GYN"
-  )
-  if (nrow(obgyn_trend_rows) < 3L) {
+
+  # Combine all gynecologic groups (FPMRS, General OB/GYN, OB/GYN)
+  gyn_groups <- c("OB/GYN", "FPMRS", "General OB/GYN")
+  gyn_trend_rows <- time_trends_tbl |>
+    dplyr::filter(specialty_group %in% gyn_groups) |>
+    dplyr::group_by(dplyr::across(dplyr::all_of(year_col))) |>
+    dplyr::summarise(
+      pct_slings_this_year = sum(pct_slings_this_year, na.rm = TRUE),
+      .groups = "drop"
+    )
+
+  if (nrow(gyn_trend_rows) < 3L) {
     log_msg(
       paste0(
-        "  OB/GYN trend test skipped: need at least 3 years of data; found ",
-        nrow(obgyn_trend_rows), ". p.value set to NA."
+        "  Gynecologic trend test skipped: need at least 3 years of data; found ",
+        nrow(gyn_trend_rows), ". p.value set to NA."
       ),
       verbose
     )
@@ -298,20 +243,20 @@ compute_obgyn_trend_test <- function(
       trend_phrase = NA_character_
     ))
   }
-  year_values       <- obgyn_trend_rows[[year_col]]
-  obgyn_pct_values  <- obgyn_trend_rows$pct_slings_this_year
-  trend_lm          <- stats::lm(obgyn_pct_values ~ year_values)
-  trend_summary     <- summary(trend_lm)
-  slope             <- stats::coef(trend_lm)[["year_values"]]
-  slope_p           <- trend_summary$coefficients["year_values", "Pr(>|t|)"]
-  start_pct         <- dplyr::first(obgyn_pct_values[order(year_values)])
-  end_pct           <- dplyr::last(obgyn_pct_values[order(year_values)])
-  start_year        <- min(year_values)
-  end_year          <- max(year_values)
+  year_values      <- gyn_trend_rows[[year_col]]
+  gyn_pct_values   <- gyn_trend_rows$pct_slings_this_year
+  trend_lm         <- stats::lm(gyn_pct_values ~ year_values)
+  trend_summary    <- summary(trend_lm)
+  slope            <- stats::coef(trend_lm)[["year_values"]]
+  slope_p          <- trend_summary$coefficients["year_values", "Pr(>|t|)"]
+  start_pct        <- dplyr::first(gyn_pct_values[order(year_values)])
+  end_pct          <- dplyr::last(gyn_pct_values[order(year_values)])
+  start_year       <- min(year_values)
+  end_year         <- max(year_values)
 
   log_msg(
     glue::glue(
-      "  OB/GYN share: {fmt_pct(start_pct)} ({start_year}) \u2192 ",
+      "  Gynecologic share: {fmt_pct(start_pct)} ({start_year}) \u2192 ",
       "{fmt_pct(end_pct)} ({end_year}); ",
       "slope = {round(slope, 3)} pct-pts/yr, p {fmt_p(slope_p)}"
     ),
@@ -344,25 +289,22 @@ compute_obgyn_trend_test <- function(
 #' @noRd
 build_abstract_objective <- function() {
   paste0(
-    "To characterize the specialty distribution and annual procedure volumes ",
-    "of physicians performing midurethral sling procedures (CPT 57288) among ",
-    "Medicare beneficiaries, and to quantify the proportion performed by ",
-    "low-volume surgeons across specialty groups."
+    "To characterize the specialty distribution, annual procedure volumes, ",
+    "and procedural concentration among physicians performing midurethral ",
+    "sling procedures (CPT 57288) in Medicare beneficiaries."
   )
 }
 
 #' @noRd
 build_abstract_methods <- function(
     year_range,
-    low_volume_threshold,
     include_trend_sentence
 ) {
-  # Single-year = cross-sectional; multi-year with trend = repeated
-  # cross-sectional. The distinction is driven by include_trend_sentence.
   trend_methods_sentence <- if (isTRUE(include_trend_sentence)) {
     paste0(
-      "Time trends in OB/GYN procedure share were assessed by linear ",
-      "regression of annual market-share percentage on calendar year."
+      "Time trends in the combined gynecologic (FPMRS + General OB/GYN) ",
+      "procedure share were assessed by linear regression of annual ",
+      "market-share percentage on calendar year."
     )
   } else {
     ""
@@ -378,19 +320,21 @@ build_abstract_methods <- function(
     "We conducted a {study_design_label} analysis of the CMS Medicare ",
     "Physician and Other Practitioners Public Use File from {year_range[1]} ",
     "to {year_range[2]}. All providers billing CPT 57288 were identified and ",
-    "classified into mutually exclusive specialty groups \u2014 obstetrics and ",
-    "gynecology (OB/GYN), urology, and other \u2014 using a hierarchical taxonomy ",
-    "applied to CMS-reported provider type. Annual sling volume was calculated ",
-    "per provider per year. Low-volume surgeons were defined as those performing ",
-    "fewer than {low_volume_threshold} procedures annually, consistent with ",
-    "surgical quality literature. Descriptive statistics including median ",
-    "annual volume with interquartile range (IQR) and the proportion of total ",
-    "procedures attributable to low-volume surgeons were computed by specialty ",
-    "group. An omnibus Kruskal-Wallis test assessed differences in annual ",
-    "volume across specialty groups; pairwise comparisons used Wilcoxon ",
-    "rank-sum tests with Bonferroni correction. Differences in the proportion ",
-    "of low-volume surgeons across specialties were assessed by chi-square ",
-    "test. {trend_methods_sentence}"
+    "classified into mutually exclusive specialty groups \u2014 Female Pelvic ",
+    "Medicine and Reconstructive Surgery (FPMRS), general obstetrics and ",
+    "gynecology (General OB/GYN), and urology \u2014 using CMS-reported provider ",
+    "type cross-referenced with the American Board of Obstetrics and ",
+    "Gynecology (ABOG) subspecialty registry. Annual sling volume was ",
+    "calculated per provider per year. Descriptive statistics including median annual ",
+    "volume with interquartile range (IQR) were computed by specialty group. ",
+    "Procedural concentration was quantified using the Gini coefficient and ",
+    "the share of procedures performed by the top 20% of providers within ",
+    "each specialty group. An omnibus Kruskal-Wallis test assessed differences ",
+    "in annual volume across specialty groups; pairwise comparisons used ",
+    "Wilcoxon rank-sum tests with Bonferroni correction. {trend_methods_sentence} ",
+    "CMS suppresses service counts of 1\u201310 in the PUF; providers below this ",
+    "threshold are absent from the data, left-truncating the observable volume ",
+    "distribution."
   )
 }
 
@@ -398,13 +342,11 @@ build_abstract_methods <- function(
 build_abstract_results <- function(
     specialty_summary_tbl,
     provider_volume_tbl,
-    low_volume_burden_tbl,
+    concentration_metrics_tbl,
     time_trends_tbl,
     year_col,
-    low_volume_threshold,
     kruskal_result,
     pairwise_p_list,
-    chisq_result,
     obgyn_trend,
     verbose = TRUE
 ) {
@@ -412,66 +354,11 @@ build_abstract_results <- function(
   grand_total_providers <- sum(specialty_summary_tbl$n_providers)
   grand_total_slings    <- sum(specialty_summary_tbl$total_slings)
 
-  obgyn_row    <- pull_specialty_row(specialty_summary_tbl, "OB/GYN")
-  urology_row  <- pull_specialty_row(specialty_summary_tbl, "Urology")
-
-  obgyn_vols   <- pull_specialty_volumes(provider_volume_tbl, "OB/GYN")
-  urology_vols <- pull_specialty_volumes(provider_volume_tbl, "Urology")
-
-  # Low-volume burden: pct of ALL slings done by low-volume surgeons.
-  # Use the column directly as the filter predicate (not isTRUE(), which
-  # is scalar and would discard all rows).
-  all_low_vol_slings <- dplyr::filter(
-    low_volume_burden_tbl,
-    is_low_volume_provider
-  ) |>
-    dplyr::pull(total_slings) |>
-    sum(na.rm = TRUE)
-  pct_slings_by_low_vol <- all_low_vol_slings / grand_total_slings * 100
-
-  # Per-specialty low-volume pct
-  obgyn_pct_low_vol   <- obgyn_row$pct_low_volume_providers
-  urology_pct_low_vol <- urology_row$pct_low_volume_providers
-
-  # Pairwise p-values — focal comparison is OB/GYN vs Urology
-  p_obgyn_urology <- pairwise_p_list[["OB/GYN vs Urology"]]
-
-  # Identify largest group by provider count from data (never hardcoded)
-  largest_provider_group <- specialty_summary_tbl |>
-    dplyr::arrange(dplyr::desc(n_providers)) |>
-    dplyr::slice(1) |>
-    dplyr::pull(specialty_group)
-
-  largest_provider_row <- pull_specialty_row(
-    specialty_summary_tbl, largest_provider_group
-  )
-
-  largest_group_label <- dplyr::case_when(
-    largest_provider_group == "OB/GYN"  ~ "OB/GYN physicians",
-    largest_provider_group == "Urology" ~ "urologists",
-    TRUE ~ glue::glue("{largest_provider_group} providers")
-  )
-
-  largest_group_volumes <- pull_specialty_volumes(
-    provider_volume_tbl, largest_provider_group
-  )
-
-  # Adaptive phrasing for OB/GYN vs Urology volume comparison
-  volume_comparison_sentence <- if (
-    !is.na(p_obgyn_urology) && p_obgyn_urology < 0.05
-  ) {
-    glue::glue(
-      "Annual procedure volume differed significantly between OB/GYN ",
-      "physicians and urologists (Wilcoxon p\u00a0{fmt_p(p_obgyn_urology)}, ",
-      "Bonferroni-corrected). "
-    )
-  } else {
-    glue::glue(
-      "After Bonferroni correction, annual procedure volume did not differ ",
-      "significantly between OB/GYN physicians and urologists ",
-      "(p\u00a0{fmt_p(p_obgyn_urology)}). "
-    )
-  }
+  # Data-driven: build per-group sentences for all focal specialties
+  # (sorted by total slings descending)
+  focal_rows <- specialty_summary_tbl |>
+    dplyr::filter(!specialty_group %in% c("Other")) |>
+    dplyr::arrange(dplyr::desc(total_slings))
 
   log_msg(
     sprintf("[DEBUG] Results: grand_total_providers=%d, grand_total_slings=%d",
@@ -479,7 +366,31 @@ build_abstract_results <- function(
     verbose
   )
 
-  # Kruskal-Wallis NA guard
+  # Build a sentence for each focal specialty group
+  group_sentences <- purrr::map_chr(
+    seq_len(nrow(focal_rows)),
+    function(i) {
+      row <- focal_rows[i, ]
+      vols <- pull_specialty_volumes(provider_volume_tbl, row$specialty_group)
+      label <- row$specialty_group
+      if (i == 1L) {
+        glue::glue(
+          "{label} physicians represented the largest group, accounting for ",
+          "{fmt_pct(row$pct_of_all_slings)} of all procedures at a median ",
+          "annual volume of {fmt_median_iqr(vols)} procedures per year ",
+          "({fmt_n(row$n_providers)} providers). "
+        )
+      } else {
+        glue::glue(
+          "{label} accounted for {fmt_n(row$n_providers)} providers ",
+          "({fmt_pct(row$pct_of_all_slings)} of procedures; ",
+          "median {fmt_median_iqr(vols)} procedures per year). "
+        )
+      }
+    }
+  )
+
+  # Kruskal-Wallis phrasing
   kruskal_phrasing <- if (!is.na(kruskal_result$p.value) &&
                           kruskal_result$p.value < 0.05) {
     glue::glue(
@@ -497,61 +408,60 @@ build_abstract_results <- function(
     )
   }
 
-  # Chi-square phrasing with NA guard
-  chisq_results_phrasing <- if (
-    !is.na(chisq_result$p.value) && chisq_result$p.value < 0.05
-  ) {
-    glue::glue(
-      "The proportion of low-volume surgeons (fewer than ",
-      "{low_volume_threshold} procedures per year) differed significantly ",
-      "across specialty groups ",
-      "(\u03c7\u00b2\u00a0=\u00a0{round(chisq_result$statistic, 1)}, ",
-      "df\u00a0=\u00a0{chisq_result$parameter}, ",
-      "p\u00a0{fmt_p(chisq_result$p.value)}): "
-    )
-  } else {
-    glue::glue(
-      "The proportion of low-volume surgeons (fewer than ",
-      "{low_volume_threshold} procedures per year) did not differ ",
-      "significantly across specialty groups ",
-      "(\u03c7\u00b2\u00a0=\u00a0{round(chisq_result$statistic, 1)}, ",
-      "df\u00a0=\u00a0{chisq_result$parameter}, ",
-      "p\u00a0{fmt_p(chisq_result$p.value)}): "
-    )
-  }
+  # Pairwise comparison sentences — report all available pairs
+  pairwise_sentences <- purrr::map_chr(
+    names(pairwise_p_list),
+    function(pair_name) {
+      p_val <- pairwise_p_list[[pair_name]]
+      if (!is.na(p_val) && p_val < 0.05) {
+        glue::glue(
+          "Annual procedure volume differed significantly between ",
+          "{pair_name} (Wilcoxon p\u00a0{fmt_p(p_val)}, Bonferroni-corrected). "
+        )
+      } else if (!is.na(p_val)) {
+        glue::glue(
+          "Annual procedure volume did not differ significantly between ",
+          "{pair_name} (p\u00a0{fmt_p(p_val)}, Bonferroni-corrected). "
+        )
+      } else {
+        ""
+      }
+    }
+  )
 
-  # Suppress standalone urology sentence when Urology is already the largest
-  # group (data already stated above).
-  urology_sentence <- if (largest_provider_group != "Urology") {
-    glue::glue(
-      "Urologists accounted for {fmt_n(urology_row$n_providers)} providers ",
-      "({fmt_pct(urology_row$pct_of_all_slings)} of procedures; ",
-      "median {fmt_median_iqr(urology_vols)} procedures per year). "
-    )
-  } else {
-    ""
-  }
+  # Concentration paragraph — data-driven for all focal groups
+  conc_sentences <- purrr::map_chr(
+    focal_rows$specialty_group,
+    function(sg) {
+      conc_row <- dplyr::filter(concentration_metrics_tbl, specialty_group == sg)
+      if (nrow(conc_row) == 0) return("")
+      gini <- round(conc_row$gini_coefficient, 2)
+      top20 <- if ("pct_by_top_20" %in% names(conc_row)) {
+        round(conc_row$pct_by_top_20, 1)
+      } else NA_real_
+      if (!is.na(top20)) {
+        glue::glue("{sg} (Gini\u00a0{gini}; top 20% performed {top20}%)")
+      } else {
+        glue::glue("{sg} (Gini\u00a0{gini})")
+      }
+    }
+  )
+  concentration_paragraph <- glue::glue(
+    "Procedural concentration varied by specialty: ",
+    "{paste(conc_sentences, collapse = '; ')}. "
+  )
 
-  # OB/GYN sentence: suppress when OB/GYN is the largest group (already stated)
-  obgyn_sentence <- if (largest_provider_group != "OB/GYN") {
-    glue::glue(
-      "OB/GYN physicians accounted for {fmt_n(obgyn_row$n_providers)} providers ",
-      "({fmt_pct(obgyn_row$pct_of_all_slings)} of procedures; ",
-      "median {fmt_median_iqr(obgyn_vols)} procedures per year). "
-    )
-  } else {
-    ""
-  }
-
-  # Trend sentence — suppressed when slope_p is NA
+  # Trend sentence
   trend_sentence <- if (!is.null(obgyn_trend) && !is.na(obgyn_trend$slope_p)) {
+    # Use the trend group label adaptively
+    trend_group <- if ("FPMRS" %in% focal_rows$specialty_group) "FPMRS" else "OB/GYN"
     glue::glue(
-      "Over the study period, the proportion of procedures performed by ",
-      "OB/GYN physicians {obgyn_trend$trend_phrase} from ",
+      "Over the study period, the combined OB/GYN share of procedures ",
+      "{obgyn_trend$trend_phrase} from ",
       "{fmt_pct(obgyn_trend$start_pct)} in {obgyn_trend$start_year} to ",
       "{fmt_pct(obgyn_trend$end_pct)} in {obgyn_trend$end_year} ",
       "(slope = {round(obgyn_trend$slope, 2)} percentage points per year; ",
-      "p {fmt_p(obgyn_trend$slope_p)})."
+      "p\u00a0{fmt_p(obgyn_trend$slope_p)})."
     )
   } else {
     ""
@@ -563,26 +473,13 @@ build_abstract_results <- function(
     "CPT 57288 across the study period, accounting for ",
     "{fmt_n(grand_total_slings)} procedures. ",
 
-    "OB/GYN physicians represented the largest group, accounting for ",
-    "{fmt_pct(obgyn_row$pct_of_all_slings)} of all procedures at a median ",
-    "annual volume of {fmt_median_iqr(obgyn_vols)} procedures per year ",
-    "({fmt_n(obgyn_row$n_providers)} providers). ",
-
-    "{urology_sentence}",
-
-    "{obgyn_sentence}",
+    "{paste(group_sentences, collapse = '')}",
 
     "{kruskal_phrasing}",
 
-    "{volume_comparison_sentence}",
+    "{paste(pairwise_sentences[pairwise_sentences != ''], collapse = '')}",
 
-    "{chisq_results_phrasing}",
-    "{fmt_pct(obgyn_pct_low_vol)} of OB/GYN physicians and ",
-    "{fmt_pct(urology_pct_low_vol)} of urologists were classified as ",
-    "low-volume. ",
-
-    "Low-volume surgeons across all specialties collectively accounted for ",
-    "{fmt_pct(pct_slings_by_low_vol)} of all midurethral sling procedures. ",
+    "{concentration_paragraph}",
 
     "{trend_sentence}"
   )
@@ -591,61 +488,59 @@ build_abstract_results <- function(
 #' @noRd
 build_abstract_conclusions <- function(
     specialty_summary_tbl,
-    low_volume_threshold,
-    obgyn_trend,
-    chisq_p
+    concentration_metrics_tbl,
+    obgyn_trend
 ) {
   # Adaptive phrasing: who performs the most procedures by total share?
-  dominant_specialty <- specialty_summary_tbl |>
+  dominant_row <- specialty_summary_tbl |>
+    dplyr::filter(!specialty_group %in% c("Other")) |>
     dplyr::arrange(dplyr::desc(total_slings)) |>
-    dplyr::slice(1) |>
-    dplyr::pull(specialty_group)
+    dplyr::slice(1)
+  dominant_specialty <- dominant_row$specialty_group
 
-  dominance_phrase <- if (dominant_specialty == "OB/GYN") {
-    "OB/GYN physicians perform the greatest share of midurethral sling procedures in Medicare"
-  } else {
-    glue::glue(
-      "a substantial proportion of midurethral sling procedures are performed ",
-      "by {dominant_specialty} physicians"
-    )
-  }
+  dominance_phrase <- glue::glue(
+    "{dominant_specialty} physicians perform the greatest share of ",
+    "midurethral sling procedures in Medicare"
+  )
 
-  # Trend conclusion — NA guard mirrors build_abstract_results logic
+  # Trend conclusion
   trend_conclusion <- if (
     !is.null(obgyn_trend) &&
     !is.na(obgyn_trend$slope_p) &&
     obgyn_trend$slope_p < 0.05
   ) {
     glue::glue(
-      " OB/GYN procedure share {obgyn_trend$trend_phrase} over the ",
-      "study period, suggesting {if (obgyn_trend$slope > 0) ",
-      "'growing scope-of-practice expansion by generalist physicians' else ",
-      "'a shifting procedural landscape with potential workforce implications'}."
+      " The combined gynecologic share {obgyn_trend$trend_phrase} over the ",
+      "study period, with potential workforce implications."
     )
   } else {
     ""
   }
 
-  # Chi-square significance phrase with NA guard
-  chisq_significance_phrase <- if (!is.na(chisq_p) && chisq_p < 0.05) {
-    glue::glue(
-      "The significant difference in the proportion of low-volume surgeons ",
-      "across specialty groups (p\u00a0{fmt_p(chisq_p)}) highlights heterogeneity"
-    )
-  } else {
-    glue::glue(
-      "Although the difference in the proportion of low-volume surgeons ",
-      "across specialty groups did not reach statistical significance ",
-      "(p\u00a0{fmt_p(chisq_p)}), the observed pattern highlights heterogeneity"
-    )
-  }
+  # Concentration discussion — highest Gini group
+  focal_conc <- concentration_metrics_tbl |>
+    dplyr::filter(!specialty_group %in% c("Other"))
+  highest_gini_row <- focal_conc |>
+    dplyr::arrange(dplyr::desc(gini_coefficient)) |>
+    dplyr::slice(1)
+  lowest_gini_row <- focal_conc |>
+    dplyr::arrange(gini_coefficient) |>
+    dplyr::slice(1)
+
+  concentration_phrase <- glue::glue(
+    "Procedural concentration is highest among {highest_gini_row$specialty_group} ",
+    "providers (Gini\u00a0{round(highest_gini_row$gini_coefficient, 2)}) and ",
+    "lowest among {lowest_gini_row$specialty_group} ",
+    "(Gini\u00a0{round(lowest_gini_row$gini_coefficient, 2)}), indicating that ",
+    "a minority of providers perform a disproportionate share of procedures."
+  )
 
   glue::glue(
-    "In this national Medicare cohort, {dominance_phrase}; however, ",
-    "a substantial proportion of providers performing this procedure operate ",
-    "at low annual volumes (fewer than {low_volume_threshold} cases per year). ",
-    "{chisq_significance_phrase} in ",
-    "procedural concentration that is not apparent from provider counts alone.",
+    "In this national Medicare cohort, {dominance_phrase}. ",
+    "{concentration_phrase} ",
+    "Because CMS suppresses claims from providers billing fewer than 11 ",
+    "beneficiaries, the lowest-volume providers are absent from the PUF, ",
+    "and true procedural concentration may be even greater than observed.",
     "{trend_conclusion} ",
     "These findings have implications for surgical training requirements, ",
     "credentialing standards, and equitable access to high-quality pelvic ",
@@ -870,7 +765,6 @@ build_abstract_conclusions <- function(
 generate_sling_abstract <- function(
     sling_analysis_output,
     year_col             = NULL,
-    low_volume_threshold = 10L,
     study_years          = NULL,
     verbose              = TRUE
 ) {
@@ -880,12 +774,6 @@ generate_sling_abstract <- function(
     msg = "verbose must be a single TRUE or FALSE."
   )
   log_msg("== generate_sling_abstract: START ==", verbose)
-
-  assertthat::assert_that(
-    is.numeric(low_volume_threshold) && length(low_volume_threshold) == 1L &&
-      low_volume_threshold > 0,
-    msg = "low_volume_threshold must be a single positive number."
-  )
 
   if (!is.null(study_years)) {
     assertthat::assert_that(
@@ -901,15 +789,14 @@ generate_sling_abstract <- function(
     )
   }
 
-  provider_volume_tbl   <- sling_analysis_output$provider_volume
-  specialty_summary_tbl <- sling_analysis_output$specialty_summary
-  low_volume_burden_tbl <- sling_analysis_output$low_volume_burden
-  time_trends_tbl       <- sling_analysis_output$time_trends
+  provider_volume_tbl       <- sling_analysis_output$provider_volume
+  specialty_summary_tbl     <- sling_analysis_output$specialty_summary
+  concentration_metrics_tbl <- sling_analysis_output$concentration_metrics
+  time_trends_tbl           <- sling_analysis_output$time_trends
 
   validate_reporting_analysis_output(
     sling_analysis_output,
-    year_col = year_col,
-    required_specialty_groups = c("OB/GYN", "Urology")
+    year_col = year_col
   )
   present_groups <- unique(specialty_summary_tbl$specialty_group)
   log_msg(
@@ -941,7 +828,6 @@ generate_sling_abstract <- function(
   log_msg(
     glue::glue(
       "Inputs \u2014 study_years: {study_years[1]}\u2013{study_years[2]}, ",
-      "low_volume_threshold: {low_volume_threshold}, ",
       "year_col: {if (is.null(year_col)) 'NULL' else year_col}, ",
       "provider_volume rows: {nrow(provider_volume_tbl)}"
     ),
@@ -951,19 +837,26 @@ generate_sling_abstract <- function(
   # ── 1. Statistical tests ──────────────────────────────────────────────────
   log_msg("Step 1 - Running statistical tests.", verbose)
 
+  # Determine focal groups from data (exclude "Other")
+  focal_groups <- specialty_summary_tbl |>
+    dplyr::filter(!specialty_group %in% c("Other")) |>
+    dplyr::arrange(dplyr::desc(total_slings)) |>
+    dplyr::pull(specialty_group)
+  log_msg(
+    glue::glue("  Focal groups: {paste(focal_groups, collapse = ', ')}"),
+    verbose
+  )
+
   kruskal_result  <- compute_kruskal_volume_test(
     provider_volume_tbl, verbose = verbose
   )
+
+  # Compute pairwise comparisons for the two largest focal groups
+  top_two <- focal_groups[1:min(2, length(focal_groups))]
   pairwise_p_list <- compute_pairwise_volume_tests(
     provider_volume_tbl,
-    focal_groups = c("OB/GYN", "Urology"),
+    focal_groups = top_two,
     verbose      = verbose
-  )
-  chisq_result    <- compute_low_volume_chisq(
-    provider_volume_tbl,
-    low_volume_threshold = low_volume_threshold,
-    focal_groups         = c("OB/GYN", "Urology"),
-    verbose              = verbose
   )
 
   obgyn_trend <- if (!is.null(time_trends_tbl) && !is.null(year_col)) {
@@ -977,8 +870,7 @@ generate_sling_abstract <- function(
   log_msg("Step 2 - Assembling stats_table.", verbose)
   stats_table <- build_focal_stats_table(
     provider_volume_tbl,
-    low_volume_threshold = low_volume_threshold,
-    focal_groups = c("OB/GYN", "Urology"),
+    focal_groups = top_two,
     time_trends_tbl = time_trends_tbl,
     year_col = year_col
   )
@@ -993,27 +885,23 @@ generate_sling_abstract <- function(
   objective_text   <- build_abstract_objective()
   methods_text     <- build_abstract_methods(
     study_years,
-    low_volume_threshold,
     include_trend_sentence = !is.null(year_col)
   )
   results_text     <- build_abstract_results(
-    specialty_summary_tbl = specialty_summary_tbl,
-    provider_volume_tbl   = provider_volume_tbl,
-    low_volume_burden_tbl = low_volume_burden_tbl,
-    time_trends_tbl       = time_trends_tbl,
-    year_col              = year_col,
-    low_volume_threshold  = low_volume_threshold,
-    kruskal_result        = kruskal_result,
-    pairwise_p_list       = pairwise_p_list,
-    chisq_result          = chisq_result,
-    obgyn_trend           = obgyn_trend,
-    verbose               = verbose
+    specialty_summary_tbl     = specialty_summary_tbl,
+    provider_volume_tbl       = provider_volume_tbl,
+    concentration_metrics_tbl = concentration_metrics_tbl,
+    time_trends_tbl           = time_trends_tbl,
+    year_col                  = year_col,
+    kruskal_result            = kruskal_result,
+    pairwise_p_list           = pairwise_p_list,
+    obgyn_trend               = obgyn_trend,
+    verbose                   = verbose
   )
   conclusions_text <- build_abstract_conclusions(
-    specialty_summary_tbl = specialty_summary_tbl,
-    low_volume_threshold  = low_volume_threshold,
-    obgyn_trend           = obgyn_trend,
-    chisq_p               = chisq_result$p.value
+    specialty_summary_tbl     = specialty_summary_tbl,
+    concentration_metrics_tbl = concentration_metrics_tbl,
+    obgyn_trend               = obgyn_trend
   )
 
   abstract_text <- paste0(
@@ -1024,35 +912,28 @@ generate_sling_abstract <- function(
   )
 
   # ── 4. Capture filled values for audit ───────────────────────────────────
-  obgyn_row   <- pull_specialty_row(specialty_summary_tbl, "OB/GYN")
-  urology_row <- pull_specialty_row(specialty_summary_tbl, "Urology")
-
+  # Build audit values dynamically for all focal groups
   filled_values <- list(
-    grand_total_providers      = sum(specialty_summary_tbl$n_providers),
-    grand_total_slings         = sum(specialty_summary_tbl$total_slings),
-    obgyn_n_providers          = obgyn_row$n_providers,
-    obgyn_pct_of_all_slings    = obgyn_row$pct_of_all_slings,
-    obgyn_median_iqr           = fmt_median_iqr(
-      pull_specialty_volumes(provider_volume_tbl, "OB/GYN")
-    ),
-    obgyn_pct_low_volume       = obgyn_row$pct_low_volume_providers,
-    urology_n_providers        = urology_row$n_providers,
-    urology_pct_of_all_slings  = urology_row$pct_of_all_slings,
-    urology_median_iqr         = fmt_median_iqr(
-      pull_specialty_volumes(provider_volume_tbl, "Urology")
-    ),
-    urology_pct_low_volume     = urology_row$pct_low_volume_providers,
-    kruskal_h                  = as.numeric(kruskal_result$statistic),
-    kruskal_p                  = kruskal_result$p.value,
-    chisq_stat                 = as.numeric(chisq_result$statistic),
-    chisq_p                    = chisq_result$p.value,
-    p_obgyn_vs_urology         = pairwise_p_list[["OB/GYN vs Urology"]],
-    obgyn_trend_slope          = if (!is.null(obgyn_trend)) obgyn_trend$slope       else NA_real_,
-    obgyn_trend_p              = if (!is.null(obgyn_trend)) obgyn_trend$slope_p     else NA_real_,
-    obgyn_trend_phrase         = if (!is.null(obgyn_trend)) obgyn_trend$trend_phrase else NA_character_,
-    obgyn_start_pct            = if (!is.null(obgyn_trend)) obgyn_trend$start_pct   else NA_real_,
-    obgyn_end_pct              = if (!is.null(obgyn_trend)) obgyn_trend$end_pct     else NA_real_
+    grand_total_providers = sum(specialty_summary_tbl$n_providers),
+    grand_total_slings    = sum(specialty_summary_tbl$total_slings),
+    kruskal_h             = as.numeric(kruskal_result$statistic),
+    kruskal_p             = kruskal_result$p.value,
+    obgyn_trend_slope     = if (!is.null(obgyn_trend)) obgyn_trend$slope       else NA_real_,
+    obgyn_trend_p         = if (!is.null(obgyn_trend)) obgyn_trend$slope_p     else NA_real_,
+    obgyn_trend_phrase    = if (!is.null(obgyn_trend)) obgyn_trend$trend_phrase else NA_character_,
+    obgyn_start_pct       = if (!is.null(obgyn_trend)) obgyn_trend$start_pct   else NA_real_,
+    obgyn_end_pct         = if (!is.null(obgyn_trend)) obgyn_trend$end_pct     else NA_real_
   )
+  for (sg in focal_groups) {
+    sg_key <- tolower(gsub("[/ ]", "_", sg))
+    sg_row <- pull_specialty_row(specialty_summary_tbl, sg)
+    filled_values[[paste0(sg_key, "_n_providers")]]       <- sg_row$n_providers
+    filled_values[[paste0(sg_key, "_pct_of_all_slings")]] <- sg_row$pct_of_all_slings
+    filled_values[[paste0(sg_key, "_gini")]]              <- sg_row$gini_coefficient
+    filled_values[[paste0(sg_key, "_median_iqr")]]        <- fmt_median_iqr(
+      pull_specialty_volumes(provider_volume_tbl, sg)
+    )
+  }
 
   # ── 5. Log output ─────────────────────────────────────────────────────────
   # Compute word count outside glue to avoid escape-sequence bugs.

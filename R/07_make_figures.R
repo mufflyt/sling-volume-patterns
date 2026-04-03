@@ -57,12 +57,13 @@ theme_publication <- function() {
     )
 }
 
-# Color palette: colorblind-safe, distinct for 4 specialty groups
+# Color palette: colorblind-safe, distinct for specialty groups
 specialty_colors <- c(
-  "FPMRS"   = "#E69F00",
-  "OB/GYN"  = "#56B4E9",
-  "Urology" = "#009E73",
-  "Other"   = "#999999"
+  "FPMRS"          = "#E69F00",
+  "General OB/GYN" = "#56B4E9",
+  "OB/GYN"         = "#56B4E9",
+  "Urology"        = "#009E73",
+  "Other"          = "#999999"
 )
 
 # =============================================================================
@@ -72,8 +73,15 @@ specialty_colors <- c(
 if (!is.null(time_trends) && nrow(time_trends) > 0) {
   year_col <- cfg$year_col_name
 
+  # Combine gynecologic groups for the area highlight
+  gyn_groups <- c("OB/GYN", "FPMRS", "General OB/GYN")
   area_data <- time_trends |>
-    dplyr::filter(specialty_group == "OB/GYN")
+    dplyr::filter(specialty_group %in% gyn_groups) |>
+    dplyr::group_by(dplyr::across(dplyr::all_of(year_col))) |>
+    dplyr::summarise(
+      pct_slings_this_year = sum(pct_slings_this_year, na.rm = TRUE),
+      .groups = "drop"
+    )
 
   fig1 <- ggplot2::ggplot(time_trends) +
     ggplot2::geom_area(
@@ -127,7 +135,7 @@ if (!is.null(time_trends) && nrow(time_trends) > 0) {
       "text",
       x = cfg$study_start_year + 1,
       y = max(area_data$pct_slings_this_year, na.rm = TRUE) + 3,
-      label = "OB/GYN share is rising",
+      label = "Gynecologic share",
       color = "#0C4DA2",
       size = 4,
       hjust = 0
@@ -222,6 +230,86 @@ if (nrow(provider_volume) > 0) {
   message(glue::glue("[07] Figure 2 saved: {fig2_path}"))
 } else {
   message("[07] provider_volume is empty -- skipping Figure 2.")
+}
+
+# =============================================================================
+# FIGURE 3: Lorenz Curve by Specialty (procedural concentration)
+# =============================================================================
+
+if (nrow(provider_volume) > 0) {
+  # Build Lorenz curve data: for each specialty, compute cumulative share
+  # of providers (x) vs cumulative share of procedures (y)
+  lorenz_data <- provider_volume |>
+    dplyr::group_by(specialty_group, Rndrng_NPI) |>
+    dplyr::summarise(
+      total_vol = sum(annual_sling_count, na.rm = TRUE),
+      .groups = "drop"
+    ) |>
+    dplyr::group_by(specialty_group) |>
+    dplyr::arrange(total_vol, .by_group = TRUE) |>
+    dplyr::mutate(
+      cum_providers = seq_len(dplyr::n()) / dplyr::n(),
+      cum_slings    = cumsum(total_vol) / sum(total_vol)
+    ) |>
+    dplyr::ungroup()
+
+  # Add origin points for each specialty
+  origin_rows <- lorenz_data |>
+    dplyr::distinct(specialty_group) |>
+    dplyr::mutate(
+      cum_providers = 0,
+      cum_slings    = 0,
+      total_vol     = NA_real_,
+      Rndrng_NPI    = NA_character_
+    )
+  lorenz_data <- dplyr::bind_rows(origin_rows, lorenz_data)
+
+  fig3 <- ggplot2::ggplot(
+    lorenz_data,
+    ggplot2::aes(
+      x     = cum_providers,
+      y     = cum_slings,
+      color = specialty_group
+    )
+  ) +
+    ggplot2::geom_abline(
+      slope = 1, intercept = 0,
+      linetype = "dashed", color = "grey60"
+    ) +
+    ggplot2::geom_line(linewidth = 1.2) +
+    ggplot2::scale_color_manual(values = specialty_colors) +
+    ggplot2::scale_x_continuous(
+      labels = scales::percent,
+      expand = c(0, 0)
+    ) +
+    ggplot2::scale_y_continuous(
+      labels = scales::percent,
+      expand = c(0, 0)
+    ) +
+    ggplot2::labs(
+      title    = "Lorenz Curve: Procedural Concentration by Specialty",
+      subtitle = glue::glue(
+        "CPT 57288 (midurethral sling), Medicare PUF ",
+        "{cfg$study_start_year}\u2013{cfg$study_end_year}"
+      ),
+      x = "Cumulative share of providers (ranked by volume)",
+      y = "Cumulative share of procedures"
+    ) +
+    theme_publication() +
+    ggplot2::coord_equal()
+
+  fig3_path <- file.path(cfg$figures_dir, "figure_3_lorenz_curve.png")
+  ggplot2::ggsave(
+    filename = fig3_path,
+    plot     = fig3,
+    width    = 7,
+    height   = 7,
+    dpi      = 300,
+    bg       = "white"
+  )
+  message(glue::glue("[07] Figure 3 saved: {fig3_path}"))
+} else {
+  message("[07] provider_volume is empty -- skipping Figure 3.")
 }
 
 # ── Done ─────────────────────────────────────────────────────────────────

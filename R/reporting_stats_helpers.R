@@ -1,7 +1,7 @@
 # =============================================================================
 # reporting_stats_helpers.R
 #
-# Shared helpers for provider-level low-volume classification and
+# Shared helpers for provider-level volume analysis and
 # publication-reporting statistical summaries.
 #
 # Authors: Tyler Muffly, MD
@@ -40,7 +40,7 @@ validate_reporting_analysis_output <- function(
 
   required_elements <- c(
     "provider_volume", "specialty_summary",
-    "low_volume_burden", "time_trends"
+    "concentration_metrics", "time_trends"
   )
   missing_elements <- setdiff(required_elements, names(sling_analysis_output))
   assertthat::assert_that(
@@ -53,11 +53,11 @@ validate_reporting_analysis_output <- function(
 
   provider_volume_tbl   <- sling_analysis_output$provider_volume
   specialty_summary_tbl <- sling_analysis_output$specialty_summary
-  low_volume_burden_tbl <- sling_analysis_output$low_volume_burden
+  concentration_tbl     <- sling_analysis_output$concentration_metrics
   time_trends_tbl       <- sling_analysis_output$time_trends
 
   provider_volume_cols <- c(
-    "Rndrng_NPI", "specialty_group", "annual_sling_count", "volume_tier"
+    "Rndrng_NPI", "specialty_group", "annual_sling_count"
   )
   if (!is.null(year_col)) {
     provider_volume_cols <- c(provider_volume_cols, year_col)
@@ -72,18 +72,14 @@ validate_reporting_analysis_output <- function(
     c(
       "specialty_group", "n_providers", "total_slings",
       "median_annual_volume", "mean_annual_volume",
-      "n_low_volume_providers", "pct_low_volume_providers",
-      "pct_of_all_slings"
+      "gini_coefficient", "pct_of_all_slings"
     ),
     "specialty_summary"
   )
   assert_required_columns(
-    low_volume_burden_tbl,
-    c(
-      "specialty_group", "is_low_volume_provider",
-      "n_providers", "total_slings", "pct_of_all_slings"
-    ),
-    "low_volume_burden"
+    concentration_tbl,
+    c("specialty_group", "gini_coefficient"),
+    "concentration_metrics"
   )
 
   if (is.null(time_trends_tbl)) {
@@ -123,46 +119,6 @@ validate_reporting_analysis_output <- function(
   }
 
   invisible(TRUE)
-}
-
-#' @noRd
-compute_provider_low_volume_status <- function(
-    provider_volume_data,
-    low_volume_threshold
-) {
-  assertthat::assert_that(
-    is.data.frame(provider_volume_data),
-    msg = "compute_provider_low_volume_status: provider_volume_data must be a data frame."
-  )
-  required_columns <- c("Rndrng_NPI", "specialty_group", "annual_sling_count")
-  missing_columns <- setdiff(required_columns, names(provider_volume_data))
-  assertthat::assert_that(
-    length(missing_columns) == 0L,
-    msg = glue::glue(
-      "compute_provider_low_volume_status: missing required columns: ",
-      "{paste(missing_columns, collapse = ', ')}"
-    )
-  )
-  assertthat::assert_that(
-    is.numeric(low_volume_threshold) &&
-      length(low_volume_threshold) == 1L &&
-      low_volume_threshold > 0,
-    msg = paste0(
-      "compute_provider_low_volume_status: low_volume_threshold must be a ",
-      "single positive number."
-    )
-  )
-
-  provider_volume_data |>
-    dplyr::group_by(Rndrng_NPI, specialty_group) |>
-    dplyr::summarise(
-      mean_annual_sling_count = mean(annual_sling_count, na.rm = TRUE),
-      total_slings_all_years  = sum(annual_sling_count, na.rm = TRUE),
-      .groups = "drop"
-    ) |>
-    dplyr::mutate(
-      is_low_volume_provider = mean_annual_sling_count < low_volume_threshold
-    )
 }
 
 #' @noRd
@@ -224,56 +180,6 @@ safe_pairwise_wilcox_tidy <- function(
 }
 
 #' @noRd
-safe_low_volume_chisq_tidy <- function(
-    provider_volume_data,
-    low_volume_threshold,
-    focal_groups = c("OB/GYN", "Urology")
-) {
-  comparison_label <- paste(focal_groups, collapse = " vs ")
-  npi_summary <- compute_provider_low_volume_status(
-    provider_volume_data,
-    low_volume_threshold = low_volume_threshold
-  ) |>
-    dplyr::filter(specialty_group %in% focal_groups)
-
-  present_groups <- intersect(focal_groups, unique(npi_summary$specialty_group))
-  if (length(present_groups) < 2L) {
-    return(tibble::tibble(
-      statistic  = NA_real_,
-      parameter  = NA_real_,
-      p.value    = NA_real_,
-      comparison = comparison_label,
-      test       = "Chi-square (not computed)"
-    ))
-  }
-
-  contingency_table <- table(
-    npi_summary$specialty_group,
-    npi_summary$is_low_volume_provider
-  )
-
-  if (nrow(contingency_table) < 2L || ncol(contingency_table) < 2L) {
-    return(tibble::tibble(
-      statistic  = NA_real_,
-      parameter  = NA_real_,
-      p.value    = NA_real_,
-      comparison = comparison_label,
-      test       = "Chi-square (not computed)"
-    ))
-  }
-
-  stats::chisq.test(contingency_table) |>
-    broom::tidy() |>
-    dplyr::transmute(
-      statistic  = statistic,
-      parameter  = parameter,
-      p.value    = p.value,
-      comparison = comparison_label,
-      test       = "Chi-square"
-    )
-}
-
-#' @noRd
 safe_obgyn_trend_row <- function(time_trends_tbl, year_col) {
   if (is.null(time_trends_tbl) || is.null(year_col)) {
     return(tibble::tibble(
@@ -291,13 +197,17 @@ safe_obgyn_trend_row <- function(time_trends_tbl, year_col) {
     "time_trends"
   )
 
-  obgyn_trend_rows <- dplyr::filter(
-    time_trends_tbl,
-    specialty_group == "OB/GYN"
-  )
-  if (nrow(obgyn_trend_rows) < 3L) {
+  gyn_groups <- c("OB/GYN", "FPMRS", "General OB/GYN")
+  gyn_trend_rows <- time_trends_tbl |>
+    dplyr::filter(specialty_group %in% gyn_groups) |>
+    dplyr::group_by(dplyr::across(dplyr::all_of(year_col))) |>
+    dplyr::summarise(
+      pct_slings_this_year = sum(pct_slings_this_year, na.rm = TRUE),
+      .groups = "drop"
+    )
+  if (nrow(gyn_trend_rows) < 3L) {
     return(tibble::tibble(
-      test        = "Linear regression: OB/GYN market share ~ year",
+      test        = "Linear regression: gynecologic market share ~ year",
       statistic   = NA_real_,
       df          = NA_real_,
       p_value     = NA_real_,
@@ -305,15 +215,15 @@ safe_obgyn_trend_row <- function(time_trends_tbl, year_col) {
     ))
   }
 
-  year_values      <- obgyn_trend_rows[[year_col]]
-  obgyn_pct_values <- obgyn_trend_rows$pct_slings_this_year
+  year_values      <- gyn_trend_rows[[year_col]]
+  obgyn_pct_values <- gyn_trend_rows$pct_slings_this_year
   trend_lm         <- stats::lm(obgyn_pct_values ~ year_values)
   trend_summary    <- summary(trend_lm)
   slope            <- stats::coef(trend_lm)[["year_values"]]
   slope_p          <- trend_summary$coefficients["year_values", "Pr(>|t|)"]
 
   tibble::tibble(
-    test        = "Linear regression: OB/GYN market share ~ year",
+    test        = "Linear regression: gynecologic market share ~ year",
     statistic   = slope,
     df          = NA_real_,
     p_value     = slope_p,
@@ -329,7 +239,6 @@ safe_obgyn_trend_row <- function(time_trends_tbl, year_col) {
 #' @noRd
 build_focal_stats_table <- function(
     provider_volume_data,
-    low_volume_threshold,
     focal_groups = c("OB/GYN", "Urology"),
     time_trends_tbl = NULL,
     year_col = NULL
@@ -376,28 +285,9 @@ build_focal_stats_table <- function(
       )
     )
 
-  chisq_row <- safe_low_volume_chisq_tidy(
-    provider_volume_data,
-    low_volume_threshold = low_volume_threshold,
-    focal_groups = focal_groups
-  ) |>
-    dplyr::transmute(
-      test        = "Chi-square: proportion low-volume across specialties",
-      statistic   = statistic,
-      df          = parameter,
-      p_value     = p.value,
-      p_formatted = dplyr::case_when(
-        is.na(p.value)  ~ "NA (not computed)",
-        p.value < 0.001 ~ "<0.001",
-        p.value < 0.01  ~ sprintf("%.3f", p.value),
-        TRUE            ~ sprintf("%.2f", p.value)
-      )
-    )
-
   dplyr::bind_rows(
     kruskal_tidy,
     pairwise_rows,
-    chisq_row,
     safe_obgyn_trend_row(time_trends_tbl, year_col)
   )
 }
