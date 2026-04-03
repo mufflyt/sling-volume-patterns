@@ -44,7 +44,8 @@ results <- analyze_midurethral_sling_patterns(
   medicare_puf_data    = puf_classified,
   year_col             = cfg$year_col_name,
   low_volume_threshold = cfg$low_volume_threshold_primary,
-  verbose              = cfg$verbose
+  verbose              = cfg$verbose,
+  abog_npi_csv         = cfg$abog_npi_csv
 )
 validate_reporting_analysis_output(
   results,

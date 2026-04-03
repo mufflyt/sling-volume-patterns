@@ -46,11 +46,13 @@ provider_volume <- artifact_read(
 theme_publication <- function() {
   ggplot2::theme_minimal(base_size = 12) +
     ggplot2::theme(
-      plot.title       = ggplot2::element_text(face = "bold", size = 14),
-      plot.subtitle    = ggplot2::element_text(size = 10, color = "grey40"),
+      plot.title       = ggplot2::element_text(face = "bold", size = 16),
+      plot.subtitle    = ggplot2::element_text(size = 11, color = "grey45"),
       legend.position  = "bottom",
       legend.title     = ggplot2::element_blank(),
       panel.grid.minor = ggplot2::element_blank(),
+      panel.grid.major = ggplot2::element_line(color = "#f0f0f0"),
+      axis.line        = ggplot2::element_line(color = "#cccccc"),
       strip.text       = ggplot2::element_text(face = "bold")
     )
 }
@@ -70,17 +72,39 @@ specialty_colors <- c(
 if (!is.null(time_trends) && nrow(time_trends) > 0) {
   year_col <- cfg$year_col_name
 
-  fig1 <- ggplot2::ggplot(
-    time_trends,
-    ggplot2::aes(
-      x     = .data[[year_col]],
-      y     = pct_slings_this_year,
-      color = specialty_group,
-      group = specialty_group
-    )
-  ) +
-    ggplot2::geom_line(linewidth = 1.2) +
-    ggplot2::geom_point(size = 2.5) +
+  area_data <- time_trends |>
+    dplyr::filter(specialty_group == "OB/GYN")
+
+  fig1 <- ggplot2::ggplot(time_trends) +
+    ggplot2::geom_area(
+      data = area_data,
+      ggplot2::aes(
+        x = .data[[year_col]],
+        y = pct_slings_this_year
+      ),
+      fill = "#4C9AFF",
+      alpha = 0.2
+    ) +
+    ggplot2::geom_line(
+      ggplot2::aes(
+        x     = .data[[year_col]],
+        y     = pct_slings_this_year,
+        color = specialty_group,
+        group = specialty_group
+      ),
+      linewidth = 1.4
+    ) +
+    ggplot2::geom_point(
+      ggplot2::aes(
+        x     = .data[[year_col]],
+        y     = pct_slings_this_year,
+        color = specialty_group
+      ),
+      size = 3,
+      stroke = 0.5,
+      shape = 21,
+      fill = "white"
+    ) +
     ggplot2::scale_color_manual(values = specialty_colors) +
     ggplot2::scale_x_continuous(breaks = cfg$puf_years) +
     ggplot2::scale_y_continuous(
@@ -95,7 +119,19 @@ if (!is.null(time_trends) && nrow(time_trends) > 0) {
       x = "Year",
       y = "Share of all midurethral slings (%)"
     ) +
-    theme_publication()
+    theme_publication() +
+    ggplot2::theme(
+      plot.background = ggplot2::element_rect(fill = "#fcfcfd", color = NA)
+    ) +
+    ggplot2::annotate(
+      "text",
+      x = cfg$study_start_year + 1,
+      y = max(area_data$pct_slings_this_year, na.rm = TRUE) + 3,
+      label = "OB/GYN share is rising",
+      color = "#0C4DA2",
+      size = 4,
+      hjust = 0
+    )
 
   fig1_path <- file.path(cfg$figures_dir, "figure_1_market_share.png")
   ggplot2::ggsave(
@@ -139,13 +175,25 @@ if (nrow(provider_volume) > 0) {
       fill = specialty_group
     )
   ) +
-    ggplot2::geom_violin(alpha = 0.6, scale = "width") +
-    ggplot2::geom_boxplot(width = 0.15, outlier.shape = NA, alpha = 0.8) +
+    ggplot2::geom_violin(alpha = 0.8, scale = "width", color = NA) +
+    ggplot2::geom_boxplot(
+      width        = 0.19,
+      outlier.shape = NA,
+      alpha        = 0.95,
+      color        = "grey20"
+    ) +
+    ggplot2::geom_jitter(
+      size  = 0.9,
+      alpha = 0.25,
+      width = 0.12,
+      color = "grey20"
+    ) +
     ggplot2::scale_fill_manual(values = specialty_colors) +
     ggplot2::scale_y_continuous(
       trans  = "log1p",
       breaks = c(1, 5, 10, 25, 50, 100, 200, 500),
-      labels = scales::comma
+      labels = scales::comma,
+      expand = c(0, 0)
     ) +
     ggplot2::labs(
       title    = "Annual Procedure Volume by Specialty",
@@ -157,7 +205,10 @@ if (nrow(provider_volume) > 0) {
       y = "Annual sling count per provider (log scale)"
     ) +
     theme_publication() +
-    ggplot2::theme(legend.position = "none")
+    ggplot2::theme(
+      legend.position = "none",
+      panel.grid.major.x = ggplot2::element_blank()
+    )
 
   fig2_path <- file.path(cfg$figures_dir, "figure_2_volume_distribution.png")
   ggplot2::ggsave(

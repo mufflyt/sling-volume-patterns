@@ -467,7 +467,8 @@ test_that("main function: provider_volume has required columns", {
   )
   required_columns <- c(
     "Rndrng_NPI", "Rndrng_Prvdr_Type",
-    "specialty_group", "annual_sling_count", "volume_tier"
+    "specialty_group", "annual_sling_count", "volume_tier",
+    "subspecialty_abog"
   )
   expect_true(
     all(required_columns %in% names(result_list$provider_volume))

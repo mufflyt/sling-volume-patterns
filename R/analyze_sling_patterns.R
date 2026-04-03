@@ -145,6 +145,48 @@ assign_volume_tier <- function(annual_count_vector, low_volume_threshold) {
   )
 }
 
+#' @noRd
+classify_abog_subspecialty <- function(subspecialty_vector) {
+  dplyr::case_when(
+    is.na(subspecialty_vector) ~ NA_character_,
+    stringr::str_detect(
+      subspecialty_vector,
+      stringr::regex("female pelvic medicine|reconstructive surgery", ignore_case = TRUE)
+    ) ~ "FPMRS / URPS",
+    TRUE ~ "General OBGYN"
+  )
+}
+
+#' @noRd
+load_abog_subspecialty_lookup <- function(abog_csv_path) {
+  assertthat::assert_that(
+    is.character(abog_csv_path) && length(abog_csv_path) == 1L && nzchar(abog_csv_path),
+    msg = "abog_csv_path must be a non-empty string."
+  )
+  assertthat::assert_that(
+    file.exists(abog_csv_path),
+    msg = glue::glue("ABOG crosswalk not found at '{abog_csv_path}'.")
+  )
+  abog_tbl <- readr::read_csv(
+    abog_csv_path,
+    show_col_types = FALSE,
+    col_types = readr::cols(
+      npi         = readr::col_character(),
+      subspecialty = readr::col_character()
+    )
+  )
+  if (!"subspecialty" %in% names(abog_tbl)) {
+    stop("Canonical ABOG file must contain a 'subspecialty' column.")
+  }
+  abog_tbl |>
+    dplyr::mutate(
+      abog_npi = trimws(npi),
+      subspecialty_abog = classify_abog_subspecialty(subspecialty)
+    ) |>
+    dplyr::select(abog_npi, subspecialty_abog) |>
+    dplyr::distinct(abog_npi, .keep_all = TRUE)
+}
+
 # =============================================================================
 # PATTERN 5: PARAMETERIZED THRESHOLD HELPERS
 # (from cas-bioinf/covid19retrospective + oyaxbell/pasc_ensanut)
@@ -747,7 +789,8 @@ analyze_midurethral_sling_patterns <- function(
     medicare_puf_data,
     year_col             = NULL,
     low_volume_threshold = 10L,
-    verbose              = TRUE
+    verbose              = TRUE,
+    abog_npi_csv         = NULL
 ) {
   # ── 0. Input validation ────────────────────────────────────────────────────
   # Bug fix: verbose must be validated FIRST because log_msg() depends on it.
@@ -787,6 +830,11 @@ analyze_midurethral_sling_patterns <- function(
     msg = "low_volume_threshold must be a positive number."
   )
 
+  abog_lookup <- NULL
+  if (!is.null(abog_npi_csv)) {
+    abog_lookup <- load_abog_subspecialty_lookup(abog_npi_csv)
+  }
+
   # ── 1. Filter to CPT 57288 ─────────────────────────────────────────────────
   log_msg("Step 1 ▸ Filtering to CPT 57288 (midurethral sling).", verbose)
   sling_claims <- filter_to_sling_cpt(medicare_puf_data, verbose = verbose)
@@ -797,6 +845,31 @@ analyze_midurethral_sling_patterns <- function(
     sling_claims,
     specialty_group = classify_provider_specialty(Rndrng_Prvdr_Type)
   )
+
+  if (!is.null(abog_lookup)) {
+    other_npis <- sling_claims |>
+      dplyr::filter(specialty_group == "Other") |>
+      dplyr::pull(Rndrng_NPI) |>
+      na.omit() |>
+      unique()
+    reassign_to_urology <- setdiff(other_npis, abog_lookup$abog_npi)
+    if (length(reassign_to_urology) > 0) {
+      log_msg(
+        glue::glue(
+          "  Reclassifying {length(reassign_to_urology)} non-ABOG NPIs ",
+          "from 'Other' to 'Urology'."
+        ),
+        verbose
+      )
+      sling_claims <- dplyr::mutate(
+        sling_claims,
+        specialty_group = dplyr::case_when(
+          Rndrng_NPI %in% reassign_to_urology ~ "Urology",
+          TRUE ~ specialty_group
+        )
+      )
+    }
+  }
 
   specialty_record_counts <- dplyr::count(sling_claims, specialty_group)
   purrr::walk(
@@ -812,8 +885,6 @@ analyze_midurethral_sling_patterns <- function(
     }
   )
 
-  # Bug fix: na.rm = TRUE required because NA == "Other" is NA, not FALSE.
-  # sum() without na.rm propagates NA silently.
   n_unclassified <- sum(sling_claims$specialty_group == "Other", na.rm = TRUE)
   if (n_unclassified > 0) {
     other_types <- sling_claims |>
@@ -845,6 +916,19 @@ analyze_midurethral_sling_patterns <- function(
         low_volume_threshold
       )
     )
+
+  if (!is.null(abog_lookup)) {
+    provider_volume <- provider_volume |>
+      dplyr::left_join(
+        abog_lookup,
+        by = c("Rndrng_NPI" = "abog_npi")
+      ) |>
+      dplyr::select(-abog_npi) |>
+      dplyr::relocate(subspecialty_abog, .after = Rndrng_NPI)
+  } else {
+    provider_volume <- provider_volume |>
+      dplyr::mutate(subspecialty_abog = NA_character_)
+  }
 
   log_msg(
     glue::glue(

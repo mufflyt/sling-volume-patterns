@@ -79,6 +79,7 @@ default:
   figures_dir:    "output/figures"
   tables_dir:     "output/tables"
   cache_dir:      "data/cache"
+  abog_npi_csv:   "data/canonical_abog/canonical_abog_npi_LATEST.csv"
 
   # ── Data provenance (Pattern 4: data_raw/ README) ──────────────────────────
   # data_raw/ holds original CMS downloads; never modified after download.
