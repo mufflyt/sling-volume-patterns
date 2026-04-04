@@ -66,8 +66,23 @@ The dashed diagonal represents perfect equality, where each provider performs an
 
 ```bash
 # From the project root:
+
+# First time (or returning after months): restore exact R package versions
+Rscript -e 'renv::restore()'
+
+# Run the full pipeline
 Rscript 00_run_all.R
 ```
+
+### Reproducible environment
+
+This project uses [`renv`](https://rstudio.github.io/renv/) to lock R package versions. The `renv.lock` file pins 91 packages to the exact versions used for the analysis (R 4.4.0). When returning to this project:
+
+1. `renv::restore()` — installs all packages at the locked versions
+2. `renv::status()` — checks if anything has drifted
+3. `renv::snapshot()` — updates the lockfile if you add new packages
+
+### Pipeline steps
 
 All parameters are in `config.yml`. The pipeline runs 7 steps:
 
