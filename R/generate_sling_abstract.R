@@ -302,9 +302,7 @@ build_abstract_methods <- function(
 ) {
   trend_methods_sentence <- if (isTRUE(include_trend_sentence)) {
     paste0(
-      "Time trends in the combined gynecologic (URPS + MIGS + General OB/GYN) ",
-      "procedure share were assessed by linear regression of annual ",
-      "market-share percentage on calendar year."
+      "Gynecologic market-share trends were assessed by linear regression. "
     )
   } else {
     ""
@@ -317,25 +315,18 @@ build_abstract_methods <- function(
   }
 
   glue::glue(
-    "We conducted a {study_design_label} analysis of the CMS Medicare ",
-    "Physician and Other Practitioners Public Use File from {year_range[1]} ",
-    "to {year_range[2]}. All providers billing CPT 57288 were identified and ",
-    "classified into mutually exclusive specialty groups \u2014 Urogynecology ",
-    "and Reconstructive Pelvic Surgery (URPS), Minimally Invasive ",
-    "Gynecologic Surgery (MIGS), general obstetrics and gynecology ",
-    "(General OB/GYN), and urology \u2014 using CMS-reported provider type ",
-    "cross-referenced with the American Board of Obstetrics and ",
-    "Gynecology (ABOG) subspecialty registry. Annual sling volume was ",
-    "calculated per provider per year. Descriptive statistics including median annual ",
-    "volume with interquartile range (IQR) were computed by specialty group. ",
-    "Procedural concentration was quantified using the Gini coefficient and ",
-    "the share of procedures performed by the top 20% of providers within ",
-    "each specialty group. An omnibus Kruskal-Wallis test assessed differences ",
-    "in annual volume across specialty groups; pairwise comparisons used ",
-    "Wilcoxon rank-sum tests with Bonferroni correction. {trend_methods_sentence} ",
-    "CMS suppresses service counts of 1\u201310 in the PUF; providers below this ",
-    "threshold are absent from the data, left-truncating the observable volume ",
-    "distribution."
+    "We analyzed the CMS Medicare Physician and Other Practitioners ",
+    "Public Use File ({year_range[1]}\u2013{year_range[2]}). Providers billing ",
+    "CPT 57288 were classified as Urogynecology and Reconstructive Pelvic ",
+    "Surgery (URPS), Minimally Invasive Gynecologic Surgery (MIGS), ",
+    "General OB/GYN, or urology using CMS provider type cross-referenced ",
+    "with the ABOG subspecialty registry. Procedural concentration was ",
+    "quantified using Gini coefficients and the share performed by the top ",
+    "20% of providers. Volume differences were assessed by Kruskal-Wallis ",
+    "and pairwise Wilcoxon tests (Bonferroni-corrected). ",
+    "{trend_methods_sentence}",
+    "CMS suppresses counts of 1\u201310 services; providers below this threshold ",
+    "are absent from the data."
   )
 }
 
@@ -539,13 +530,11 @@ build_abstract_conclusions <- function(
   glue::glue(
     "In this national Medicare cohort, {dominance_phrase}. ",
     "{concentration_phrase} ",
-    "Because CMS suppresses claims from providers billing fewer than 11 ",
-    "beneficiaries, the lowest-volume providers are absent from the PUF, ",
-    "and true procedural concentration may be even greater than observed.",
+    "True concentration may be greater, as CMS suppresses claims from ",
+    "providers with fewer than 11 beneficiaries.",
     "{trend_conclusion} ",
-    "These findings have implications for surgical training requirements, ",
-    "credentialing standards, and equitable access to high-quality pelvic ",
-    "floor surgical care."
+    "These findings inform credentialing standards and workforce planning ",
+    "for pelvic floor surgical care."
   )
 }
 
