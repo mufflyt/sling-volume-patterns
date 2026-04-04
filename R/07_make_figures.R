@@ -5,7 +5,7 @@
 # This script reads ONLY from data/cache/ — never calls analysis functions.
 #
 # Figures:
-#   Figure 1: FPMRS market share time trend (line plot)
+#   Figure 1: URPS market share time trend (line plot)
 #   Figure 2: Annual volume distributions by specialty (box/violin)
 #
 # Phase chain:
@@ -59,7 +59,7 @@ theme_publication <- function() {
 
 # Color palette: colorblind-safe, distinct for specialty groups
 specialty_colors <- c(
-  "FPMRS"          = "#E69F00",
+  "URPS"          = "#E69F00",
   "MIGS"           = "#CC79A7",
   "General OB/GYN" = "#56B4E9",
   "OB/GYN"         = "#56B4E9",
@@ -68,14 +68,14 @@ specialty_colors <- c(
 )
 
 # =============================================================================
-# FIGURE 1: FPMRS Market Share Time Trend
+# FIGURE 1: URPS Market Share Time Trend
 # =============================================================================
 
 if (!is.null(time_trends) && nrow(time_trends) > 0) {
   year_col <- cfg$year_col_name
 
   # Combine gynecologic groups for the area highlight
-  gyn_groups <- c("OB/GYN", "FPMRS", "MIGS", "General OB/GYN")
+  gyn_groups <- c("OB/GYN", "URPS", "MIGS", "General OB/GYN")
   area_data <- time_trends |>
     dplyr::filter(specialty_group %in% gyn_groups) |>
     dplyr::group_by(dplyr::across(dplyr::all_of(year_col))) |>

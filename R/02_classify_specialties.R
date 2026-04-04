@@ -2,7 +2,7 @@
 # 02_classify_specialties.R
 #
 # Step 2: Read puf_merged.rds, classify each provider's specialty using the
-# hierarchical regex taxonomy (FPMRS > OB/GYN > Urology > Other), write
+# hierarchical regex taxonomy (URPS > OB/GYN > Urology > Other), write
 # data/cache/puf_classified.rds.
 #
 # Phase chain:
@@ -36,7 +36,7 @@ message(glue::glue(
 
 # ── Classify specialties ─────────────────────────────────────────────────
 # Uses classify_provider_specialty() from analyze_sling_patterns.R
-# Hierarchy: FPMRS > OB/GYN > Urology > Other
+# Hierarchy: URPS > OB/GYN > Urology > Other
 puf_classified <- dplyr::mutate(
   puf_merged,
   specialty_group = classify_provider_specialty(Rndrng_Prvdr_Type)

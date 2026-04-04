@@ -11,7 +11,7 @@
 # adaptive phrase drawn directly from the data.
 #
 # CMS Medicare PUF provider types: OB/GYN, Urology, Other.
-# There is no FPMRS category in the PUF. The focal comparison is
+# There is no URPS category in the PUF. The focal comparison is
 # OB/GYN vs Urology.
 #
 # Statistical tests performed:
@@ -214,8 +214,8 @@ compute_obgyn_trend_test <- function(
     verbose
   )
 
-  # Combine all gynecologic groups (FPMRS, General OB/GYN, OB/GYN)
-  gyn_groups <- c("OB/GYN", "FPMRS", "MIGS", "General OB/GYN")
+  # Combine all gynecologic groups (URPS, General OB/GYN, OB/GYN)
+  gyn_groups <- c("OB/GYN", "URPS", "MIGS", "General OB/GYN")
   gyn_trend_rows <- time_trends_tbl |>
     dplyr::filter(specialty_group %in% gyn_groups) |>
     dplyr::group_by(dplyr::across(dplyr::all_of(year_col))) |>
@@ -302,7 +302,7 @@ build_abstract_methods <- function(
 ) {
   trend_methods_sentence <- if (isTRUE(include_trend_sentence)) {
     paste0(
-      "Time trends in the combined gynecologic (FPMRS + General OB/GYN) ",
+      "Time trends in the combined gynecologic (URPS + MIGS + General OB/GYN) ",
       "procedure share were assessed by linear regression of annual ",
       "market-share percentage on calendar year."
     )
@@ -320,8 +320,8 @@ build_abstract_methods <- function(
     "We conducted a {study_design_label} analysis of the CMS Medicare ",
     "Physician and Other Practitioners Public Use File from {year_range[1]} ",
     "to {year_range[2]}. All providers billing CPT 57288 were identified and ",
-    "classified into mutually exclusive specialty groups \u2014 Female Pelvic ",
-    "Medicine and Reconstructive Surgery (FPMRS), Minimally Invasive ",
+    "classified into mutually exclusive specialty groups \u2014 Urogynecology ",
+    "and Reconstructive Pelvic Surgery (URPS), Minimally Invasive ",
     "Gynecologic Surgery (MIGS), general obstetrics and gynecology ",
     "(General OB/GYN), and urology \u2014 using CMS-reported provider type ",
     "cross-referenced with the American Board of Obstetrics and ",
@@ -455,7 +455,7 @@ build_abstract_results <- function(
   # Trend sentence
   trend_sentence <- if (!is.null(obgyn_trend) && !is.na(obgyn_trend$slope_p)) {
     # Use the trend group label adaptively
-    trend_group <- if ("FPMRS" %in% focal_rows$specialty_group) "FPMRS" else "OB/GYN"
+    trend_group <- if ("URPS" %in% focal_rows$specialty_group) "URPS" else "OB/GYN"
     glue::glue(
       "Over the study period, the combined OB/GYN share of procedures ",
       "{obgyn_trend$trend_phrase} from ",
@@ -562,7 +562,7 @@ build_abstract_conclusions <- function(
 #' statistics and p-values required to render a complete, publication-ready
 #' structured abstract. Every number, percentage, IQR, p-value, and
 #' directional phrase is derived programmatically from the data. The CMS
-#' Medicare PUF does not include an FPMRS (urogynecology) provider type;
+#' Medicare PUF does not include an URPS (urogynecology) provider type;
 #' the three groups present in the data are OB/GYN, Urology, and Other.
 #' The focal comparison is OB/GYN vs Urology.
 #'

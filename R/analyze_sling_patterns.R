@@ -90,7 +90,7 @@ classify_provider_specialty <- function(provider_type_vector) {
     msg = "provider_type_vector must be a character vector."
   )
   # Mutually exclusive hierarchy:
-  #   1. FPMRS (urogynecology keywords win)
+  #   1. URPS (urogynecology keywords win)
   #   2. OB/GYN (obstetrics / gynecology keywords)
   #   3. Urology
   #   4. Other (catch-all)
@@ -101,7 +101,7 @@ classify_provider_specialty <- function(provider_type_vector) {
         "urogynecol|female pelvic|pelvic medicine|pelvic floor",
         ignore_case = TRUE
       )
-    ) ~ "FPMRS",
+    ) ~ "URPS",
     stringr::str_detect(
       provider_type_vector,
       stringr::regex(
@@ -204,7 +204,7 @@ classify_abog_subspecialty <- function(subspecialty_vector) {
     stringr::str_detect(
       subspecialty_vector,
       stringr::regex("female pelvic medicine|reconstructive surgery", ignore_case = TRUE)
-    ) ~ "FPMRS",
+    ) ~ "URPS",
     stringr::str_detect(
       subspecialty_vector,
       stringr::regex("^MIG$|minimally invasive gynecol", ignore_case = TRUE)
@@ -514,7 +514,7 @@ build_time_trends <- function(
 #' @description
 #' Classifies every provider billing CPT 57288 (midurethral sling) in the
 #' CMS Medicare Physician and Other Practitioners Public Use File into one
-#' of four mutually exclusive specialty groups — FPMRS (urogynecology),
+#' of four mutually exclusive specialty groups — URPS (urogynecology),
 #' OB/GYN, Urology, or Other — using a deterministic hierarchical taxonomy
 #' applied to the \code{Rndrng_Prvdr_Type} column supplied directly by CMS.
 #' The function then summarises annual procedure volume, the low-volume
@@ -525,7 +525,7 @@ build_time_trends <- function(
 #' Classification is mutually exclusive and applied in priority order.
 #' The first matching rule wins:
 #' \enumerate{
-#'   \item \strong{FPMRS} — \code{Rndrng_Prvdr_Type} matches
+#'   \item \strong{URPS} — \code{Rndrng_Prvdr_Type} matches
 #'     (case-insensitive): \emph{urogynecol}, \emph{female pelvic},
 #'     \emph{pelvic medicine}, or \emph{pelvic floor}
 #'   \item \strong{OB/GYN} — matches: \emph{obstetrics},
@@ -605,7 +605,7 @@ build_time_trends <- function(
 #'   \item{\code{provider_volume}}{Tibble. One row per provider-year
 #'     (or per provider when \code{year_col = NULL}). Columns:
 #'     \code{Rndrng_NPI} (chr), \code{Rndrng_Prvdr_Type} (chr),
-#'     \code{specialty_group} (chr; one of FPMRS / OB/GYN / Urology /
+#'     \code{specialty_group} (chr; one of URPS / OB/GYN / Urology /
 #'     Other), \code{annual_sling_count} (int; sum of \code{Tot_Srvcs}),
 #'     \code{volume_tier} (chr; Low / Medium / High relative to
 #'     \code{low_volume_threshold}). If \code{year_col} was supplied,
@@ -668,7 +668,7 @@ build_time_trends <- function(
 #' \donttest{
 #' synthetic_puf_single_year <- tibble::tibble(
 #'   Rndrng_NPI        = as.character(c(
-#'     1001, 1002, 1003,       # FPMRS — high-volume
+#'     1001, 1002, 1003,       # URPS — high-volume
 #'     1004, 1005, 1006, 1007, # OB/GYN — all low-volume
 #'     1008, 1009, 1010,       # Urology — mixed volume
 #'     1011, 1012,             # Other — low-volume
@@ -683,7 +683,7 @@ build_time_trends <- function(
 #'   ),
 #'   HCPCS_Cd  = c(rep("57288", 12), "99213"),
 #'   Tot_Srvcs = c(
-#'     45L, 38L, 52L,        # FPMRS: all >= 10 (high-volume)
+#'     45L, 38L, 52L,        # URPS: all >= 10 (high-volume)
 #'     4L,  6L,  3L, 9L,    # OB/GYN: all < 10 (low-volume)
 #'     14L, 8L, 20L,         # Urology: 1 low, 2 high
 #'     3L,  7L,              # Other: both low-volume
@@ -702,12 +702,12 @@ build_time_trends <- function(
 #' #> # A tibble: 4 x 8
 #' #>   specialty_group n_providers total_slings median_annual_volume ...
 #' #>   <chr>                 <int>        <int>                <dbl>
-#' #> 1 FPMRS                     3          135                   45
+#' #> 1 URPS                     3          135                   45
 #' #> 2 Urology                   3           42                   14
 #' #> 3 OB/GYN                    4           22                    5
 #' #> 4 Other                     2           10                    5
 #'
-#' # All 4 OB/GYN providers are low-volume; 0 FPMRS providers are low-volume
+#' # All 4 OB/GYN providers are low-volume; 0 URPS providers are low-volume
 #' print(results_single$specialty_summary[,
 #'   c("specialty_group", "pct_low_volume_providers")
 #' ])
@@ -718,7 +718,7 @@ build_time_trends <- function(
 #'
 #' # ----------------------------------------------------------------
 #' # Example 2 — Multi-year trend analysis with year_col
-#' # Shows rising FPMRS market share 2020 -> 2022
+#' # Shows rising URPS market share 2020 -> 2022
 #' # ----------------------------------------------------------------
 #' \donttest{
 #' synthetic_puf_multiyear <- tibble::tibble(
@@ -855,8 +855,8 @@ analyze_midurethral_sling_patterns <- function(
       )
     }
 
-    # Step 2b: Split OB/GYN into FPMRS, MIGS, and General OB/GYN using ABOG
-    fpmrs_npis <- abog_lookup$abog_npi[abog_lookup$subspecialty_abog == "FPMRS"]
+    # Step 2b: Split OB/GYN into URPS, MIGS, and General OB/GYN using ABOG
+    fpmrs_npis <- abog_lookup$abog_npi[abog_lookup$subspecialty_abog == "URPS"]
     migs_npis  <- abog_lookup$abog_npi[abog_lookup$subspecialty_abog == "MIGS"]
     obgyn_npis <- sling_claims |>
       dplyr::filter(specialty_group == "OB/GYN") |>
@@ -869,14 +869,14 @@ analyze_midurethral_sling_patterns <- function(
     log_msg(
       glue::glue(
         "  Splitting OB/GYN by ABOG subspecialty: ",
-        "{n_fpmrs} FPMRS, {n_migs} MIGS, {n_gen} General OB/GYN."
+        "{n_fpmrs} URPS, {n_migs} MIGS, {n_gen} General OB/GYN."
       ),
       verbose
     )
     sling_claims <- dplyr::mutate(
       sling_claims,
       specialty_group = dplyr::case_when(
-        specialty_group == "OB/GYN" & Rndrng_NPI %in% fpmrs_npis ~ "FPMRS",
+        specialty_group == "OB/GYN" & Rndrng_NPI %in% fpmrs_npis ~ "URPS",
         specialty_group == "OB/GYN" & Rndrng_NPI %in% migs_npis  ~ "MIGS",
         specialty_group == "OB/GYN"                               ~ "General OB/GYN",
         TRUE ~ specialty_group

@@ -9,11 +9,11 @@
 # Here the "assumption" being tested is the specialty grouping taxonomy.
 #
 # Sensitivity schemes:
-#   A. Gynecologic  — FPMRS + OB/GYN merged into "Gynecologic specialists"
-#                     vs Urology vs Other (tests whether FPMRS/OB-GYN split
+#   A. Gynecologic  — URPS + OB/GYN merged into "Gynecologic specialists"
+#                     vs Urology vs Other (tests whether URPS/OB-GYN split
 #                     matters or if the gynecologic vs urologic contrast drives
 #                     the result)
-#   B. Binary       — "FPMRS only" vs "Non-FPMRS" (simplest possible split;
+#   B. Binary       — "URPS only" vs "Non-URPS" (simplest possible split;
 #                     directly answers "is this a subspecialist-concentration
 #                     story?")
 #
@@ -160,15 +160,15 @@ run_sens_scheme <- function(
 }
 
 # =============================================================================
-# SCHEME A: Gynecologic specialists (FPMRS + OB/GYN merged)
+# SCHEME A: Gynecologic specialists (URPS + OB/GYN merged)
 # =============================================================================
-# Tests whether the conclusion "FPMRS outperforms OB/GYN" survives when
+# Tests whether the conclusion "URPS outperforms OB/GYN" survives when
 # the two gynecologic groups are collapsed.  If Gynecologic > Urology still
-# holds, the result is robust to the FPMRS/OB-GYN split.
+# holds, the result is robust to the URPS/OB-GYN split.
 
 recode_gynecologic <- function(specialty_group_vector) {
   dplyr::case_when(
-    specialty_group_vector %in% c("FPMRS", "OB/GYN") ~ "Gynecologic specialists",
+    specialty_group_vector %in% c("URPS", "OB/GYN") ~ "Gynecologic specialists",
     specialty_group_vector == "Urology"               ~ "Urology",
     TRUE                                              ~ "Other"
   )
@@ -184,15 +184,15 @@ run_sens_scheme(
 )
 
 # =============================================================================
-# SCHEME B: Binary split — FPMRS vs Non-FPMRS
+# SCHEME B: Binary split — URPS vs Non-URPS
 # =============================================================================
 # The simplest possible question: does subspecialty training predict volume?
-# Collapses OB/GYN, Urology, and Other into a single "Non-FPMRS" category.
+# Collapses OB/GYN, Urology, and Other into a single "Non-URPS" category.
 
 recode_binary <- function(specialty_group_vector) {
   dplyr::case_when(
-    specialty_group_vector == "FPMRS" ~ "FPMRS",
-    TRUE                              ~ "Non-FPMRS"
+    specialty_group_vector == "URPS" ~ "URPS",
+    TRUE                              ~ "Non-URPS"
   )
 }
 
@@ -236,7 +236,7 @@ if (file.exists(primary_summary_path) &&
   print(sens_a_ss[, c("specialty_group", "n_providers",
                        "gini_coefficient", "pct_of_all_slings")])
 
-  message("  Scheme B (binary FPMRS / Non-FPMRS):")
+  message("  Scheme B (binary URPS / Non-URPS):")
   print(sens_b_ss[, c("specialty_group", "n_providers",
                        "gini_coefficient", "pct_of_all_slings")])
 }
