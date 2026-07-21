@@ -1128,6 +1128,30 @@ test_that("summarise_scheme: distribution shares sum to 100 and trends compute",
   expect_true(all(c("urps_slope_pp_yr", "gyn_slope_pp_yr") %in% names(s$trends)))
 })
 
+# =============================================================================
+# Tests: workforce dynamics (R/workforce_dynamics.R)
+# =============================================================================
+
+test_that("build_workforce_dynamics: two-year washout flags entrants and exits", {
+  # A present all years; B enters 2013 (absent 2011-12); C exits after 2012.
+  pv <- tibble::tibble(
+    Rndrng_NPI = c("A","A","A","A","A", "B","B","B", "C","C"),
+    specialty_group = "URPS",
+    annual_sling_count = 11L,
+    puf_year = c(2011L,2012L,2013L,2014L,2015L, 2013L,2014L,2015L, 2011L,2012L)
+  )
+  wf <- build_workforce_dynamics(pv, "puf_year", washout = 2L)
+  a <- wf$annual
+  # 2013: B is an entrant (absent 2011 and 2012); A is continuing.
+  r2013 <- a[a$puf_year == 2013, ]
+  expect_equal(r2013$n_entrant, 1L)
+  expect_equal(r2013$n_continuing, r2013$n_observable - 1L)
+  # 2012: C is exiting (absent 2013 and 2014).
+  expect_equal(a$n_exiting[a$puf_year == 2012], 1L)
+  # First two years have no 2-year prior -> entrant is NA
+  expect_true(is.na(a$n_entrant[a$puf_year == 2011]))
+})
+
 # ── Property invariant tests ─────────────────────────────────────────────────
 
 test_that("Invariant: each NPI appears at most once in provider_volume (cross-sectional)", {

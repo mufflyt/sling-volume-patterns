@@ -18,7 +18,7 @@ Tyler Muffly, MD
 
 **Methods:** We analyzed the CMS Medicare Physician and Other Practitioners Public Use File (2013–2023, excluding 2017 as a truncated release). Providers billing CPT 57288 were classified as Urogynecology and Reconstructive Pelvic Surgery (URPS), Minimally Invasive Gynecologic Surgery (MIGS), General OB/GYN, or urology using CMS provider type cross-referenced with the ABOG (OB/GYN pathway) and ABU (urology pathway) subspecialty rosters. Procedural concentration was quantified at the surgeon level using the Gini coefficient and the Herfindahl–Hirschman Index (HHI), overall and per calendar year. Because each physician contributes repeated annual observations, volume differences were modeled with a Poisson generalized estimating equation (GEE) clustered by NPI (adjusted rate ratios, 95% CIs), with a per-physician Kruskal-Wallis secondary analysis. The market-share trend was reported under multiple classification schemes that bracket the truth: fixed-membership (each physician's eventual subspecialty applied to all years; a lower bound) and time-varying certification-gated (URPS/MIGS only from the ABOG subspecialty certification year; an upper bound, since certification lags practice onset), with modal and ever-URPS/MIGS as additional sensitivity analyses.
 
-**Results:** A total of 1,758 unique providers billed CPT 57288, accounting for 131,637 procedures. URPS physicians represented the largest group — 753 providers, 80,033 procedures (60.8%), median 19 procedures/year (IQR 14–29). Urology accounted for 665 providers (34,351 procedures; 26.1%; median 16), General OB/GYN for 330 (16,391; 12.5%; median 15), and MIGS for 10 (862; 0.7%; median 16). In a Poisson GEE clustered by NPI, adjusted annual volume was significantly lower than URPS for every group — Urology (rate ratio 0.82, 95% CI 0.70–0.95), General OB/GYN (0.67, 0.50–0.90), and MIGS (0.56, 0.40–0.76) — with a ~11% decline in 2020 (RR 0.89, 0.85–0.92, p < 0.001) and no overall per-physician time trend (RR 1.00, p = 0.52). Pooled multi-year concentration was lowest for URPS (Gini 0.51, HHI 27; top 20% performed 53.4%) and highest for MIGS (Gini 0.60, HHI 2,919; 68.2%); within-year concentration was low and stable (annual Gini ≈ 0.27; no trend, p = 0.82). The URPS market share increased significantly under every classification scheme, bracketed by fixed-membership classification (a lower bound: gynecologic share 60.8% → 70.1%, +0.84 pp/year) and time-varying certification-gated classification (an upper bound, as certification lags the start of subspecialty practice: URPS share 46.3% → 74.2%, +2.28 pp/year); the true increase lies between (all p ≤ 0.001).
+**Results:** A total of 1,758 unique providers billed CPT 57288, accounting for 131,637 procedures. URPS physicians represented the largest group — 753 providers, 80,033 procedures (60.8%), median 19 procedures/year (IQR 14–29). Urology accounted for 665 providers (34,351 procedures; 26.1%; median 16), General OB/GYN for 330 (16,391; 12.5%; median 15), and MIGS for 10 (862; 0.7%; median 16). In a Poisson GEE clustered by NPI, adjusted annual volume was significantly lower than URPS for every group — Urology (rate ratio 0.82, 95% CI 0.70–0.95), General OB/GYN (0.67, 0.50–0.90), and MIGS (0.56, 0.40–0.76) — with a ~11% decline in 2020 (RR 0.89, 0.85–0.92, p < 0.001) and no overall per-physician time trend (RR 1.00, p = 0.52). Pooled multi-year concentration was lowest for URPS (Gini 0.51, HHI 27; top 20% performed 53.4%) and highest for MIGS (Gini 0.60, HHI 2,919; 68.2%); within-year concentration was low and stable (annual Gini ≈ 0.27; no trend, p = 0.82). Modeled by specialty, URPS share rose (+0.90 pp/year, p < 0.001) while urology (−0.55, p = 0.004) and General OB/GYN (−0.42, p = 0.006) declined; the combined URPS increase was significant under every classification scheme, bracketed by fixed-membership classification (lower bound: gynecologic share 60.8% → 70.1%, +0.84 pp/year) and time-varying certification-gated classification (upper bound, as certification lags practice onset: URPS share 46.3% → 74.2%, +2.28 pp/year). Newly observable entrant surgeons (absent the prior two observable years) performed 7–23% of annual volume at low median volume (~13); URPS contributed the most entrants (440 over the period) while urology showed substantial churn (373 entrants despite a declining share).
 
 **Conclusions:** URPS physicians perform the majority of midurethral sling procedures in Medicare, with significantly higher adjusted per-physician volume and the most equitable within-group distribution. The rising gynecologic market share reflects attrition of non-URPS providers rather than a more concentrated surgeon pool, with implications for credentialing standards and workforce planning for pelvic floor surgical care.
 
@@ -56,7 +56,13 @@ CMS suppresses provider-service level data when a provider serves fewer than 11 
 
 The primary outcome was the annual midurethral sling count per provider. Procedural concentration was quantified with two complementary **surgeon-level** measures — the Gini coefficient (inequality across the whole surgeon-volume distribution) and the Herfindahl–Hirschman Index (HHI, sum of squared per-surgeon shares on a 0–10,000 scale, driven especially by the largest-volume surgeons) — computed on aggregate provider totals and separately for each calendar year. Each physician is the operative production unit; this is surgeon-level procedural concentration and not the antitrust use of HHI for hospital/health-system market competition, so values are not comparable to FTC/DOJ thresholds.
 
-Because each physician contributes up to ten annual observations, provider-year records are not independent, and rank tests over them are descriptive only. We therefore modeled the annual count with a Poisson generalized estimating equation (GEE) clustered by NPI (exchangeable working correlation, robust standard errors), with fixed effects for specialty (reference URPS), calendar year, specialty × year, and a 2020 (COVID) indicator, reporting adjusted rate ratios with 95% CIs; a negative-binomial mixed model with a random intercept per NPI gave concordant estimates. As a secondary analysis restoring independence, we compared one value per physician (each physician's median annual volume) across specialties by Kruskal-Wallis and Bonferroni-adjusted pairwise Wilcoxon tests. Time trends in the gynecologic (OB/GYN-residency-trained: ABOG-URPS + MIGS + General OB/GYN) share were assessed by ordinary least-squares regression on calendar year.
+Because each physician contributes up to ten annual observations, provider-year records are not independent, and rank tests over them are descriptive only. We therefore modeled the annual count with a Poisson generalized estimating equation (GEE) clustered by NPI (exchangeable working correlation, robust standard errors), with fixed effects for specialty (reference URPS), calendar year, specialty × year, and a 2020 (COVID) indicator, reporting adjusted rate ratios with 95% CIs; a negative-binomial mixed model with a random intercept per NPI gave concordant estimates. As a secondary analysis restoring independence, we compared one value per physician (each physician's median annual volume) across specialties by Kruskal-Wallis and Bonferroni-adjusted pairwise Wilcoxon tests.
+
+We modeled each specialty's annual market share separately by ordinary least-squares regression of its annual percentage share on calendar year (URPS, urology, and General OB/GYN; MIGS descriptively given n = 10), in addition to the combined gynecologic share.
+
+To characterize workforce turnover, we classified each observable surgeon in each year, using a two-year washout, as an **entrant** (observable that year but absent in both of the two prior observable years), **continuing** (observable and not an entrant), or apparently **exiting** (observable that year but absent in both of the two subsequent observable years), and computed the entrant share of annual volume, median entrant volume, and entrants by specialty. Because CMS suppression removes providers below 11 beneficiaries, we describe these as *newly observable* surgeons rather than definitively new sling surgeons.
+
+As a restrained secondary geographic analysis, we tabulated observable surgeons and the URPS share by provider practice state and identified states with no observable URPS surgeon performing at least 11 Medicare slings in any year. Population-based rates (surgeons and procedures per female Medicare beneficiary) were not computed, as fee-for-service denominators with Medicare Advantage adjustment were outside the scope of this analysis.
 
 All analyses were performed in R 4.4 with package versions locked via renv. The complete pipeline is available at https://github.com/mufflyt/sling-volume-patterns.
 
@@ -79,6 +85,18 @@ Pooled multi-year concentration was lowest for URPS (Gini 0.51, HHI 27; top 20% 
 The URPS market share of sling procedures rose significantly regardless of classification, and two schemes bracket the true trend. Fixed-membership classification, which assigns each physician's eventual subspecialty to all study years, is a lower bound: the combined-URPS share rose 53.4% → 63.8% (+0.90 pp/year) and the gynecologic share 60.8% → 70.1% (+0.84 pp/year), with the URPS-share slope +0.90 to +0.98 pp/year across the fixed, modal, and ever-URPS/MIGS schemes (all p ≤ 0.001). Time-varying, certification-gated classification — counting physicians as URPS only from their ABOG subspecialty certification year — is an upper bound: URPS share rose 46.3% → 74.2% (slope 2.28 pp/year; p < 0.001) and the gynecologic slope 1.33 pp/year (p < 0.001). The upper bound overstates the rise because board certification lags the start of subspecialty practice — the 2013 examination certified physicians who were already practicing urogynecology, and later diplomates likewise practiced before sitting for boards — so certified-only classification misattributes their pre-certification years to General OB/GYN or urology. The true increase in URPS market share therefore lies between roughly +0.9 and +2.3 percentage points per year and is significant under every specification. Non-URPS urology's share fell correspondingly (30.7% → 23.1%, fixed classification).
 
 The number of observable surgeons fell over the period, driven by non-URPS providers: urology declined from 282 to 144 (−12.6/year, p = 0.002) and General OB/GYN from 142 to 76 (−6.9/year, p = 0.002), whereas the URPS surgeon count was statistically stable (385 to 338; −6.4/year, p = 0.10). Because per-physician volume showed no time trend, the rising URPS share reflects attrition of non-URPS providers rather than growth in the URPS workforce.
+
+### Specialty-Specific Market-Share Trends
+
+Modeling each specialty's annual share separately (Table 6) shows that the combined gynecologic increase masks divergent specialty trajectories. URPS share rose significantly (53.4% → 63.8%; +0.90 pp/year, p < 0.001), while both urology (30.7% → 23.1%; −0.55 pp/year, p = 0.004) and General OB/GYN (15.7% → 12.3%; −0.42 pp/year, p = 0.006) declined significantly. MIGS share was small but rose descriptively (0.2% → 0.8%; n = 10). Total observable sling volume did not increase over the period; the shift is one of specialty ownership rather than growth in overall Medicare sling volume.
+
+### Workforce Entry and Exit
+
+Applying a two-year washout (Table 5), newly observable entrant surgeons numbered 48–184 per year and performed 7.4%–22.5% of that year's volume, at a low median entrant volume (~13 slings/year) consistent with providers appearing just above the CMS suppression threshold. Entry fell sharply in 2020 (48 entrants; 7.4% of volume), consistent with pandemic disruption. Across the period URPS contributed the most entrants (440), followed by urology (373), General OB/GYN (189), and MIGS (8). Thus the rising URPS market share reflects both the largest inflow of newly observable URPS surgeons and continuing URPS volume, whereas urology exhibited substantial churn — many entrants alongside its net decline — indicating turnover rather than simple attrition. Because CMS suppresses providers below 11 beneficiaries, these are newly observable rather than definitively new sling surgeons.
+
+### Geographic Distribution (Secondary)
+
+Provider practice location spanned 52 states and territories. The URPS share of observable sling surgeons varied widely by state, from 100% (Hawaii) and 82%–85% (Minnesota, District of Columbia, Connecticut) to 15% (Nebraska). Four states or territories had no observable URPS surgeon performing at least 11 Medicare slings in any study year (North Dakota, Alaska, Puerto Rico, Wyoming); given CMS suppression, this indicates the absence of *observable* high-volume URPS surgeons, not necessarily the absence of any URPS physician. Population-based rates and formal geographic inequality measures were not computed and are proposed as a separate access-focused analysis.
 
 ## Discussion
 
@@ -167,6 +185,32 @@ In this national Medicare cohort, URPS physicians perform the majority of midure
 | Sensitivity — URPS share (ever-URPS/MIGS) | — | 0.96 | 0.001 |
 | **Upper bound — URPS share (time-varying, cert-gated)** | **46.3% → 74.2%** | **2.28** | **< 0.001** |
 | Upper bound — gynecologic share (time-varying, cert-gated) | — | 1.33 | < 0.001 |
+
+**Table 5.** Annual sling workforce dynamics (newly observable surgeons; two-year washout). Entrants were absent in both prior observable years; exiting surgeons were absent in both subsequent observable years. Entrant/continuing counts are undefined for the first two years and exiting counts for the last two.
+
+| Year | Observable | Entrants | Continuing | Exiting | % volume by entrants | Median entrant volume |
+|------|-----------|----------|-----------|---------|----------------------|-----------------------|
+| 2013 | 812 | — | — | 214 | — | — |
+| 2014 | 685 | — | — | 164 | — | — |
+| 2015 | 655 | 127 | 528 | 136 | 14.2% | 13 |
+| 2016 | 701 | 158 | 543 | 219 | 15.3% | 13 |
+| 2018 | 672 | 184 | 488 | 154 | 20.6% | 14 |
+| 2019 | 650 | 122 | 528 | 230 | 12.4% | 13 |
+| 2020 | 445 | 48 | 397 | 66 | 7.4% | 13 |
+| 2021 | 458 | 77 | 381 | 81 | 12.1% | 13 |
+| 2022 | 562 | 168 | 394 | — | 22.5% | 14 |
+| 2023 | 562 | 126 | 436 | — | 15.7% | 13 |
+
+Entrants by specialty over the period: URPS 440, urology 373, General OB/GYN 189, MIGS 8.
+
+**Table 6.** Specialty-specific market-share trends (annual percentage-point share regressed on year; fixed classification).
+
+| Specialty | 2013 → 2023 share | Slope (pp/year) | p-value |
+|-----------|-------------------|-----------------|---------|
+| URPS | 53.4% → 63.8% | +0.90 | < 0.001 |
+| Urology | 30.7% → 23.1% | −0.55 | 0.004 |
+| General OB/GYN | 15.7% → 12.3% | −0.42 | 0.006 |
+| MIGS (descriptive, n = 10) | 0.2% → 0.8% | +0.07 | 0.008 |
 
 ---
 
