@@ -18,6 +18,7 @@
 # =============================================================================
 
 source("R/artifact_manifest.R")
+source("R/annual_concentration_outputs.R")
 
 cfg          <- config::get()
 phase_label  <- "07_figures"
@@ -311,6 +312,38 @@ if (nrow(provider_volume) > 0) {
   message(glue::glue("[07] Figure 3 saved: {fig3_path}"))
 } else {
   message("[07] provider_volume is empty -- skipping Figure 3.")
+}
+
+# =============================================================================
+# FIGURES 4 & 5: Annual concentration and supply trends by specialty
+# =============================================================================
+
+annual_path <- file.path(cfg$cache_dir, "annual_concentration.rds")
+if (file.exists(annual_path)) {
+  annual_concentration <- artifact_read(
+    artifact_name = "annual_concentration",
+    file_path     = annual_path,
+    cache_dir     = cfg$cache_dir,
+    verify_hash   = TRUE,
+    verbose       = cfg$verbose
+  )
+  year_col <- cfg$year_col_name
+
+  fig4 <- make_concentration_trend_figure(
+    annual_concentration, year_col = year_col, year_breaks = cfg$puf_years
+  )
+  fig4_path <- file.path(cfg$figures_dir, "figure_4_concentration_trends.png")
+  ggplot2::ggsave(fig4_path, fig4, width = 9, height = 7, dpi = 300, bg = "white")
+  message(glue::glue("[07] Figure 4 saved: {fig4_path}"))
+
+  fig5 <- make_supply_trend_figure(
+    annual_concentration, year_col = year_col, year_breaks = cfg$puf_years
+  )
+  fig5_path <- file.path(cfg$figures_dir, "figure_5_supply_trends.png")
+  ggplot2::ggsave(fig5_path, fig5, width = 9, height = 5, dpi = 300, bg = "white")
+  message(glue::glue("[07] Figure 5 saved: {fig5_path}"))
+} else {
+  message("[07] annual_concentration.rds not found — skipping Figures 4 & 5.")
 }
 
 # ── Done ─────────────────────────────────────────────────────────────────

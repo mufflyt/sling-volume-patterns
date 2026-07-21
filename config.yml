@@ -73,6 +73,14 @@ default:
   tables_dir:     "output/tables"
   cache_dir:      "data/cache"
   abog_npi_csv:   "data/canonical_abog/canonical_abog_npi_LATEST.csv"
+  # ABU (American Board of Urology) urology-pathway URPS/FPMRS roster.
+  # These fellowship-trained urogynecologists entered via a urology residency,
+  # are absent from the ABOG (OB/GYN) registry, and appear only as "Urology" in
+  # the CMS PUF. Cross-referencing this list folds them into the combined URPS
+  # group (see analyze_midurethral_sling_patterns Step 2c). Set to a non-string
+  # (e.g. remove the line) to disable and keep them inside Urology.
+  # Source: isochrones repo ABU pipeline (abu_urps_active_with_gender_*).
+  urps_urology_npi_csv: "data/abu_urology/abu_urps_npi_LATEST.csv"
 
   # ── Data provenance (Pattern 4: data_raw/ README) ──────────────────────────
   # data_raw/ holds original CMS downloads; never modified after download.

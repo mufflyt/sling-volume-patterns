@@ -20,6 +20,7 @@
 
 source("R/artifact_manifest.R")
 source("R/reporting_stats_helpers.R")
+source("R/annual_concentration_outputs.R")
 
 cfg <- config::get()
 set.seed(cfg$seed)
@@ -247,6 +248,55 @@ artifact_csv(
 
 message("[06_tables] Table 4 (statistical tests via broom::tidy()):")
 print(table_4_stats)
+
+# =============================================================================
+# TABLE 5 & 6: Annual concentration metrics and their year trends
+# =============================================================================
+
+annual_path <- file.path(cfg$cache_dir, "annual_concentration.rds")
+if (file.exists(annual_path)) {
+  annual_concentration <- artifact_read(
+    artifact_name = "annual_concentration",
+    file_path     = annual_path,
+    cache_dir     = cfg$cache_dir,
+    verify_hash   = TRUE,
+    verbose       = cfg$verbose
+  )
+
+  # Table 5: per year x specialty (+ pooled "All")
+  table_5 <- build_annual_concentration_table(
+    annual_concentration,
+    year_col = cfg$year_col_name
+  )
+  artifact_csv(
+    tbl           = table_5,
+    artifact_name = "table_5_annual_concentration",
+    file_path     = file.path(cfg$tables_dir, "table_5_annual_concentration.csv"),
+    phase         = phase_label,
+    phase_script  = phase_script,
+    cache_dir     = cfg$cache_dir,
+    verbose       = cfg$verbose
+  )
+
+  # Table 6: regress each measure on calendar year, per specialty
+  trend_regressions <- build_concentration_trend_regressions(
+    annual_concentration,
+    year_col = cfg$year_col_name
+  )
+  table_6 <- build_trend_regression_table(trend_regressions)
+  artifact_csv(
+    tbl           = table_6,
+    artifact_name = "table_6_concentration_trends",
+    file_path     = file.path(cfg$tables_dir, "table_6_concentration_trends.csv"),
+    phase         = phase_label,
+    phase_script  = phase_script,
+    cache_dir     = cfg$cache_dir,
+    verbose       = cfg$verbose
+  )
+  message("[06_tables] Tables 5 & 6 (annual concentration + trends) written.")
+} else {
+  message("[06_tables] annual_concentration.rds not found — skipping Tables 5 & 6.")
+}
 
 # =============================================================================
 # TABLE 1-HTML: kable() + kableExtra publication-formatted version

@@ -122,6 +122,105 @@ validate_reporting_analysis_output <- function(
 }
 
 #' @noRd
+#' Regress each annual concentration measure on calendar year, separately for
+#' every specialty group (and the pooled "All" group).
+#'
+#' Consumes the tibble returned by build_annual_concentration_metrics() and
+#' fits an ordinary-least-squares trend (measure ~ year) per specialty x
+#' measure. This is what lets the manuscript state whether surgeon-level
+#' concentration "increased, decreased, or remained stable" over 2013-2023
+#' rather than reporting a single pooled Gini. Groups/measures with fewer than
+#' three usable (non-NA) years return an NA row instead of erroring.
+#'
+#' @return One row per specialty_group x measure with: n_years, start_year,
+#'   end_year, start_value, end_value, slope_per_year, r_squared, p_value,
+#'   and a formatted p (p_formatted).
+build_concentration_trend_regressions <- function(
+    annual_concentration_tbl,
+    year_col,
+    measures = c(
+      "n_procedures", "n_surgeons", "median_volume",
+      "gini_coefficient", "hhi",
+      "pct_by_top_10", "pct_by_top_20", "pct_by_bottom_50"
+    )
+) {
+  assert_required_columns(
+    annual_concentration_tbl,
+    c(year_col, "specialty_group", measures),
+    "annual_concentration"
+  )
+
+  fit_one <- function(group_name, measure_name) {
+    sub <- annual_concentration_tbl[
+      annual_concentration_tbl$specialty_group == group_name, ,
+      drop = FALSE
+    ]
+    year_values    <- sub[[year_col]]
+    measure_values <- sub[[measure_name]]
+    keep           <- !is.na(year_values) & !is.na(measure_values)
+    year_values    <- year_values[keep]
+    measure_values <- measure_values[keep]
+
+    ordered_idx <- order(year_values)
+    year_values    <- year_values[ordered_idx]
+    measure_values <- measure_values[ordered_idx]
+    n_years        <- length(year_values)
+
+    na_row <- tibble::tibble(
+      specialty_group = group_name,
+      measure         = measure_name,
+      n_years         = n_years,
+      start_year      = if (n_years > 0L) year_values[1] else NA_real_,
+      end_year        = if (n_years > 0L) year_values[n_years] else NA_real_,
+      start_value     = if (n_years > 0L) measure_values[1] else NA_real_,
+      end_value       = if (n_years > 0L) measure_values[n_years] else NA_real_,
+      slope_per_year  = NA_real_,
+      r_squared       = NA_real_,
+      p_value         = NA_real_,
+      p_formatted     = "NA (not computed)"
+    )
+
+    # Need at least 3 years and some variation in the outcome to fit a line.
+    if (n_years < 3L || length(unique(measure_values)) < 2L) {
+      return(na_row)
+    }
+
+    trend_lm      <- stats::lm(measure_values ~ year_values)
+    trend_summary <- summary(trend_lm)
+    slope         <- stats::coef(trend_lm)[["year_values"]]
+    slope_p       <- trend_summary$coefficients["year_values", "Pr(>|t|)"]
+    r_squared     <- trend_summary$r.squared
+
+    tibble::tibble(
+      specialty_group = group_name,
+      measure         = measure_name,
+      n_years         = n_years,
+      start_year      = year_values[1],
+      end_year        = year_values[n_years],
+      start_value     = measure_values[1],
+      end_value       = measure_values[n_years],
+      slope_per_year  = slope,
+      r_squared       = r_squared,
+      p_value         = slope_p,
+      p_formatted     = dplyr::case_when(
+        is.na(slope_p)  ~ "NA (not computed)",
+        slope_p < 0.001 ~ "<0.001",
+        slope_p < 0.01  ~ sprintf("%.3f", slope_p),
+        TRUE            ~ sprintf("%.2f", slope_p)
+      )
+    )
+  }
+
+  group_names <- unique(annual_concentration_tbl$specialty_group)
+  grid <- expand.grid(
+    specialty_group = group_names,
+    measure         = measures,
+    stringsAsFactors = FALSE
+  )
+  purrr::map2_dfr(grid$specialty_group, grid$measure, fit_one)
+}
+
+#' @noRd
 safe_pairwise_wilcox_tidy <- function(
     provider_volume_data,
     focal_groups = c("OB/GYN", "Urology"),

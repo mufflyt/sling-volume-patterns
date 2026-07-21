@@ -427,7 +427,7 @@ test_that("build_concentration_metrics: emits Gini and one top-N% column per cut
 # Tests: analyze_midurethral_sling_patterns() — integration
 # =============================================================================
 
-test_that("main function: returns a list with four named elements", {
+test_that("main function: returns a list with the expected named elements", {
   result_list <- analyze_midurethral_sling_patterns(
     medicare_puf_data = make_minimal_puf(),
     year_col          = NULL,
@@ -437,7 +437,7 @@ test_that("main function: returns a list with four named elements", {
   expect_named(
     result_list,
     c("provider_volume", "specialty_summary", "concentration_metrics",
-      "time_trends")
+      "time_trends", "annual_concentration")
   )
 })
 
@@ -818,6 +818,177 @@ test_that("manifest_verify errors on missing artifacts", {
   expect_error(
     suppressWarnings(manifest_verify(cache_dir, verbose = FALSE)),
     regexp = "missing artifact"
+  )
+})
+
+# =============================================================================
+# Tests: compute_hhi() / compute_bottom_pct_share()
+# =============================================================================
+
+test_that("compute_hhi: equal volumes give 10000/n; a monopoly gives 10000", {
+  expect_equal(compute_hhi(rep(4, 5)), 2000)          # 10000 / 5
+  expect_equal(compute_hhi(c(0, 0, 10)), 10000)       # one provider, all share
+  expect_true(compute_hhi(c(50, 50)) == 5000)         # two equal → 10000/2
+})
+
+test_that("compute_hhi: returns NA for degenerate input", {
+  expect_true(is.na(compute_hhi(numeric(0))))
+  expect_true(is.na(compute_hhi(c(0, 0))))
+})
+
+test_that("compute_bottom_pct_share: bottom 50% share is small and <= top 50%", {
+  vols <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+  bottom <- compute_bottom_pct_share(vols, bottom_pct = 0.50)  # 1+2+3+4+5=15 of 55
+  expect_equal(round(bottom, 1), 27.3)
+  expect_true(bottom < compute_top_pct_share(vols, top_pct = 0.50))
+})
+
+test_that("compute_bottom_pct_share: returns NA for degenerate input", {
+  expect_true(is.na(compute_bottom_pct_share(numeric(0))))
+  expect_true(is.na(compute_bottom_pct_share(c(0, 0))))
+})
+
+# =============================================================================
+# Tests: build_annual_concentration_metrics()
+# =============================================================================
+
+test_that("build_annual_concentration_metrics: has an 'All' row per year and expected columns", {
+  result_list <- analyze_midurethral_sling_patterns(
+    make_puf_multiyear(), year_col = "year", verbose = FALSE
+  )
+  ac <- result_list$annual_concentration
+  expect_false(is.null(ac))
+  expect_true(all(
+    c("year", "specialty_group", "n_surgeons", "n_procedures",
+      "p25_volume", "median_volume", "p75_volume", "gini_coefficient",
+      "hhi", "pct_by_top_10", "pct_by_top_20", "pct_by_bottom_50") %in% names(ac)
+  ))
+  # One pooled "All" row for every year present
+  years <- sort(unique(ac$year))
+  all_rows <- ac[ac$specialty_group == "All", ]
+  expect_equal(sort(all_rows$year), years)
+})
+
+test_that("build_annual_concentration_metrics: pooled 'All' equals the sum across specialties", {
+  result_list <- analyze_midurethral_sling_patterns(
+    make_puf_multiyear(), year_col = "year", verbose = FALSE
+  )
+  ac <- result_list$annual_concentration
+  per_specialty_totals <- ac |>
+    dplyr::filter(specialty_group != "All") |>
+    dplyr::group_by(year) |>
+    dplyr::summarise(
+      procs    = sum(n_procedures),
+      surgeons = sum(n_surgeons),
+      .groups = "drop"
+    )
+  all_totals <- ac |>
+    dplyr::filter(specialty_group == "All") |>
+    dplyr::select(year, all_procs = n_procedures, all_surgeons = n_surgeons)
+  cmp <- dplyr::left_join(per_specialty_totals, all_totals, by = "year")
+  # Every surgeon-year belongs to exactly one specialty, so totals must match.
+  expect_true(all(cmp$procs == cmp$all_procs))
+  expect_true(all(cmp$surgeons == cmp$all_surgeons))
+})
+
+test_that("build_annual_concentration_metrics: is NULL in cross-sectional mode", {
+  result_list <- analyze_midurethral_sling_patterns(
+    make_minimal_puf(), year_col = NULL, verbose = FALSE
+  )
+  expect_null(result_list$annual_concentration)
+})
+
+# =============================================================================
+# Tests: build_concentration_trend_regressions()
+# =============================================================================
+
+test_that("build_concentration_trend_regressions: recovers a known positive slope", {
+  annual <- tibble::tibble(
+    puf_year        = 2013:2023,
+    specialty_group = "All",
+    n_procedures    = 100 + 10 * (0:10),   # exact slope = 10/yr
+    n_surgeons      = 50L,
+    median_volume   = 15,
+    gini_coefficient = 0.30,
+    hhi             = 100,
+    pct_by_top_10   = 20,
+    pct_by_top_20   = 35,
+    pct_by_bottom_50 = 30
+  )
+  tr <- build_concentration_trend_regressions(annual, year_col = "puf_year")
+  proc_row <- tr[tr$specialty_group == "All" & tr$measure == "n_procedures", ]
+  expect_equal(round(proc_row$slope_per_year, 6), 10)
+  expect_equal(round(proc_row$r_squared, 6), 1)
+  expect_equal(proc_row$p_formatted, "<0.001")
+})
+
+test_that("build_concentration_trend_regressions: NA row when fewer than 3 years", {
+  annual <- tibble::tibble(
+    puf_year         = c(2022L, 2023L),
+    specialty_group  = "All",
+    n_procedures     = c(100, 120),
+    n_surgeons       = c(50L, 55L),
+    median_volume    = c(15, 16),
+    gini_coefficient = c(0.30, 0.31),
+    hhi              = c(100, 110),
+    pct_by_top_10    = c(20, 21),
+    pct_by_top_20    = c(35, 36),
+    pct_by_bottom_50 = c(30, 29)
+  )
+  tr <- build_concentration_trend_regressions(annual, year_col = "puf_year")
+  expect_true(all(is.na(tr$slope_per_year)))
+  expect_true(all(tr$p_formatted == "NA (not computed)"))
+})
+
+# =============================================================================
+# Tests: urology-pathway URPS reclassification (ABU list)
+# =============================================================================
+
+test_that("load_urps_urology_npi_list reads NPIs and errors without an npi column", {
+  good <- tempfile(fileext = ".csv")
+  readr::write_csv(tibble::tibble(npi = c("1003", " 1009 "), name = c("a", "b")), good)
+  npis <- load_urps_urology_npi_list(good)
+  expect_true(all(c("1003", "1009") %in% npis))  # trimmed
+
+  bad <- tempfile(fileext = ".csv")
+  readr::write_csv(tibble::tibble(provider = "1003"), bad)
+  expect_error(load_urps_urology_npi_list(bad), regexp = "npi")
+})
+
+test_that("main function: ABU list folds a Urology provider into combined URPS", {
+  # NPI 1003 is CMS-typed Urology; placing it on the ABU roster must move it
+  # (and its procedures) from Urology into the combined URPS group.
+  abu_csv <- tempfile(fileext = ".csv")
+  readr::write_csv(tibble::tibble(npi = "1003"), abu_csv)
+
+  baseline <- analyze_midurethral_sling_patterns(
+    make_minimal_puf(), verbose = FALSE
+  )
+  reclassified <- analyze_midurethral_sling_patterns(
+    make_minimal_puf(), urps_urology_npi_csv = abu_csv, verbose = FALSE
+  )
+
+  base_grp <- baseline$provider_volume$specialty_group[
+    baseline$provider_volume$Rndrng_NPI == "1003"
+  ]
+  new_grp <- reclassified$provider_volume$specialty_group[
+    reclassified$provider_volume$Rndrng_NPI == "1003"
+  ]
+  expect_equal(base_grp, "Urology")
+  expect_equal(new_grp, "URPS")
+
+  # URPS provider count rises by exactly one; Urology falls by one.
+  # (Count directly so an emptied group reads as 0, not a missing table level.)
+  count_grp <- function(pv, grp) sum(pv$specialty_group == grp)
+  expect_equal(
+    count_grp(reclassified$provider_volume, "URPS") -
+      count_grp(baseline$provider_volume, "URPS"),
+    1L
+  )
+  expect_equal(
+    count_grp(baseline$provider_volume, "Urology") -
+      count_grp(reclassified$provider_volume, "Urology"),
+    1L
   )
 })
 

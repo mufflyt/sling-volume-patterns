@@ -92,8 +92,8 @@ All parameters are in `config.yml`. The pipeline runs 7 steps:
 4. **03_run_primary_analysis_sens.R** — Sensitivity: alternative specialty groupings (gynecologic-merged, binary URPS/non-URPS)
 5. **04_run_sensitivity_analyses.R** — Cross-sectional vs multi-year Gini comparison
 6. **05_generate_abstract.R** — Programmatic abstract with all statistics computed from data
-7. **06_make_tables.R** — Publication tables (CSV + HTML)
-8. **07_make_figures.R** — Market share trend, volume distributions, Lorenz curves
+7. **06_make_tables.R** — Publication tables (CSV + HTML), incl. Table 5 (annual concentration) and Table 6 (year trends)
+8. **07_make_figures.R** — Market share trend, volume distributions, Lorenz curves, plus Figure 4 (annual concentration) and Figure 5 (supply trends)
 
 ### Output files
 
@@ -104,10 +104,14 @@ All parameters are in `config.yml`. The pipeline runs 7 steps:
 | `output/tables/table_2_concentration.csv` | Concentration metrics (Gini, top 10/20/30%) |
 | `output/tables/table_3_time_trends.csv` | Annual trends by specialty |
 | `output/tables/table_4_stats.csv` | Statistical tests (Kruskal-Wallis, Wilcoxon, trend) |
+| `output/tables/table_5_annual_concentration.csv` | Per-year × specialty concentration (surgeons, procedures, median[p25–p75], Gini, HHI, top-10/20%, bottom-50%) |
+| `output/tables/table_6_concentration_trends.csv` | OLS trend of each annual measure on calendar year, by specialty |
 | `output/tables/table_s1_sensitivity.csv` | Cross-sectional vs multi-year sensitivity |
 | `output/figures/figure_1_market_share.png` | Market share time trend |
 | `output/figures/figure_2_volume_distribution.png` | Volume distributions (violin + box) |
 | `output/figures/figure_3_lorenz_curve.png` | Lorenz curves by specialty |
+| `output/figures/figure_4_concentration_trends.png` | Annual Gini/HHI/top-20%/bottom-50% by specialty over time |
+| `output/figures/figure_5_supply_trends.png` | Observable surgeons and procedure volume per year by specialty |
 
 ---
 
@@ -115,6 +119,7 @@ All parameters are in `config.yml`. The pipeline runs 7 steps:
 
 - **CMS Medicare Physician & Other Practitioners PUF** (2013–2023): Provider-and-service level claims data. Raw CSVs (~2.7GB each) in `data/raw/`, downloaded from [data.cms.gov](https://data.cms.gov/provider-summary-by-type-of-service/medicare-physician-other-practitioners/medicare-physician-other-practitioners-by-provider-and-service). Not tracked in git.
 - **ABOG Subspecialty Registry**: `data/canonical_abog/canonical_abog_npi_LATEST.csv` — NPI-to-subspecialty crosswalk from the American Board of Obstetrics and Gynecology. Used to split OB/GYN providers into URPS, MIGS, and General OB/GYN.
+- **ABU urology-pathway URPS roster**: `data/abu_urology/abu_urps_npi_LATEST.csv` — NPIs of fellowship-trained URPS surgeons who entered via a urology residency (American Board of Urology), sourced from the `isochrones` ABU pipeline. The CMS PUF reports these surgeons only as "Urology"; cross-referencing this list folds them into the combined URPS group (config key `urps_urology_npi_csv`; set to empty/remove to keep them in Urology).
 
 ---
 
@@ -129,6 +134,10 @@ All parameters are in `config.yml`. The pipeline runs 7 steps:
 4. **Why 2013 start?** CMS PUF begins in 2013. The 2012 data was published in an earlier format that has been superseded. Extending from 2017–2023 to 2013–2023 made the gynecologic market share trend statistically significant (p=0.10 → p<0.001).
 
 5. **FPMRS → URPS rename:** The subspecialty was renamed from "Female Pelvic Medicine and Reconstructive Surgery" to "Urogynecology and Reconstructive Pelvic Surgery" by ABMS. The code uses "URPS" throughout.
+
+6. **Combined URPS (both training pathways):** URPS is certifiable from either an OB/GYN or a urology residency. The ABOG registry captures only the OB/GYN pathway; urology-pathway URPS surgeons appear as "Urology" in the CMS PUF. Step 2c of `analyze_midurethral_sling_patterns()` cross-references the ABU roster (`urps_urology_npi_csv`) and promotes those NPIs into a single combined URPS group, leaving Urology as non-URPS urology. Note: this makes "URPS + MIGS + General OB/GYN" no longer purely OB/GYN-trained, so revisit any "gynecologic share" wording.
+
+7. **Annual concentration, not just one pooled Gini:** `build_annual_concentration_metrics()` computes every concentration measure per calendar year (overall and by specialty) — total procedures, observable surgeons, median[p25–p75], Gini, HHI, top-10/20% and bottom-50% shares — and `build_concentration_trend_regressions()` regresses each on year. This distinguishes *within-year* concentration (was ~0.27 and stable) from cumulative *multi-year* concentration (~0.52), answering whether care concentrated over time rather than reporting a single pooled value. Refresh from the cached `provider_volume`/`puf_classified` without re-reading raw CSVs via `scripts/refresh_annual_concentration.R`.
 
 ---
 

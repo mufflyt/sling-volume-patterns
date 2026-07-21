@@ -40,12 +40,15 @@ message(glue::glue(
 ))
 
 # ── Run primary analysis ─────────────────────────────────────────────────
+# cfg$urps_urology_npi_csv is optional; config::get() returns NULL when the
+# key is absent, which analyze_*() treats as "keep urology-URPS in Urology".
 results <- analyze_midurethral_sling_patterns(
   medicare_puf_data     = puf_classified,
   year_col              = cfg$year_col_name,
   concentration_cutoffs = cfg$concentration_cutoffs,
   verbose               = cfg$verbose,
-  abog_npi_csv          = cfg$abog_npi_csv
+  abog_npi_csv          = cfg$abog_npi_csv,
+  urps_urology_npi_csv  = cfg$urps_urology_npi_csv
 )
 validate_reporting_analysis_output(
   results,
@@ -57,10 +60,12 @@ sub_artifacts <- list(
   specialty_summary     = results$specialty_summary,
   provider_volume       = results$provider_volume,
   concentration_metrics = results$concentration_metrics,
-  time_trends           = results$time_trends
+  time_trends           = results$time_trends,
+  annual_concentration  = results$annual_concentration
 )
 
 for (name in names(sub_artifacts)) {
+  if (is.null(sub_artifacts[[name]])) next  # e.g. annual_concentration in cross-sectional mode
   artifact_write(
     object        = sub_artifacts[[name]],
     artifact_name = name,

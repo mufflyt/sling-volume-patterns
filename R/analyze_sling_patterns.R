@@ -144,6 +144,34 @@ compute_top_pct_share <- function(x, top_pct = 0.20) {
   sum(x_sorted_desc[seq_len(n_top)]) / sum(x_sorted_desc) * 100
 }
 
+#' Compute the Herfindahl-Hirschman Index (HHI) of procedural concentration.
+#' HHI is the sum of squared market shares. Reported here on the standard
+#' antitrust 0-10,000 scale (shares expressed as percentages), where higher
+#' values indicate greater concentration among fewer providers. A single
+#' provider performing every procedure yields HHI = 10,000; N providers with
+#' equal volume yield HHI = 10,000 / N.
+#' @noRd
+compute_hhi <- function(x) {
+  x <- x[!is.na(x)]
+  if (length(x) == 0L || sum(x) == 0) return(NA_real_)
+  shares <- x / sum(x)
+  sum(shares^2) * 10000
+}
+
+#' Compute the share of total volume performed by the bottom `bottom_pct`
+#' fraction of providers (ranked by volume, ascending). Complements
+#' compute_top_pct_share(); together they describe both tails of the
+#' concentration distribution.
+#' @noRd
+compute_bottom_pct_share <- function(x, bottom_pct = 0.50) {
+  x <- x[!is.na(x)]
+  n <- length(x)
+  if (n == 0L || sum(x) == 0) return(NA_real_)
+  x_sorted_asc <- sort(x, decreasing = FALSE)
+  n_bottom <- max(1L, floor(n * bottom_pct))
+  sum(x_sorted_asc[seq_len(n_bottom)]) / sum(x_sorted_asc) * 100
+}
+
 #' Build concentration metrics table by specialty group.
 #' Replaces the former build_low_volume_burden().
 #' @noRd
@@ -197,6 +225,98 @@ build_concentration_metrics <- function(
   results
 }
 
+#' Summarise a single provider-volume vector into a one-row tibble of
+#' concentration measures. Shared by the annual (per year x specialty) and
+#' pooled builders so every measure is defined in exactly one place.
+#' @noRd
+summarise_concentration_vector <- function(volume_vector) {
+  volume_vector <- volume_vector[!is.na(volume_vector)]
+  n_surgeons <- length(volume_vector)
+  quartiles <- if (n_surgeons > 0L) {
+    stats::quantile(volume_vector, probs = c(0.25, 0.5, 0.75), names = FALSE)
+  } else {
+    c(NA_real_, NA_real_, NA_real_)
+  }
+  tibble::tibble(
+    n_surgeons       = n_surgeons,
+    n_procedures     = sum(volume_vector),
+    p25_volume       = quartiles[1],
+    median_volume    = quartiles[2],
+    p75_volume       = quartiles[3],
+    gini_coefficient = compute_gini(volume_vector),
+    hhi              = compute_hhi(volume_vector),
+    pct_by_top_10    = compute_top_pct_share(volume_vector, top_pct = 0.10),
+    pct_by_top_20    = compute_top_pct_share(volume_vector, top_pct = 0.20),
+    pct_by_bottom_50 = compute_bottom_pct_share(volume_vector, bottom_pct = 0.50)
+  )
+}
+
+#' Build annual concentration metrics: one row per calendar year x specialty
+#' group, plus a pooled "All" row per year that combines every specialty.
+#'
+#' This is the key improvement over the single pooled 11-year Gini: it lets a
+#' reader see whether surgeon-level concentration is rising, falling, or stable
+#' over time, and whether that differs by specialty. Each row reports the total
+#' Medicare sling volume, the number of observable surgeons, median annual
+#' surgeon volume with p25/p75, Gini, HHI, top-10%/top-20% shares, and the
+#' bottom-50% share. Feed the result to build_concentration_trend_regressions()
+#' to model each measure against calendar year.
+#' @noRd
+build_annual_concentration_metrics <- function(
+    provider_volume_data,
+    year_col,
+    verbose = TRUE
+) {
+  assertthat::assert_that(
+    is.character(year_col) && length(year_col) == 1L,
+    msg = "build_annual_concentration_metrics: year_col must be a single string."
+  )
+  assertthat::assert_that(
+    year_col %in% names(provider_volume_data),
+    msg = glue::glue(
+      "build_annual_concentration_metrics: year_col '{year_col}' not found."
+    )
+  )
+
+  # Per year x specialty. group_modify() lets the shared summariser return a
+  # multi-column tibble while dplyr restores the (year, specialty) keys.
+  by_specialty <- provider_volume_data |>
+    dplyr::group_by(
+      dplyr::across(dplyr::all_of(c(year_col, "specialty_group")))
+    ) |>
+    dplyr::group_modify(
+      ~ summarise_concentration_vector(.x$annual_sling_count)
+    ) |>
+    dplyr::ungroup()
+
+  # Per year, pooled across all specialties ("All"). Computed on the same
+  # provider-year rows so surgeons are not double-counted within a year.
+  overall <- provider_volume_data |>
+    dplyr::group_by(dplyr::across(dplyr::all_of(year_col))) |>
+    dplyr::group_modify(
+      ~ summarise_concentration_vector(.x$annual_sling_count)
+    ) |>
+    dplyr::ungroup() |>
+    dplyr::mutate(specialty_group = "All")
+
+  annual_metrics <- dplyr::bind_rows(overall, by_specialty) |>
+    dplyr::relocate(specialty_group, .after = dplyr::all_of(year_col)) |>
+    dplyr::arrange(
+      dplyr::across(dplyr::all_of(year_col)),
+      match(specialty_group, c("All", "URPS", "MIGS", "General OB/GYN", "Urology")),
+      specialty_group
+    )
+
+  log_msg(
+    glue::glue(
+      "Annual concentration metrics built: {nrow(annual_metrics)} year x group ",
+      "rows across {dplyr::n_distinct(annual_metrics[[year_col]])} years."
+    ),
+    verbose = verbose
+  )
+  annual_metrics
+}
+
 #' @noRd
 classify_abog_subspecialty <- function(subspecialty_vector) {
   dplyr::case_when(
@@ -242,6 +362,37 @@ load_abog_subspecialty_lookup <- function(abog_csv_path) {
     ) |>
     dplyr::select(abog_npi, subspecialty_abog, subspecialty_raw) |>
     dplyr::distinct(abog_npi, .keep_all = TRUE)
+}
+
+#' @noRd
+#' Load the ABU (American Board of Urology) urology-pathway URPS/FPMRS NPI list.
+#' These are fellowship-trained Urogynecology & Reconstructive Pelvic Surgery
+#' physicians who entered through a urology residency; the CMS PUF reports them
+#' only as "Urology", and they are absent from the ABOG (OB/GYN) registry.
+#' Cross-referencing this list lets the pipeline fold urology-pathway URPS into
+#' a single combined URPS group. Returns a character vector of trimmed NPIs.
+load_urps_urology_npi_list <- function(urps_urology_csv_path) {
+  assertthat::assert_that(
+    is.character(urps_urology_csv_path) &&
+      length(urps_urology_csv_path) == 1L && nzchar(urps_urology_csv_path),
+    msg = "urps_urology_csv_path must be a non-empty string."
+  )
+  assertthat::assert_that(
+    file.exists(urps_urology_csv_path),
+    msg = glue::glue(
+      "ABU urology-URPS crosswalk not found at '{urps_urology_csv_path}'."
+    )
+  )
+  urps_tbl <- readr::read_csv(
+    urps_urology_csv_path,
+    show_col_types = FALSE,
+    col_types = readr::cols(.default = readr::col_character())
+  )
+  if (!"npi" %in% names(urps_tbl)) {
+    stop("ABU urology-URPS file must contain an 'npi' column.")
+  }
+  npis <- trimws(urps_tbl$npi)
+  unique(npis[!is.na(npis) & nzchar(npis)])
 }
 
 # =============================================================================
@@ -788,7 +939,8 @@ analyze_midurethral_sling_patterns <- function(
     year_col               = NULL,
     concentration_cutoffs  = c(10, 20, 30),
     verbose                = TRUE,
-    abog_npi_csv           = NULL
+    abog_npi_csv           = NULL,
+    urps_urology_npi_csv   = NULL
 ) {
   # ── 0. Input validation ────────────────────────────────────────────────────
   assertthat::assert_that(
@@ -817,6 +969,11 @@ analyze_midurethral_sling_patterns <- function(
   abog_lookup <- NULL
   if (!is.null(abog_npi_csv)) {
     abog_lookup <- load_abog_subspecialty_lookup(abog_npi_csv)
+  }
+
+  urps_urology_npis <- NULL
+  if (!is.null(urps_urology_npi_csv)) {
+    urps_urology_npis <- load_urps_urology_npi_list(urps_urology_npi_csv)
   }
 
   # ── 1. Filter to CPT 57288 ─────────────────────────────────────────────────
@@ -880,6 +1037,32 @@ analyze_midurethral_sling_patterns <- function(
         specialty_group == "OB/GYN" & Rndrng_NPI %in% migs_npis  ~ "MIGS",
         specialty_group == "OB/GYN"                               ~ "General OB/GYN",
         TRUE ~ specialty_group
+      )
+    )
+  }
+
+  # Step 2c: Fold urology-pathway URPS into the combined URPS group.
+  # ABOG only registers OB/GYN-pathway URPS; urology-trained URPS surgeons are
+  # reported as "Urology" in the CMS PUF. Cross-referencing the ABU roster
+  # promotes any listed NPI (regardless of its current group) to URPS so both
+  # training pathways form one URPS group and the Urology group is left as
+  # non-URPS urology only.
+  if (!is.null(urps_urology_npis)) {
+    cohort_npis <- unique(na.omit(sling_claims$Rndrng_NPI))
+    n_promoted  <- sum(cohort_npis %in% urps_urology_npis)
+    log_msg(
+      glue::glue(
+        "  Folding urology-pathway URPS into combined URPS: ",
+        "{n_promoted} of {length(cohort_npis)} cohort NPIs matched the ABU roster."
+      ),
+      verbose
+    )
+    sling_claims <- dplyr::mutate(
+      sling_claims,
+      specialty_group = dplyr::if_else(
+        Rndrng_NPI %in% urps_urology_npis,
+        "URPS",
+        specialty_group
       )
     )
   }
@@ -961,7 +1144,8 @@ analyze_midurethral_sling_patterns <- function(
   )
 
   # ── 6. Time trends (optional) ──────────────────────────────────────────────
-  time_trends <- NULL
+  time_trends         <- NULL
+  annual_concentration <- NULL
   if (!is.null(year_col)) {
     log_msg(
       glue::glue(
@@ -971,6 +1155,17 @@ analyze_midurethral_sling_patterns <- function(
       verbose
     )
     time_trends <- build_time_trends(
+      provider_volume,
+      year_col = year_col,
+      verbose  = verbose
+    )
+
+    # ── 6b. Annual concentration (per year x specialty + pooled) ─────────────
+    log_msg(
+      "Step 6b ▸ Computing annual concentration metrics (Gini, HHI, top/bottom shares).",
+      verbose
+    )
+    annual_concentration <- build_annual_concentration_metrics(
       provider_volume,
       year_col = year_col,
       verbose  = verbose
@@ -987,7 +1182,8 @@ analyze_midurethral_sling_patterns <- function(
     provider_volume       = provider_volume,
     specialty_summary     = specialty_summary,
     concentration_metrics = concentration_metrics,
-    time_trends           = time_trends
+    time_trends           = time_trends,
+    annual_concentration  = annual_concentration
   )
 
   log_msg("── Output summary ──────────────────────────────────", verbose)
