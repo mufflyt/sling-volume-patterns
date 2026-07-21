@@ -412,7 +412,7 @@ test_that("build_concentration_metrics: emits Gini and one top-N% column per cut
     verbose = FALSE
   )
   expect_true(all(
-    c("specialty_group", "gini_coefficient", "n_providers",
+    c("specialty_group", "gini_coefficient", "hhi", "n_providers",
       "pct_by_top_10", "pct_by_top_20", "pct_by_top_30") %in% names(metrics)
   ))
   # One row per specialty group
@@ -420,6 +420,9 @@ test_that("build_concentration_metrics: emits Gini and one top-N% column per cut
   # Top-share columns are ordered: top 10% <= top 20% <= top 30%
   expect_true(all(metrics$pct_by_top_10 <= metrics$pct_by_top_20))
   expect_true(all(metrics$pct_by_top_20 <= metrics$pct_by_top_30))
+  # HHI is a complementary concentration measure on the 0-10,000 scale,
+  # computed on the same per-NPI totals as Gini.
+  expect_true(all(metrics$hhi > 0 & metrics$hhi <= 10000))
 })
 
 

@@ -145,11 +145,21 @@ compute_top_pct_share <- function(x, top_pct = 0.20) {
 }
 
 #' Compute the Herfindahl-Hirschman Index (HHI) of procedural concentration.
-#' HHI is the sum of squared market shares. Reported here on the standard
-#' antitrust 0-10,000 scale (shares expressed as percentages), where higher
-#' values indicate greater concentration among fewer providers. A single
-#' provider performing every procedure yields HHI = 10,000; N providers with
-#' equal volume yield HHI = 10,000 / N.
+#' HHI is the sum of squared shares. Reported here on the standard 0-10,000
+#' scale (shares expressed as percentages), where higher values indicate
+#' greater concentration among fewer units. A single unit performing every
+#' procedure yields HHI = 10,000; N units of equal volume yield HHI = 10,000/N.
+#'
+#' IMPORTANT: this is applied to INDIVIDUAL SURGEONS as the operative production
+#' unit (each surgeon's share of procedures), quantifying SURGEON-LEVEL
+#' PROCEDURAL CONCENTRATION. It is NOT the conventional antitrust use of HHI to
+#' measure hospital or health-system MARKET COMPETITION, and the values are not
+#' comparable to FTC/DOJ market-concentration thresholds. HHI is reported
+#' alongside the Gini coefficient because they answer related but distinct
+#' questions: Gini measures inequality across the entire surgeon-volume
+#' distribution, whereas HHI is driven especially by the largest-volume surgeons.
+#' Treating each physician as the production unit follows the 2013-2023
+#' orthopedic/shoulder-arthroplasty workforce-concentration literature.
 #' @noRd
 compute_hhi <- function(x) {
   x <- x[!is.na(x)]
@@ -192,11 +202,17 @@ build_concentration_metrics <- function(
   # Note: compute_gini needs the per-NPI volume vector, not the aggregated sum.
   # dplyr::summarise evaluates sequentially, so total_slings on the gini line
   # would reference the just-computed sum. Use the original column name explicitly.
+  # Gini and HHI are complementary surgeon-level concentration measures (see
+  # compute_gini / compute_hhi): Gini captures inequality across the whole
+  # surgeon-volume distribution; HHI is driven especially by the largest-volume
+  # surgeons. Both must read the per-NPI volume VECTOR, so compute them before
+  # total_slings is overwritten by its sum on the following line.
   results <- npi_totals |>
     dplyr::group_by(specialty_group) |>
     dplyr::summarise(
       n_providers      = dplyr::n(),
       gini_coefficient = compute_gini(total_slings),
+      hhi              = compute_hhi(total_slings),
       total_slings     = sum(total_slings, na.rm = TRUE),
       .groups = "drop"
     )

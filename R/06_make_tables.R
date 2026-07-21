@@ -105,12 +105,19 @@ print(table_1)
 # Build column list dynamically based on available pct_by_top_* columns
 top_pct_cols <- grep("^pct_by_top_", names(concentration_metrics), value = TRUE)
 
+# Gini and HHI are reported together as complementary SURGEON-LEVEL concentration
+# measures (each surgeon = one production unit) — not hospital/market competition.
 table_2 <- concentration_metrics |>
   dplyr::transmute(
     Specialty            = specialty_group,
     `N providers`        = format(n_providers, big.mark = ","),
     `Total slings`       = format(total_slings, big.mark = ","),
-    `Gini coefficient`   = round(gini_coefficient, 3)
+    `Gini coefficient`   = round(gini_coefficient, 3),
+    `HHI (0-10,000)`     = if ("hhi" %in% names(concentration_metrics)) {
+      round(hhi, 0)
+    } else {
+      NA_real_
+    }
   )
 
 # Add top-N% columns dynamically

@@ -101,7 +101,7 @@ All parameters are in `config.yml`. The pipeline runs 7 steps:
 |------|-------------|
 | `output/abstract.txt` | Programmatic abstract (378 words) |
 | `output/tables/table_1_specialty_summary.csv` | Specialty-level summary with Gini |
-| `output/tables/table_2_concentration.csv` | Concentration metrics (Gini, top 10/20/30%) |
+| `output/tables/table_2_concentration.csv` | Concentration metrics (Gini + HHI, top 10/20/30%) |
 | `output/tables/table_3_time_trends.csv` | Annual trends by specialty |
 | `output/tables/table_4_stats.csv` | Statistical tests (Kruskal-Wallis, Wilcoxon, trend) |
 | `output/tables/table_5_annual_concentration.csv` | Per-year × specialty concentration (surgeons, procedures, median[p25–p75], Gini, HHI, top-10/20%, bottom-50%) |
