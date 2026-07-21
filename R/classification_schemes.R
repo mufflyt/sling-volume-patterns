@@ -94,6 +94,53 @@ assign_specialty_scheme <- function(
 }
 
 #' @noRd
+#' Certification-gated time-varying classification (the preferred per
+#' physician-year hierarchy). For each physician-year, apply, in order:
+#'   1. ABOG URPS certification active by that year  -> URPS
+#'   2. ABOG MIGS certification active by that year   -> MIGS
+#'   3. otherwise keep the year's existing specialty_group (CMS urology /
+#'      CMS general OB/GYN), i.e. the lower tiers of the hierarchy.
+#'
+#' @param cert_year_lookup data frame with columns npi (character),
+#'   subspecialty ("URPS" or "MIGS"), and cert_year (integer). A physician is
+#'   assigned URPS/MIGS only in years >= their subspecialty certification year.
+#'
+#' NOTE: this is the machinery for a fully time-varying subspecialty hierarchy.
+#' It is NOT wired into the primary pipeline because the available ABOG data do
+#' not contain the SUBSPECIALTY (FPMRS/MIG) certification date — the certification
+#' years present are the initial general (OB/GYN or urology) board dates, which
+#' predate FPMRS by decades and would wrongly mark physicians URPS since the
+#' 1970s. Supply a validated npi -> subspecialty -> cert_year table here and the
+#' hierarchy runs as specified.
+assign_time_varying_certgated <- function(
+    provider_volume_data,
+    year_col,
+    cert_year_lookup
+) {
+  stopifnot(all(c("npi", "subspecialty", "cert_year") %in% names(cert_year_lookup)))
+  urps_cert <- cert_year_lookup |>
+    dplyr::filter(subspecialty == "URPS") |>
+    dplyr::group_by(npi) |>
+    dplyr::summarise(urps_cert_year = min(cert_year, na.rm = TRUE), .groups = "drop")
+  migs_cert <- cert_year_lookup |>
+    dplyr::filter(subspecialty == "MIGS") |>
+    dplyr::group_by(npi) |>
+    dplyr::summarise(migs_cert_year = min(cert_year, na.rm = TRUE), .groups = "drop")
+
+  provider_volume_data |>
+    dplyr::left_join(urps_cert, by = c("Rndrng_NPI" = "npi")) |>
+    dplyr::left_join(migs_cert, by = c("Rndrng_NPI" = "npi")) |>
+    dplyr::mutate(
+      specialty_group = dplyr::case_when(
+        !is.na(urps_cert_year) & .data[[year_col]] >= urps_cert_year ~ "URPS",
+        !is.na(migs_cert_year) & .data[[year_col]] >= migs_cert_year ~ "MIGS",
+        TRUE ~ specialty_group
+      )
+    ) |>
+    dplyr::select(-urps_cert_year, -migs_cert_year)
+}
+
+#' @noRd
 #' Per-scheme summary: specialty distribution (providers, procedures, share)
 #' plus the URPS and gynecologic (URPS+MIGS+General OB/GYN) market-share trends
 #' (OLS slope in percentage points per year, with p-value). One tibble per call;

@@ -2,15 +2,25 @@
 
 Tyler Muffly, MD
 
+> **Revision note (analysis update).** This version reflects the revised analysis:
+> (1) URPS combines both training pathways — ABOG (OB/GYN) urogynecologists and
+> ABU (urology) urogynecologists cross-referenced from the American Board of
+> Urology roster; (2) calendar year 2017 is excluded as a truncated PUF release;
+> (3) concentration is reported with both the Gini coefficient and the
+> Herfindahl–Hirschman Index (HHI) at the surgeon level; (4) volume differences
+> are tested with a repeated-measures model accounting for physicians who recur
+> across years; and (5) the specialty-classification choice is examined in a
+> sensitivity analysis. Numbers therefore differ from the original submission.
+
 ## Abstract
 
 **Objective:** To characterize the specialty distribution, annual procedure volumes, and procedural concentration among physicians performing midurethral sling procedures (CPT 57288) in Medicare beneficiaries.
 
-**Methods:** We analyzed the CMS Medicare Physician and Other Practitioners Public Use File (2013–2023). Providers billing CPT 57288 were classified as Urogynecology and Reconstructive Pelvic Surgery (URPS), Minimally Invasive Gynecologic Surgery (MIGS), General OB/GYN, or urology using CMS provider type cross-referenced with the ABOG subspecialty registry. Procedural concentration was quantified using Gini coefficients and the share performed by the top 20% of providers. Volume differences were assessed by Kruskal-Wallis and pairwise Wilcoxon tests (Bonferroni-corrected). Gynecologic market-share trends were assessed by linear regression. CMS suppresses counts of 1–10 services; providers below this threshold are absent from the data.
+**Methods:** We analyzed the CMS Medicare Physician and Other Practitioners Public Use File (2013–2023, excluding 2017 as a truncated release). Providers billing CPT 57288 were classified as Urogynecology and Reconstructive Pelvic Surgery (URPS), Minimally Invasive Gynecologic Surgery (MIGS), General OB/GYN, or urology using CMS provider type cross-referenced with the ABOG (OB/GYN pathway) and ABU (urology pathway) subspecialty rosters. Procedural concentration was quantified at the surgeon level using the Gini coefficient and the Herfindahl–Hirschman Index (HHI), overall and per calendar year. Because each physician contributes repeated annual observations, volume differences were modeled with a Poisson generalized estimating equation (GEE) clustered by NPI (adjusted rate ratios, 95% CIs), with a per-physician Kruskal-Wallis secondary analysis. Gynecologic (OB/GYN-trained) market-share trends were assessed by linear regression. Classification was examined under time-varying, modal, and ever-URPS/MIGS schemes.
 
-**Results:** A total of 1,775 unique providers billed CPT 57288 across the study period, accounting for 139,855 procedures. URPS physicians represented the largest group, accounting for 52.7% of all procedures at a median annual volume of 19 (IQR 14–29) procedures per year (609 providers). Urology accounted for 823 providers (34.2% of procedures; median 16, IQR 13–22). General OB/GYN accounted for 333 providers (12.4%; median 15, IQR 12–22). MIGS accounted for 10 providers (0.6%; median 16, IQR 12–23). Annual sling volume differed significantly across specialty groups (Kruskal-Wallis H = 291.8, df = 3, p < 0.001). Procedural concentration varied by specialty: URPS (Gini 0.51; top 20% performed 53%); Urology (Gini 0.54; top 20% performed 58.9%); General OB/GYN (Gini 0.56; top 20% performed 61.9%); MIGS (Gini 0.59; top 20% performed 67%). The combined gynecologic share increased significantly from 60.3% in 2013 to 69.9% in 2023 (slope = 0.84 percentage points per year; p < 0.001).
+**Results:** A total of 1,758 unique providers billed CPT 57288, accounting for 131,637 procedures. URPS physicians represented the largest group — 753 providers, 80,033 procedures (60.8%), median 19 procedures/year (IQR 14–29). Urology accounted for 665 providers (34,351 procedures; 26.1%; median 16), General OB/GYN for 330 (16,391; 12.5%; median 15), and MIGS for 10 (862; 0.7%; median 16). In a Poisson GEE clustered by NPI, adjusted annual volume was significantly lower than URPS for every group — Urology (rate ratio 0.82, 95% CI 0.70–0.95), General OB/GYN (0.67, 0.50–0.90), and MIGS (0.56, 0.40–0.76) — with a ~11% decline in 2020 (RR 0.89, 0.85–0.92, p < 0.001) and no overall per-physician time trend (RR 1.00, p = 0.52). Pooled multi-year concentration was lowest for URPS (Gini 0.51, HHI 27; top 20% performed 53.4%) and highest for MIGS (Gini 0.60, HHI 2,919; 68.2%); within-year concentration was low and stable (annual Gini ≈ 0.27; no trend, p = 0.82). The combined gynecologic (OB/GYN-trained) share increased from 60.8% in 2013 to 70.1% in 2023 (slope = 0.84 percentage points/year; p < 0.001), robust across classification schemes (URPS-share slope +0.90 to +0.98 pp/yr, all p ≤ 0.001).
 
-**Conclusions:** URPS physicians perform the majority of midurethral sling procedures in Medicare with the most equitable volume distribution. The growing gynecologic market share and specialty-specific concentration patterns have implications for credentialing standards and workforce planning for pelvic floor surgical care.
+**Conclusions:** URPS physicians perform the majority of midurethral sling procedures in Medicare, with significantly higher adjusted per-physician volume and the most equitable within-group distribution. The rising gynecologic market share reflects attrition of non-URPS providers rather than a more concentrated surgeon pool, with implications for credentialing standards and workforce planning for pelvic floor surgical care.
 
 ---
 
@@ -20,9 +30,9 @@ The midurethral sling is the most commonly performed surgical procedure for stre
 
 Understanding who performs midurethral slings—and how procedure volume is distributed within each specialty—has direct implications for surgical quality, training requirements, and workforce planning. The volume-outcome relationship in surgery is well established: higher-volume surgeons and hospitals tend to achieve better patient outcomes across a range of procedures.^3,4^ However, the evidence base for volume thresholds in midurethral sling surgery specifically is limited, and the specialty landscape has evolved considerably over the past decade.
 
-Several trends make this analysis timely. First, the subspecialty of Female Pelvic Medicine and Reconstructive Surgery—recently renamed Urogynecology and Reconstructive Pelvic Surgery (URPS)—has grown substantially since achieving American Board of Medical Specialties (ABMS) recognition in 2013.^5^ Second, the US Food and Drug Administration's reclassification of urogynecologic surgical mesh as a Class III device in 2016 and subsequent market withdrawal orders may have shifted the procedural landscape.^6^ Third, there is growing interest in procedural concentration—the degree to which a small number of providers account for a disproportionate share of procedures—as a metric relevant to quality improvement and resource allocation.^7^
+Several trends make this analysis timely. First, the subspecialty of Female Pelvic Medicine and Reconstructive Surgery—recently renamed Urogynecology and Reconstructive Pelvic Surgery (URPS)—has grown substantially since achieving American Board of Medical Specialties (ABMS) recognition in 2013,^5^ and is certifiable through both obstetrics-gynecology (ABOG) and urology (ABU) training pathways. Second, the US Food and Drug Administration's reclassification of urogynecologic surgical mesh as a Class III device in 2016 and subsequent market withdrawal orders may have shifted the procedural landscape.^6^ Third, there is growing interest in procedural concentration—the degree to which a small number of providers account for a disproportionate share of procedures—as a metric relevant to quality improvement and resource allocation.^7^
 
-The objective of this study was to characterize the specialty distribution, annual procedure volumes, and procedural concentration among physicians performing midurethral sling procedures in Medicare beneficiaries from 2013 to 2023. We further aimed to assess time trends in the gynecologic share of sling procedures and to quantify the degree to which procedural volume is concentrated among high-volume providers within each specialty group.
+The objective of this study was to characterize the specialty distribution, annual procedure volumes, and procedural concentration among physicians performing midurethral sling procedures in Medicare beneficiaries from 2013 to 2023, and to assess time trends in the gynecologic share of sling procedures.
 
 ## Methods
 
@@ -30,103 +40,73 @@ The objective of this study was to characterize the specialty distribution, annu
 
 We conducted a repeated cross-sectional analysis of the Centers for Medicare & Medicaid Services (CMS) Medicare Physician and Other Practitioners Public Use File (PUF) from 2013 to 2023. This dataset contains 100% of fee-for-service Medicare Part B claims aggregated to the provider-service level, with one row per unique combination of National Provider Identifier (NPI), Healthcare Common Procedure Coding System (HCPCS) code, and place of service per calendar year. The dataset is publicly available and contains no protected health information; institutional review board approval was not required.
 
-### Study Population
-
-We identified all provider-year observations with HCPCS code 57288 (placement of a midurethral sling for stress urinary incontinence). Across the 11-year study period, this yielded 6,663 provider-year observations before specialty classification and exclusions.
+The 2017 file was excluded from all analyses as a truncated release: it is roughly half the size of adjacent-year files (1.5 GB vs ~2.7 GB) and contains only 376 sling provider-year records versus ~660–810 in neighboring years, producing an artifactual dip that would bias temporal trends.
 
 ### Specialty Classification
 
-Providers were initially classified into broad specialty groups based on CMS-reported provider type (Rndrng_Prvdr_Type): obstetrics and gynecology (OB/GYN), urology, or other. Providers classified as "Other" by CMS whose NPIs did not appear in the American Board of Obstetrics and Gynecology (ABOG) subspecialty registry were reclassified as urologists, on the assumption that non-OB/GYN, non-urology providers billing this code are most likely urologists with atypical CMS provider type designations (n = 310 reclassified).
+Providers were classified into four mutually exclusive groups. CMS-reported provider type (Rndrng_Prvdr_Type, which can vary by year) established a baseline of OB/GYN, urology, or other; providers billing CPT 57288 with a non-OB/GYN, non-urology CMS type not found in the ABOG registry were reclassified as urology. OB/GYN providers were then subdivided using the ABOG subspecialty registry: "Female Pelvic Medicine and Reconstructive Surgery" → URPS, "MIG" → MIGS, all others → General OB/GYN. Finally, urology-pathway urogynecologists were identified from the American Board of Urology (ABU) roster and folded into a single combined URPS group, leaving urology as non-URPS urology; without this step these fellowship-trained urogynecologists appear only as "Urology" in the PUF. Records from non-OB/GYN, non-urology surgical types too heterogeneous to interpret were excluded.
 
-OB/GYN providers were further subdivided using the ABOG subspecialty registry, which contains NPI-linked subspecialty certification data for all ABOG diplomates. Providers with an ABOG subspecialty of "Female Pelvic Medicine and Reconstructive Surgery" were classified as URPS (Urogynecology and Reconstructive Pelvic Surgery, reflecting the 2024 ABMS-approved name change). Providers with an ABOG subspecialty designation of "MIG" (Minimally Invasive Gynecologic Surgery) were classified as MIGS. All remaining OB/GYN providers—including ABOG-certified generalists and providers not found in the ABOG registry—were classified as General OB/GYN.
-
-Providers whose CMS provider type did not match OB/GYN, urology, or any identifiable surgical specialty (n = 80 records from General Surgery, osteopathic specialties, and undefined types) were excluded from analysis as too heterogeneous and small to interpret meaningfully.
+Because the primary conclusion concerns changes in specialty market share, we compared three classification schemes in a sensitivity analysis: time-varying (one specialty per physician-year), modal (single most-frequent specialty per physician), and ever-URPS/MIGS (URPS if ever URPS, else MIGS if ever MIGS, else modal).
 
 ### CMS Data Suppression
 
-CMS suppresses provider-service level data when a provider serves fewer than 11 Medicare beneficiaries for a given HCPCS code in a calendar year. This means that all providers in our dataset performed at least 11 midurethral sling procedures per year—the true number of low-volume providers is unknowable from these data. This left-truncation is an inherent limitation of the PUF and must be considered when interpreting volume distributions and concentration metrics.
+CMS suppresses provider-service level data when a provider serves fewer than 11 Medicare beneficiaries for a given HCPCS code in a calendar year. All providers in our dataset therefore performed at least 11 midurethral slings per year; the true number of low-volume providers is unknowable. This left-truncation means the concentration metrics reported here are lower bounds.
 
-### Outcome Measures
+### Outcome Measures and Statistical Analysis
 
-The primary outcome was the annual midurethral sling count per provider (Tot_Srvcs from the PUF), summarized as median with interquartile range (IQR) by specialty group. Secondary outcomes included:
+The primary outcome was the annual midurethral sling count per provider. Procedural concentration was quantified with two complementary **surgeon-level** measures — the Gini coefficient (inequality across the whole surgeon-volume distribution) and the Herfindahl–Hirschman Index (HHI, sum of squared per-surgeon shares on a 0–10,000 scale, driven especially by the largest-volume surgeons) — computed on aggregate provider totals and separately for each calendar year. Each physician is the operative production unit; this is surgeon-level procedural concentration and not the antitrust use of HHI for hospital/health-system market competition, so values are not comparable to FTC/DOJ thresholds.
 
-1. **Procedural concentration**, quantified using the Gini coefficient (ranging from 0 for perfect equality to 1 for maximum concentration) and the percentage of procedures performed by the top 20% of providers within each specialty group. Gini coefficients were computed on aggregate (multi-year) provider-level total volumes.
+Because each physician contributes up to ten annual observations, provider-year records are not independent, and rank tests over them are descriptive only. We therefore modeled the annual count with a Poisson generalized estimating equation (GEE) clustered by NPI (exchangeable working correlation, robust standard errors), with fixed effects for specialty (reference URPS), calendar year, specialty × year, and a 2020 (COVID) indicator, reporting adjusted rate ratios with 95% CIs; a negative-binomial mixed model with a random intercept per NPI gave concordant estimates. As a secondary analysis restoring independence, we compared one value per physician (each physician's median annual volume) across specialties by Kruskal-Wallis and Bonferroni-adjusted pairwise Wilcoxon tests. Time trends in the gynecologic (OB/GYN-residency-trained: ABOG-URPS + MIGS + General OB/GYN) share were assessed by ordinary least-squares regression on calendar year.
 
-2. **Market share trends**, defined as the percentage of all midurethral sling procedures performed by each specialty group per calendar year.
-
-### Statistical Analysis
-
-Differences in annual procedure volume across specialty groups were assessed using the Kruskal-Wallis test, a non-parametric omnibus test appropriate for the right-skewed volume distributions observed. Pairwise comparisons between the two largest groups (URPS and urology) were performed using the Wilcoxon rank-sum test with Bonferroni correction.
-
-Time trends in the combined gynecologic share (URPS + MIGS + General OB/GYN) were assessed by ordinary least-squares linear regression of annual market-share percentage on calendar year. The slope represents the average annual change in gynecologic market share in percentage points per year.
-
-All analyses were performed in R version 4.4.0. Package versions were locked using renv (version 1.0.7) for reproducibility. The complete analysis pipeline, including all code and configuration, is available at https://github.com/mufflyt/sling-volume-patterns.
+All analyses were performed in R 4.4 with package versions locked via renv. The complete pipeline is available at https://github.com/mufflyt/sling-volume-patterns.
 
 ## Results
 
 ### Overall Volume and Specialty Distribution
 
-A total of 1,775 unique providers billed CPT 57288 at least once during the 11-year study period, accounting for 139,855 procedures (Table 1). Annual procedure counts ranged from 8,218 (2017) to 16,399 (2013), with a notable decline in 2017 that partially recovered by 2018.
-
-URPS physicians constituted the largest specialty group, with 609 providers performing 73,751 procedures (52.7% of all slings). Urologists were the second largest group, with 823 providers performing 47,825 procedures (34.2%). General OB/GYN accounted for 333 providers and 17,402 procedures (12.4%). MIGS providers were rare, with only 10 providers performing 877 procedures (0.6%).
+A total of 1,758 unique providers billed CPT 57288, accounting for 131,637 procedures (Table 1). URPS physicians constituted the largest group — 753 providers, 80,033 procedures (60.8%) — followed by non-URPS urology (665 providers; 34,351; 26.1%), General OB/GYN (330; 16,391; 12.5%), and MIGS (10; 862; 0.7%). Folding urology-pathway urogynecologists into URPS moved 150 providers (11,503 procedures) from urology to URPS relative to an ABOG-only classification.
 
 ### Procedure Volume by Specialty
 
-URPS providers had the highest median annual volume at 19 procedures per year (IQR 14–29; mean 23.7), significantly higher than urologists at 16 (IQR 13–22; mean 19.1), General OB/GYN at 15 (IQR 12–22; mean 19.2), and MIGS at 16 (IQR 12–23; mean 23.7). Annual sling volume differed significantly across all four specialty groups (Kruskal-Wallis H = 291.8, df = 3, p < 0.001). In the pairwise comparison of the two largest groups, URPS providers performed significantly more slings per year than urologists (Wilcoxon p < 0.001, Bonferroni-corrected).
-
-The volume distributions were right-skewed in all groups (Figure 2), with outlier high-volume providers performing up to 98 (URPS), 92 (urology), 77 (MIGS), and 73 (General OB/GYN) procedures per year. The minimum observable volume was 11 in all groups, reflecting CMS cell suppression.
+URPS providers had the highest median annual volume at 19 procedures/year (IQR 14–29), versus 16 for urology, 15 for General OB/GYN, and 16 for MIGS. In the Poisson GEE clustered by NPI, adjusted annual volume relative to URPS was significantly lower for every other group: urology rate ratio (RR) 0.82 (95% CI 0.70–0.95, p = 0.008), General OB/GYN 0.67 (0.50–0.90, p = 0.008), and MIGS 0.56 (0.40–0.76, p < 0.001) (Table 3). Volume dropped ~11% in 2020 (RR 0.89, 0.85–0.92, p < 0.001), consistent with the COVID-19 pandemic, and there was no overall linear per-physician time trend (year RR 1.00, 0.99–1.00, p = 0.52). The secondary one-value-per-physician analysis agreed (Kruskal-Wallis H = 66.1, df = 3, p < 0.001; URPS significantly exceeded urology and General OB/GYN, pairwise p < 0.001; URPS vs MIGS not significant, n = 10).
 
 ### Procedural Concentration
 
-Procedural concentration, measured by the Gini coefficient on aggregate provider-level volumes, varied across specialty groups (Table 2, Figure 3). URPS had the lowest Gini coefficient (0.51), indicating the most equitable distribution of sling volume among its providers. The top 20% of URPS providers performed 53.0% of all URPS slings, and the top 10% performed 33.6%.
-
-Urology showed moderate concentration (Gini 0.54), with the top 20% performing 58.9% of urology slings. General OB/GYN was more concentrated (Gini 0.56; top 20% performed 61.9%), suggesting that a relatively small number of generalist OB/GYNs account for the majority of generalist sling volume. MIGS showed the highest concentration (Gini 0.59; top 20% performed 67.0%), although interpretation is limited by the small group size (n = 10 providers).
+Pooled multi-year concentration was lowest for URPS (Gini 0.51, HHI 27; top 20% performed 53.4%) and rose through urology (Gini 0.52, HHI 35; 57.5%), General OB/GYN (Gini 0.55, HHI 89; 60.8%), and MIGS (Gini 0.60, HHI 2,919; 68.2%) (Table 2). Gini and HHI ranked the specialties identically, but for the three main groups HHI was very low in absolute terms (27–89 of 10,000): sling volume is spread unevenly across many surgeons rather than dominated by a few. The high MIGS HHI reflects its 10 providers and should not be over-interpreted. Computed separately for each year, within-year concentration was modest and stable across the study period (pooled annual Gini 0.26–0.28; no trend, slope ≈ 0.000/year, p = 0.82), indicating that midurethral sling care did not become concentrated among a shrinking set of high-volume surgeons even as the workforce contracted.
 
 ### Time Trends in Market Share
 
-The combined gynecologic share of midurethral sling procedures (URPS + MIGS + General OB/GYN) increased significantly from 60.3% in 2013 to 69.9% in 2023 (slope = 0.84 percentage points per year; p < 0.001; Figure 1). This increase was driven primarily by URPS, whose share rose from 44.3% in 2013 to 56.9% in 2023. Conversely, urology's share declined from 39.7% to 30.1%, and General OB/GYN's share decreased from 15.7% to 12.3%.
+The combined gynecologic (OB/GYN-trained) share of sling procedures increased from 60.8% in 2013 to 70.1% in 2023 (slope = 0.84 percentage points/year; p < 0.001; Figure 1), while non-URPS urology fell from 30.7% to 23.1%. The combined-URPS share rose from 53.4% to 63.8% (+0.90 pp/year, p < 0.001). This trend was robust to classification scheme: the specialty distribution differed by less than one percentage point across the time-varying, modal, and ever-URPS/MIGS schemes, and the URPS-share slope remained significant in every scheme (+0.90 to +0.98 pp/year, all p ≤ 0.001).
 
-The number of urologists billing CPT 57288 declined substantially from 363 in 2013 to 189 in 2023, a 48% decrease. The number of URPS providers showed a more modest decline from 304 to 293 (3.6%), while General OB/GYN providers decreased from 142 to 76 (46%). These changes suggest that urology and generalist OB/GYN are losing providers from the sling workforce more rapidly than URPS.
+The number of observable surgeons fell over the period, driven by non-URPS providers: urology declined from 282 to 144 (−12.6/year, p = 0.002) and General OB/GYN from 142 to 76 (−6.9/year, p = 0.002), whereas the URPS surgeon count was statistically stable (385 to 338; −6.4/year, p = 0.10). Because per-physician volume showed no time trend, the rising URPS share reflects attrition of non-URPS providers rather than growth in the URPS workforce.
 
 ## Discussion
 
-This national analysis of Medicare claims from 2013 to 2023 reveals that URPS physicians perform the majority of midurethral sling procedures, accounting for 52.7% of all slings with the highest per-provider volume and the most equitable volume distribution. The combined gynecologic share of sling procedures has increased significantly over the past decade, rising from 60.3% to 69.9%, driven primarily by growth in the URPS share.
+This national analysis of Medicare claims from 2013 to 2023 shows that URPS physicians perform the majority of midurethral sling procedures (60.8%), with the highest adjusted per-physician volume and the most equitable within-group distribution. The combined gynecologic share increased significantly over the decade, from 60.8% to 70.1%.
 
-### Subspecialty Dominance and the ABOG Crosswalk
+### Subspecialty Dominance and Both Training Pathways
 
-A key methodological contribution of this study is the use of the ABOG subspecialty registry to disaggregate the OB/GYN provider type into URPS, MIGS, and General OB/GYN. Without this crosswalk, the CMS PUF groups all OB/GYN subspecialties together, obscuring the fact that 78% of OB/GYN providers billing for midurethral slings are URPS-certified subspecialists. This finding reframes the narrative: midurethral sling surgery in Medicare is predominantly performed by fellowship-trained urogynecologists, not generalist OB/GYNs.
-
-The 10 MIGS providers identified performing slings is a novel finding. While MIGS fellowship training emphasizes minimally invasive approaches to gynecologic surgery, the midurethral sling is not traditionally considered a core MIGS procedure. The small number of MIGS providers in this dataset may represent surgeons with dual expertise or those whose practice encompasses pelvic floor surgery.
+A key methodological contribution is the identification of urogynecologists through **both** certifying pathways — ABOG (OB/GYN) and ABU (urology). Cross-referencing the ABU roster reassigned 150 urology-typed providers (8.2% of all slings) to URPS, sharpening the finding that midurethral sling surgery in Medicare is predominantly performed by fellowship-trained urogynecologists. The finding is robust: the pooled URPS Gini changed negligibly (0.51 → 0.52) under the reclassification.
 
 ### Procedural Concentration
 
-The Gini coefficients observed (0.51–0.59) indicate moderate procedural concentration across all specialty groups. For context, a Gini of 0.51 means that if sling volume were distributed perfectly equally among URPS providers, each would perform the same number—the actual distribution deviates 51% from this ideal. The finding that URPS has the lowest concentration (most equitable distribution) is consistent with the subspecialty's focused training in pelvic floor procedures, which may promote a more uniform practice pattern.
-
-General OB/GYN's higher Gini coefficient (0.56) suggests greater heterogeneity: some generalists maintain robust sling practices while others perform the procedure infrequently. This has implications for credentialing and privileging decisions, as hospitals must balance access to surgical care with the evidence linking higher procedure volume to better outcomes.^3,4^
+Reporting the Gini coefficient and HHI together makes the concentration finding difficult to attribute to a single metric: the two answer related but distinct questions and agree here. The low absolute HHI for the three main groups (27–89) shows that, although volume is unequally distributed (Gini 0.51–0.55), no individual surgeon approaches a dominant share — this is inequality across many surgeons, not domination by a few. Reporting each physician as the production unit follows workforce-concentration analyses in other surgical specialties; it is explicitly a surgeon-level, not a market-competition, measure.
 
 ### Temporal Trends and Workforce Implications
 
-The significant increase in gynecologic market share over the study period reflects two concurrent phenomena: the maturation and growth of URPS as a subspecialty, and the declining participation of urologists and generalist OB/GYNs in sling surgery. The 48% decline in the number of urologists billing CPT 57288 (363 in 2013 to 189 in 2023) is particularly striking. This may reflect subspecialization within urology, with fewer general urologists performing sling procedures as the procedure migrates toward URPS-trained pelvic floor specialists.
+The repeated-measures model clarifies the mechanism behind the rising gynecologic share. Individual physician volume did not change over time (year RR 1.00), but the number of non-URPS surgeons fell sharply while URPS numbers held steady. The market-share shift is therefore a workforce-composition change — non-URPS attrition — rather than a change in how much any individual operates. The significant 2020 decline (RR 0.89) is consistent with pandemic-related deferral of elective surgery and was robust to excluding 2020.
 
-The 2017 dip in total procedure volume (8,218 procedures, down from 14,935 in 2016) coincides with the FDA's reclassification of surgical mesh and heightened public concern about mesh complications.^6^ While volume partially recovered by 2018 (15,002 procedures), the provider count never fully recovered to pre-2017 levels, suggesting that some providers permanently exited the sling workforce during this period.
+### Limitations
 
-### CMS Data Suppression as a Limitation
-
-A fundamental limitation of this study is that CMS suppresses provider-level data when fewer than 11 beneficiaries are served for a given HCPCS code. This means our dataset necessarily excludes the lowest-volume providers—those performing 1 to 10 slings per year. The true number of providers performing midurethral slings is therefore larger than the 1,775 identified here, and the true distribution of volume is more right-skewed (and more concentrated) than what we observe. The Gini coefficients reported here should be interpreted as lower bounds on true procedural concentration.
-
-This suppression also precludes the traditional "low-volume surgeon" analysis that defines a binary threshold (e.g., fewer than 10 procedures per year). Since no provider in the PUF can have fewer than 11 procedures, any threshold at or below 10 yields zero low-volume providers by construction. We adopted the Gini coefficient and top-N% share metrics specifically to characterize concentration within the observable portion of the volume distribution without relying on an arbitrary binary threshold.
-
-### Additional Limitations
-
-Several additional limitations warrant discussion. First, the Medicare PUF captures only fee-for-service Medicare Part B claims. Procedures performed on younger patients, those with Medicare Advantage, Medicaid, commercial insurance, or the uninsured are not represented. The specialty distribution and volume patterns in these populations may differ. Second, our specialty classification depends on the accuracy of CMS provider type coding and the ABOG subspecialty registry. Providers who completed URPS fellowship training but are not ABOG-certified would be misclassified as General OB/GYN. Third, the ABOG crosswalk is a snapshot; providers who obtained subspecialty certification during the study period may be classified as URPS for all years despite billing as generalists in earlier years. Fourth, Tot_Srvcs in the PUF includes all services billed, which may include bilateral procedures or procedures with modifiers that inflate the apparent volume.
+Several limitations warrant discussion. First, CMS suppresses provider-level data below 11 beneficiaries, so the lowest-volume providers are unobserved and reported concentration is a lower bound. Second, the PUF captures only fee-for-service Medicare Part B; younger, Medicare Advantage, Medicaid, commercially insured, and uninsured patients are not represented. Third, specialty classification depends on CMS provider type and the ABOG/ABU rosters; providers who completed URPS fellowship but are not board-certified would be misclassified. Fourth, and importantly for the market-share conclusion, **the available ABOG data do not contain the subspecialty (FPMRS) certification date** — the certification years present are the initial general (OB/GYN or urology) board dates, which predate FPMRS by decades. Subspecialty membership therefore cannot be switched on at a physician's certification year; in all classification schemes ABOG URPS/MIGS membership is fixed across the study period, and only CMS provider type varies annually. A fully time-varying subspecialty hierarchy would require ABOG (and ABU) subspecialty certification dates that are not currently available; our sensitivity analysis nonetheless shows the market-share trend is stable across the classification schemes the data support. Fifth, the exclusion of 2017 removes one year of the time series (the underlying file being truncated); re-running with a complete 2017 file would restore all 11 years. Sixth, Tot_Srvcs may include bilateral or modifier-inflated services.
 
 ### Strengths
 
-This study has several strengths. It uses 11 years of complete Medicare claims data, providing a comprehensive view of temporal trends. The ABOG crosswalk enables granular specialty classification not possible from CMS data alone. The Gini coefficient provides a continuous, assumption-free measure of concentration that avoids the pitfalls of arbitrary volume thresholds. The entire analysis pipeline is publicly available and reproducible.
+This study uses a national, 100% sample of Medicare fee-for-service claims; identifies urogynecologists through both training pathways; reports concentration with two complementary surgeon-level measures at both the pooled and annual level; accounts for the non-independence of repeated physician-year observations with a clustered model; and is fully reproducible.
 
 ## Conclusions
 
-In this national analysis of Medicare midurethral sling procedures from 2013 to 2023, URPS physicians perform the majority of slings with the highest per-provider volume and the most equitable volume distribution. The growing gynecologic share—driven by URPS—and the declining participation of urologists and generalist OB/GYNs in sling surgery suggest an ongoing shift in the procedural landscape. These findings have implications for surgical training requirements, credentialing standards, and equitable access to pelvic floor surgical care.
+In this national Medicare cohort, URPS physicians perform the majority of midurethral slings with the highest adjusted per-physician volume and the most equitable within-group distribution. The growing gynecologic market share is driven by attrition of non-URPS providers rather than by increasing surgeon-level concentration, with implications for training requirements, credentialing standards, and access to pelvic floor surgical care.
 
 ## References
 
@@ -148,41 +128,54 @@ In this national analysis of Medicare midurethral sling procedures from 2013 to 
 
 ## Tables
 
-**Table 1.** Specialty distribution of CPT 57288 providers, Medicare PUF 2013–2023.
+**Table 1.** Specialty distribution of CPT 57288 providers, Medicare PUF 2013–2023 (2017 excluded; combined URPS).
 
-| Specialty | N providers | Total slings | % of all slings | Median annual volume (IQR) | Mean annual volume | Gini coefficient |
-|-----------|-------------|-------------|-----------------|---------------------------|-------------------|-----------------|
-| URPS | 609 | 73,751 | 52.7% | 19 (14–29) | 23.7 | 0.28 |
-| Urology | 823 | 47,825 | 34.2% | 16 (13–22) | 19.1 | 0.24 |
-| General OB/GYN | 333 | 17,402 | 12.4% | 15 (12–22) | 19.2 | 0.26 |
-| MIGS | 10 | 877 | 0.6% | 16 (12–23) | 23.7 | 0.36 |
-| **Total** | **1,775** | **139,855** | **100%** | — | — | — |
+| Specialty | N providers | Total slings | % of all slings | Median annual volume (IQR) |
+|-----------|-------------|-------------|-----------------|---------------------------|
+| URPS | 753 | 80,033 | 60.8% | 19 (14–29) |
+| Urology (non-URPS) | 665 | 34,351 | 26.1% | 16 (13–22) |
+| General OB/GYN | 330 | 16,391 | 12.5% | 15 (12–22) |
+| MIGS | 10 | 862 | 0.7% | 16 (12–23) |
+| **Total** | **1,758** | **131,637** | **100%** | — |
 
-*Note: Gini coefficient in Table 1 is computed on annual provider-year volumes. The concentration Gini in Table 2 is computed on aggregate (multi-year) provider totals, yielding higher values.*
+**Table 2.** Procedural concentration by specialty (aggregate provider-level volumes): Gini and HHI (surgeon-level).
 
-**Table 2.** Procedural concentration metrics by specialty group (aggregate provider-level volumes).
+| Specialty | N providers | Gini | HHI (0–10,000) | % by top 10% | % by top 20% |
+|-----------|-------------|------|----------------|--------------|--------------|
+| URPS | 753 | 0.51 | 27 | 34.3% | 53.4% |
+| Urology (non-URPS) | 665 | 0.52 | 35 | 38.5% | 57.5% |
+| General OB/GYN | 330 | 0.55 | 89 | 43.2% | 60.8% |
+| MIGS | 10 | 0.60 | 2,919 | 48.4% | 68.2% |
 
-| Specialty | N providers | Gini coefficient | % by top 10% | % by top 20% | % by top 30% |
-|-----------|-------------|-----------------|--------------|--------------|--------------|
-| URPS | 609 | 0.51 | 33.6% | 53.0% | 67.3% |
-| Urology | 823 | 0.54 | 39.4% | 58.9% | 71.2% |
-| General OB/GYN | 333 | 0.56 | 44.1% | 61.9% | 73.0% |
-| MIGS | 10 | 0.59 | 47.5% | 67.0% | 74.7% |
+**Table 3.** Repeated-measures model of annual sling volume — adjusted rate ratios from a Poisson GEE clustered by NPI (reference URPS; exchangeable correlation, robust SEs).
 
-**Table 3.** Statistical tests.
+| Term | Rate ratio (95% CI) | p-value |
+|------|--------------------|---------|
+| Urology (vs URPS) | 0.82 (0.70–0.95) | 0.008 |
+| General OB/GYN (vs URPS) | 0.67 (0.50–0.90) | 0.008 |
+| MIGS (vs URPS) | 0.56 (0.40–0.76) | < 0.001 |
+| Calendar year (per year) | 1.00 (0.99–1.00) | 0.52 |
+| 2020 (COVID) indicator | 0.89 (0.85–0.92) | < 0.001 |
 
-| Test | Comparison | Test statistic | p-value |
-|------|-----------|---------------|---------|
-| Kruskal-Wallis | All specialty groups | H = 291.8, df = 3 | < 0.001 |
-| Wilcoxon (Bonferroni) | URPS vs Urology | — | < 0.001 |
-| Linear regression | Gynecologic market share ~ year | slope = 0.84 | < 0.001 |
+**Table 4.** Gynecologic (OB/GYN-trained) market-share trend and classification-scheme sensitivity.
+
+| Analysis | 2013 → 2023 | Slope (pp/year) | p-value |
+|----------|-------------|-----------------|---------|
+| Gynecologic (ABOG-URPS + MIGS + Gen OB/GYN) share | 60.8% → 70.1% | 0.84 | < 0.001 |
+| Combined URPS share | 53.4% → 63.8% | 0.90 | < 0.001 |
+| URPS share — modal scheme | — | 0.98 | < 0.001 |
+| URPS share — ever-URPS/MIGS scheme | — | 0.96 | 0.001 |
 
 ---
 
 ## Figures
 
-**Figure 1.** Market share of midurethral sling procedures (CPT 57288) by specialty group, Medicare PUF 2013–2023. The combined gynecologic share (shaded area) increased significantly from 60.3% in 2013 to 69.9% in 2023 (slope = 0.84 percentage points per year; p < 0.001). URPS physicians consistently accounted for the largest share, rising from approximately 44% to 57% over the study period. Urology's share declined correspondingly from approximately 40% to 30%. General OB/GYN share decreased modestly from approximately 16% to 12%. MIGS providers contributed less than 1% throughout.
+**Figure 1.** Market share of midurethral sling procedures (CPT 57288) by specialty group, Medicare PUF 2013–2023 (2017 excluded). The combined gynecologic (OB/GYN-trained) share increased from 60.8% to 70.1% (slope 0.84 pp/year; p < 0.001).
 
-**Figure 2.** Distribution of annual midurethral sling procedure volume by specialty group, Medicare PUF 2013–2023. Violin plots with embedded box plots and jittered individual observations show the volume distribution on a log scale. URPS providers had the highest median annual volume (19 procedures; IQR 14–29), followed by MIGS (16; IQR 12–23), Urology (16; IQR 13–22), and General OB/GYN (15; IQR 12–22). All groups showed right-skewed distributions with outlier high-volume providers exceeding 70 procedures per year. The minimum observable volume is 11 due to CMS cell suppression.
+**Figure 2.** Distribution of annual midurethral sling volume by specialty group (violin + box plots, log scale). The minimum observable volume is 11 due to CMS cell suppression.
 
-**Figure 3.** Lorenz curves depicting procedural concentration of midurethral sling procedures by specialty group, Medicare PUF 2013–2023. The dashed diagonal represents perfect equality, where each provider performs an equal share of procedures. Curves farther from the diagonal indicate greater concentration. URPS providers (Gini = 0.51) show the most equitable distribution of sling volume, with the curve closest to the diagonal. MIGS (Gini = 0.59) shows the highest concentration. Urology (Gini = 0.54) and General OB/GYN (Gini = 0.56) fall between these extremes.
+**Figure 3.** Lorenz curves of procedural concentration by specialty. Curves farther from the diagonal indicate greater concentration; URPS (Gini 0.51) is closest to equality, MIGS (0.60) farthest.
+
+**Figure 4.** Annual procedural concentration by specialty (Gini, HHI, top-20% and bottom-50% shares) per calendar year; within-year concentration is low and stable. MIGS excluded from these panels (too few surgeons/year for a stable estimate).
+
+**Figure 5.** Observable surgeons and total procedure volume per year by specialty; the surgeon-pool decline is concentrated in urology and General OB/GYN.
