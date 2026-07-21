@@ -706,7 +706,7 @@ test_that("build_focal_stats_table returns publication-ready rows", {
     all(c("test", "statistic", "df", "p_value", "p_formatted") %in% names(stats_table))
   )
   expect_true(any(stats_table$test == "Kruskal-Wallis: annual volume across specialty groups"))
-  expect_true(any(stats_table$test == "Linear regression: gynecologic market share ~ year"))
+  expect_true(any(stats_table$test == "Linear regression: OB/GYN-trained gynecologic market share ~ year"))
 })
 
 test_that("build_focal_stats_table handles a missing focal specialty without error", {
@@ -760,7 +760,7 @@ test_that("generate_sling_abstract handles a non-computable trend test", {
 
   trend_row <- dplyr::filter(
     abstract_result$stats_table,
-    test == "Linear regression: gynecologic market share ~ year"
+    test == "Linear regression: OB/GYN-trained gynecologic market share ~ year"
   )
 
   expect_equal(trend_row$p_formatted, "NA (not computed)")

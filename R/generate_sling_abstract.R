@@ -193,36 +193,27 @@ compute_pairwise_volume_tests <- function(
 
 
 #' @noRd
+#' Linear trend of the OB/GYN-residency-trained gynecologic share on year.
+#' Takes provider_volume (not time_trends): urology-pathway URPS (ABU roster,
+#' subspecialty_abog = NA) are excluded from the gynecologic share so the trend
+#' matches the manuscript's "combined gynecologic share" definition rather than
+#' the inflated URPS-specialty-group version. See gyn_trained_annual_share().
 compute_obgyn_trend_test <- function(
-    time_trends_tbl,
+    provider_volume_tbl,
     year_col,
     verbose = TRUE
 ) {
   assertthat::assert_that(
-    is.data.frame(time_trends_tbl),
-    msg = "compute_obgyn_trend_test: time_trends_tbl must be a data frame."
-  )
-  assertthat::assert_that(
-    "pct_slings_this_year" %in% names(time_trends_tbl),
-    msg = paste0(
-      "compute_obgyn_trend_test: pct_slings_this_year column not found. ",
-      "Run analyze_midurethral_sling_patterns() with year_col set."
-    )
+    is.data.frame(provider_volume_tbl),
+    msg = "compute_obgyn_trend_test: provider_volume_tbl must be a data frame."
   )
   log_msg(
-    "Computing linear trend test: gynecologic market share ~ year.",
+    "Computing linear trend test: OB/GYN-trained gynecologic market share ~ year.",
     verbose
   )
 
-  # Combine all gynecologic groups (URPS, General OB/GYN, OB/GYN)
-  gyn_groups <- c("OB/GYN", "URPS", "MIGS", "General OB/GYN")
-  gyn_trend_rows <- time_trends_tbl |>
-    dplyr::filter(specialty_group %in% gyn_groups) |>
-    dplyr::group_by(dplyr::across(dplyr::all_of(year_col))) |>
-    dplyr::summarise(
-      pct_slings_this_year = sum(pct_slings_this_year, na.rm = TRUE),
-      .groups = "drop"
-    )
+  gyn_trend_rows <- gyn_trained_annual_share(provider_volume_tbl, year_col) |>
+    dplyr::rename(pct_slings_this_year = pct_gyn)
 
   if (nrow(gyn_trend_rows) < 3L) {
     log_msg(
@@ -850,7 +841,7 @@ generate_sling_abstract <- function(
   )
 
   obgyn_trend <- if (!is.null(time_trends_tbl) && !is.null(year_col)) {
-    compute_obgyn_trend_test(time_trends_tbl, year_col, verbose = verbose)
+    compute_obgyn_trend_test(provider_volume_tbl, year_col, verbose = verbose)
   } else {
     log_msg("Step 1 - Trend test skipped (year_col = NULL).", verbose)
     NULL

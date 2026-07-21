@@ -279,8 +279,51 @@ safe_pairwise_wilcox_tidy <- function(
 }
 
 #' @noRd
-safe_obgyn_trend_row <- function(time_trends_tbl, year_col) {
-  if (is.null(time_trends_tbl) || is.null(year_col)) {
+#' Per-year OB/GYN-residency-trained gynecologic share of procedures (%).
+#'
+#' The "gynecologic" share must count only OB/GYN-residency-trained surgeons:
+#' ABOG-registry URPS + MIGS + General OB/GYN. Under the combined-URPS taxonomy,
+#' URPS also contains urology-pathway (ABU) surgeons, so summing the URPS
+#' specialty_group would over-count. The training pathway is recovered from
+#' subspecialty_abog: ABOG-matched (gyn pathway) is non-NA; ABU-only (urology
+#' pathway) is NA. When no ABOG information is present at all (subspecialty_abog
+#' absent or all-NA), there is no pathway split to make, so every URPS provider
+#' is treated as gynecologic — which reproduces the pre-combined behavior.
+gyn_trained_annual_share <- function(provider_volume_data, year_col) {
+  assert_required_columns(
+    provider_volume_data,
+    c(year_col, "specialty_group", "annual_sling_count"),
+    "provider_volume"
+  )
+  has_abog <- "subspecialty_abog" %in% names(provider_volume_data) &&
+    any(!is.na(provider_volume_data$subspecialty_abog))
+  abog_urps <- if ("subspecialty_abog" %in% names(provider_volume_data)) {
+    !is.na(provider_volume_data$subspecialty_abog)
+  } else {
+    rep(FALSE, nrow(provider_volume_data))
+  }
+
+  provider_volume_data |>
+    dplyr::mutate(
+      .is_gyn_trained =
+        specialty_group %in% c("OB/GYN", "General OB/GYN", "MIGS") |
+        (specialty_group == "URPS" & (!has_abog | abog_urps))
+    ) |>
+    dplyr::group_by(dplyr::across(dplyr::all_of(year_col))) |>
+    dplyr::summarise(
+      pct_gyn = 100 * sum(annual_sling_count[.is_gyn_trained], na.rm = TRUE) /
+        sum(annual_sling_count, na.rm = TRUE),
+      .groups = "drop"
+    ) |>
+    dplyr::arrange(dplyr::across(dplyr::all_of(year_col)))
+}
+
+#' @noRd
+#' Trend row for Table 4: OB/GYN-trained gynecologic market share ~ year.
+#' Takes provider_volume (not time_trends) so it can apply the training-pathway
+#' definition above; urology-pathway URPS are excluded from the gynecologic share.
+safe_obgyn_trend_row <- function(provider_volume_data, year_col) {
+  if (is.null(provider_volume_data) || is.null(year_col)) {
     return(tibble::tibble(
       test        = character(0),
       statistic   = numeric(0),
@@ -290,23 +333,12 @@ safe_obgyn_trend_row <- function(time_trends_tbl, year_col) {
     ))
   }
 
-  assert_required_columns(
-    time_trends_tbl,
-    c(year_col, "specialty_group", "pct_slings_this_year"),
-    "time_trends"
-  )
+  trend_label <- "Linear regression: OB/GYN-trained gynecologic market share ~ year"
+  gyn_share <- gyn_trained_annual_share(provider_volume_data, year_col)
 
-  gyn_groups <- c("OB/GYN", "URPS", "MIGS", "General OB/GYN")
-  gyn_trend_rows <- time_trends_tbl |>
-    dplyr::filter(specialty_group %in% gyn_groups) |>
-    dplyr::group_by(dplyr::across(dplyr::all_of(year_col))) |>
-    dplyr::summarise(
-      pct_slings_this_year = sum(pct_slings_this_year, na.rm = TRUE),
-      .groups = "drop"
-    )
-  if (nrow(gyn_trend_rows) < 3L) {
+  if (nrow(gyn_share) < 3L) {
     return(tibble::tibble(
-      test        = "Linear regression: gynecologic market share ~ year",
+      test        = trend_label,
       statistic   = NA_real_,
       df          = NA_real_,
       p_value     = NA_real_,
@@ -314,15 +346,15 @@ safe_obgyn_trend_row <- function(time_trends_tbl, year_col) {
     ))
   }
 
-  year_values      <- gyn_trend_rows[[year_col]]
-  obgyn_pct_values <- gyn_trend_rows$pct_slings_this_year
-  trend_lm         <- stats::lm(obgyn_pct_values ~ year_values)
-  trend_summary    <- summary(trend_lm)
-  slope            <- stats::coef(trend_lm)[["year_values"]]
-  slope_p          <- trend_summary$coefficients["year_values", "Pr(>|t|)"]
+  year_values <- gyn_share[[year_col]]
+  pct_values  <- gyn_share$pct_gyn
+  trend_lm    <- stats::lm(pct_values ~ year_values)
+  trend_summary <- summary(trend_lm)
+  slope       <- stats::coef(trend_lm)[["year_values"]]
+  slope_p     <- trend_summary$coefficients["year_values", "Pr(>|t|)"]
 
   tibble::tibble(
-    test        = "Linear regression: gynecologic market share ~ year",
+    test        = trend_label,
     statistic   = slope,
     df          = NA_real_,
     p_value     = slope_p,
@@ -387,6 +419,9 @@ build_focal_stats_table <- function(
   dplyr::bind_rows(
     kruskal_tidy,
     pairwise_rows,
-    safe_obgyn_trend_row(time_trends_tbl, year_col)
+    # Trend uses provider_volume (has subspecialty_abog) so the gynecologic
+    # share counts only OB/GYN-trained surgeons, not urology-pathway URPS.
+    # time_trends_tbl is retained in the signature for backward compatibility.
+    safe_obgyn_trend_row(provider_volume_data, year_col)
   )
 }
