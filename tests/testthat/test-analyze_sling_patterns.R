@@ -1014,6 +1014,61 @@ test_that("main function: ABU list folds a Urology provider into combined URPS",
   )
 })
 
+# =============================================================================
+# Tests: repeated-measures volume models (R/volume_models.R)
+# =============================================================================
+
+# Synthetic panel: 24 physicians, 5 years each, two specialties, volumes that
+# differ by specialty — deterministic but varied so models can fit.
+make_panel_fixture <- function() {
+  npi   <- rep(as.character(2001:2024), each = 5)
+  years <- rep(2019:2023, times = 24)
+  spec  <- rep(c("URPS", "Urology"), each = 60)
+  base  <- ifelse(spec == "URPS", 22L, 15L)
+  offset <- (as.integer(npi) %% 5L) + (years - 2019L)
+  tibble::tibble(
+    Rndrng_NPI         = npi,
+    specialty_group    = spec,
+    annual_sling_count = base + offset,
+    puf_year           = years
+  )
+}
+
+test_that("per_physician_volume: one row per NPI with a median", {
+  pp <- per_physician_volume(make_panel_fixture())
+  expect_equal(nrow(pp), 24L)                       # 24 distinct NPIs
+  expect_true(all(pp$n_years == 5L))
+  expect_true(all(c("specialty_group", "median_annual_volume") %in% names(pp)))
+})
+
+test_that("test_per_physician_volume: Kruskal-Wallis row on independent obs", {
+  tbl <- test_per_physician_volume(make_panel_fixture())
+  kw <- dplyr::filter(tbl, grepl("^Kruskal-Wallis", test))
+  expect_equal(nrow(kw), 1L)
+  expect_true(is.finite(kw$statistic))
+})
+
+test_that("fit_volume_gee: returns exponentiated rate ratios with 95% CIs", {
+  testthat::skip_if_not_installed("geepack")
+  fit <- fit_volume_gee(make_panel_fixture(), year_col = "puf_year",
+                        reference_specialty = "URPS", verbose = FALSE)
+  expect_false(is.null(fit))
+  expect_true(all(c("term", "rate_ratio", "ci_low", "ci_high", "p_value") %in%
+                    names(fit$terms)))
+  # Urology term present and its RR < 1 (lower volume than URPS reference)
+  uro <- dplyr::filter(fit$terms, term == "specialty_groupUrology")
+  expect_equal(nrow(uro), 1L)
+  expect_true(uro$rate_ratio < 1)
+  expect_true(uro$ci_low < uro$rate_ratio && uro$rate_ratio < uro$ci_high)
+})
+
+test_that("fit_volume_nb_mixed: returns NULL or a fitted list, never errors", {
+  # glmmTMB may be unloadable (no OpenMP); either way the call must be safe.
+  res <- fit_volume_nb_mixed(make_panel_fixture(), year_col = "puf_year",
+                             verbose = FALSE)
+  expect_true(is.null(res) || is.list(res))
+})
+
 # ── Property invariant tests ─────────────────────────────────────────────────
 
 test_that("Invariant: each NPI appears at most once in provider_volume (cross-sectional)", {

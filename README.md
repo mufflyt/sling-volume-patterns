@@ -139,6 +139,10 @@ All parameters are in `config.yml`. The pipeline runs 7 steps:
 
 7. **Annual concentration, not just one pooled Gini:** `build_annual_concentration_metrics()` computes every concentration measure per calendar year (overall and by specialty) — total procedures, observable surgeons, median[p25–p75], Gini, HHI, top-10/20% and bottom-50% shares — and `build_concentration_trend_regressions()` regresses each on year. This distinguishes *within-year* concentration (was ~0.27 and stable) from cumulative *multi-year* concentration (~0.52), answering whether care concentrated over time rather than reporting a single pooled value. Refresh from the cached `provider_volume`/`puf_classified` without re-reading raw CSVs via `scripts/refresh_annual_concentration.R`.
 
+8. **Gini AND HHI, both surgeon-level:** the concentration table reports the Herfindahl–Hirschman Index next to Gini (`compute_hhi()`). They answer related but distinct questions — Gini = inequality across the whole surgeon-volume distribution; HHI = concentration driven especially by the largest-volume surgeons. Each physician is the production unit: this is **surgeon-level procedural concentration, not antitrust hospital/market competition**, and values are not comparable to FTC/DOJ thresholds.
+
+9. **Repeated-measures volume models (`R/volume_models.R`):** provider-year rows are not independent (each NPI recurs across years), so the Kruskal-Wallis/pairwise-Wilcoxon tests are descriptive only. `fit_volume_nb_mixed()` (negative-binomial mixed model, random intercept per NPI, via glmmTMB) and `fit_volume_gee()` (Poisson GEE clustered by NPI, via geepack) give adjusted rate ratios with 95% CIs for specialty, calendar year, specialty × year, and a 2020/COVID indicator; `test_per_physician_volume()` is the one-value-per-physician secondary. Run `scripts/fit_volume_models.R`. glmmTMB/geepack are optional (functions skip gracefully if absent). glmmTMB needs OpenMP-linked TMB — on macOS install `libomp` if it fails to load; the GEE path has no such requirement.
+
 ---
 
 ## Project Structure
