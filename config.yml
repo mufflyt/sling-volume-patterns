@@ -88,6 +88,13 @@ default:
   # (e.g. remove the line) to disable and keep them inside Urology.
   # Source: isochrones repo ABU pipeline (abu_urps_active_with_gender_*).
   urps_urology_npi_csv: "data/abu_urology/abu_urps_npi_LATEST.csv"
+  # ABOG subspecialty (FPMRS/MIG) certification-year crosswalk, derived from the
+  # ABOG `sub1startdate` field (the true subspecialty cert date, 2013-2024, not
+  # the initial OB/GYN board date). Columns: npi, subspecialty (URPS/MIGS),
+  # cert_year. Enables the time-varying cert-gated classification in
+  # scripts/classification_sensitivity.R (a physician counts as URPS/MIGS only
+  # from their certification year onward).
+  abog_subspecialty_certyear_csv: "data/canonical_abog/abog_subspecialty_certyear_LATEST.csv"
 
   # ── Data provenance (Pattern 4: data_raw/ README) ──────────────────────────
   # data_raw/ holds original CMS downloads; never modified after download.

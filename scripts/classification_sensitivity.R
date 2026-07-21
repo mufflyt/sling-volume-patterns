@@ -38,6 +38,36 @@ summaries <- lapply(names(schemes), function(s) {
   summarise_scheme(assign_specialty_scheme(pv, s), year_col, schemes[[s]])
 })
 
+# ── Fourth scheme: true time-varying, cert-gated by ABOG sub1startdate ────────
+# A physician counts as URPS/MIGS only from their subspecialty certification
+# year onward; pre-certification years revert to their CMS-based group. This
+# requires the CMS-only base classification (no ABOG/ABU split) as the fallback.
+certyear_path <- tryCatch(config::get("abog_subspecialty_certyear_csv"),
+                          error = function(e) NULL)
+if (!is.null(certyear_path) && file.exists(certyear_path)) {
+  base <- analyze_midurethral_sling_patterns(
+    readRDS(puf_classified_path), year_col = year_col,
+    abog_npi_csv = NULL, urps_urology_npi_csv = NULL,
+    exclude_years = tryCatch(config::get("exclude_years"), error = function(e) NULL),
+    verbose = FALSE
+  )$provider_volume |>
+    dplyr::mutate(specialty_group = ifelse(specialty_group == "OB/GYN",
+                                           "General OB/GYN", specialty_group))
+  cw  <- readr::read_csv(certyear_path, show_col_types = FALSE) |>
+    dplyr::mutate(npi = as.character(npi))
+  abu <- readr::read_csv("data/abu_urology/abu_urps_npi_LATEST.csv",
+                         show_col_types = FALSE)$npi
+  # ABOG URPS/MIGS gated by cert year; ABU urology-pathway URPS kept fixed
+  # (no urology-FPMRS certification date is available).
+  tv <- assign_time_varying_certgated(base, year_col, cw) |>
+    dplyr::mutate(specialty_group = ifelse(
+      Rndrng_NPI %in% abu & specialty_group != "MIGS", "URPS", specialty_group))
+  s_tv <- summarise_scheme(tv, year_col, "Time-varying cert-gated (ABOG sub1startdate)")
+  summaries <- c(summaries, list(s_tv))
+} else {
+  message("[classification] no cert-year crosswalk — skipping cert-gated scheme.")
+}
+
 dist  <- dplyr::bind_rows(lapply(summaries, `[[`, "distribution"))
 trend <- dplyr::bind_rows(lapply(summaries, `[[`, "trends"))
 
@@ -59,5 +89,7 @@ print(as.data.frame(trend |>
             `Gyn slope`  = gyn_slope_pp_yr,  `Gyn p`  = fmt_p(gyn_p))),
   row.names = FALSE)
 
-cat("\nNote: ABOG supplies no certification date, so ABOG URPS/MIGS membership is\n",
-    "fixed across years in every scheme; only CMS provider type varies annually.\n", sep = "")
+cat("\nNote: the cert-gated scheme uses the ABOG sub1startdate (true FPMRS/MIG\n",
+    "subspecialty certification date, 2013-2024) to switch physicians into URPS/\n",
+    "MIGS only from their certification year; urology-pathway URPS remain fixed\n",
+    "(no urology-FPMRS certification date is available).\n", sep = "")
