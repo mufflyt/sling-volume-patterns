@@ -940,7 +940,8 @@ analyze_midurethral_sling_patterns <- function(
     concentration_cutoffs  = c(10, 20, 30),
     verbose                = TRUE,
     abog_npi_csv           = NULL,
-    urps_urology_npi_csv   = NULL
+    urps_urology_npi_csv   = NULL,
+    exclude_years          = NULL
 ) {
   # ── 0. Input validation ────────────────────────────────────────────────────
   assertthat::assert_that(
@@ -965,6 +966,34 @@ analyze_midurethral_sling_patterns <- function(
   )
 
   validate_sling_input(medicare_puf_data, year_col = year_col)
+
+  # Drop excluded calendar years (e.g. a corrupt/truncated PUF download).
+  # config::get() delivers a YAML sequence as a list, so coerce to a vector.
+  exclude_years <- suppressWarnings(as.integer(unlist(exclude_years)))
+  exclude_years <- exclude_years[!is.na(exclude_years)]
+  if (length(exclude_years) > 0L) {
+    assertthat::assert_that(
+      !is.null(year_col),
+      msg = "exclude_years was supplied but year_col is NULL; cannot filter by year."
+    )
+    n_before <- nrow(medicare_puf_data)
+    medicare_puf_data <- dplyr::filter(
+      medicare_puf_data,
+      !(.data[[year_col]] %in% exclude_years)
+    )
+    log_msg(
+      glue::glue(
+        "Excluded year(s) {paste(sort(exclude_years), collapse=', ')}: ",
+        "{format(n_before - nrow(medicare_puf_data), big.mark=',')} rows dropped ",
+        "({format(nrow(medicare_puf_data), big.mark=',')} remain)."
+      ),
+      verbose
+    )
+    assertthat::assert_that(
+      nrow(medicare_puf_data) > 0L,
+      msg = "No rows remain after applying exclude_years."
+    )
+  }
 
   abog_lookup <- NULL
   if (!is.null(abog_npi_csv)) {

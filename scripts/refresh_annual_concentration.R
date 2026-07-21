@@ -33,13 +33,20 @@ year_breaks <- 2013:2023
 stopifnot(file.exists(puf_classified_path))
 pc <- readRDS(puf_classified_path)
 
+# Honour the same data-quality year exclusions as the pipeline (e.g. 2017).
+exclude_years <- tryCatch(config::get("exclude_years"), error = function(e) NULL)
+
 res <- analyze_midurethral_sling_patterns(
   medicare_puf_data    = pc,
   year_col             = year_col,
   abog_npi_csv         = "data/canonical_abog/canonical_abog_npi_LATEST.csv",
   urps_urology_npi_csv = "data/abu_urology/abu_urps_npi_LATEST.csv",
+  exclude_years        = exclude_years,
   verbose              = FALSE
 )
+if (length(unlist(exclude_years))) {
+  cat("Excluded year(s):", paste(unlist(exclude_years), collapse = ", "), "\n")
+}
 
 annual      <- res$annual_concentration
 regressions <- build_concentration_trend_regressions(annual, year_col = year_col)

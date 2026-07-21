@@ -48,7 +48,8 @@ results <- analyze_midurethral_sling_patterns(
   concentration_cutoffs = cfg$concentration_cutoffs,
   verbose               = cfg$verbose,
   abog_npi_csv          = cfg$abog_npi_csv,
-  urps_urology_npi_csv  = cfg$urps_urology_npi_csv
+  urps_urology_npi_csv  = cfg$urps_urology_npi_csv,
+  exclude_years         = cfg$exclude_years
 )
 validate_reporting_analysis_output(
   results,

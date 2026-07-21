@@ -891,6 +891,25 @@ test_that("build_annual_concentration_metrics: pooled 'All' equals the sum acros
   expect_true(all(cmp$surgeons == cmp$all_surgeons))
 })
 
+test_that("main function: exclude_years drops the named calendar years", {
+  full <- analyze_midurethral_sling_patterns(
+    make_puf_multiyear(), year_col = "year", verbose = FALSE
+  )
+  dropped <- analyze_midurethral_sling_patterns(
+    make_puf_multiyear(), year_col = "year",
+    exclude_years = 2021, verbose = FALSE
+  )
+  expect_true(2021 %in% full$provider_volume$year)
+  expect_false(2021 %in% dropped$provider_volume$year)
+  expect_false(2021 %in% dropped$annual_concentration$year)
+  # A list (as config::get() returns for a YAML sequence) works too.
+  dropped_list <- analyze_midurethral_sling_patterns(
+    make_puf_multiyear(), year_col = "year",
+    exclude_years = list(2021L), verbose = FALSE
+  )
+  expect_false(2021 %in% dropped_list$provider_volume$year)
+})
+
 test_that("build_annual_concentration_metrics: is NULL in cross-sectional mode", {
   result_list <- analyze_midurethral_sling_patterns(
     make_minimal_puf(), year_col = NULL, verbose = FALSE
