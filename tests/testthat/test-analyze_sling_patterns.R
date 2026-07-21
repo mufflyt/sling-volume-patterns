@@ -1069,6 +1069,50 @@ test_that("fit_volume_nb_mixed: returns NULL or a fitted list, never errors", {
   expect_true(is.null(res) || is.list(res))
 })
 
+# =============================================================================
+# Tests: specialty classification schemes (R/classification_schemes.R)
+# =============================================================================
+
+# NPI 3001 is URPS once then Urology twice (modal = Urology, ever = URPS);
+# NPI 3002 is always General OB/GYN.
+make_scheme_fixture <- function() {
+  tibble::tibble(
+    Rndrng_NPI         = c("3001", "3001", "3001", "3002", "3002"),
+    specialty_group    = c("URPS", "Urology", "Urology",
+                           "General OB/GYN", "General OB/GYN"),
+    annual_sling_count = c(10L, 12L, 14L, 8L, 9L),
+    puf_year           = c(2020L, 2021L, 2022L, 2021L, 2022L)
+  )
+}
+
+test_that("assign_specialty_scheme: time_varying leaves specialty_group unchanged", {
+  fx <- make_scheme_fixture()
+  out <- assign_specialty_scheme(fx, "time_varying")
+  expect_identical(out$specialty_group, fx$specialty_group)
+  expect_equal(nrow(out), nrow(fx))
+})
+
+test_that("assign_specialty_scheme: modal assigns the most-frequent specialty per NPI", {
+  out <- assign_specialty_scheme(make_scheme_fixture(), "modal")
+  expect_true(all(out$specialty_group[out$Rndrng_NPI == "3001"] == "Urology"))
+  expect_true(all(out$specialty_group[out$Rndrng_NPI == "3002"] == "General OB/GYN"))
+  expect_equal(nrow(out), 5L)  # row count preserved
+})
+
+test_that("assign_specialty_scheme: ever_urps_migs promotes any-year URPS", {
+  out <- assign_specialty_scheme(make_scheme_fixture(), "ever_urps_migs")
+  # 3001 was URPS in one year → URPS for all years
+  expect_true(all(out$specialty_group[out$Rndrng_NPI == "3001"] == "URPS"))
+  expect_true(all(out$specialty_group[out$Rndrng_NPI == "3002"] == "General OB/GYN"))
+})
+
+test_that("summarise_scheme: distribution shares sum to 100 and trends compute", {
+  fx <- make_scheme_fixture()
+  s <- summarise_scheme(assign_specialty_scheme(fx, "modal"), "puf_year", "modal")
+  expect_equal(round(sum(s$distribution$pct_of_all), 1), 100)
+  expect_true(all(c("urps_slope_pp_yr", "gyn_slope_pp_yr") %in% names(s$trends)))
+})
+
 # ── Property invariant tests ─────────────────────────────────────────────────
 
 test_that("Invariant: each NPI appears at most once in provider_volume (cross-sectional)", {

@@ -112,6 +112,10 @@ All parameters are in `config.yml`. The pipeline runs 7 steps:
 | `output/figures/figure_3_lorenz_curve.png` | Lorenz curves by specialty |
 | `output/figures/figure_4_concentration_trends.png` | Annual Gini/HHI/top-20%/bottom-50% by specialty over time |
 | `output/figures/figure_5_supply_trends.png` | Observable surgeons and procedure volume per year by specialty |
+| `output/tables/table_8_volume_gee.csv` (+ `8b`, NB mixed) | Repeated-measures rate ratios (GEE / NB mixed), 2020 sensitivity |
+| `output/tables/table_9_per_physician.csv` | One-value-per-physician secondary tests |
+| `output/tables/table_10_classification_sensitivity.csv` (+ `10b`) | Time-varying vs modal vs ever-URPS/MIGS distribution & trends |
+| `output/manuscript.docx` | Manuscript rendered from `output/manuscript.md` (pandoc) |
 
 ---
 
@@ -142,6 +146,8 @@ All parameters are in `config.yml`. The pipeline runs 7 steps:
 8. **Gini AND HHI, both surgeon-level:** the concentration table reports the Herfindahl–Hirschman Index next to Gini (`compute_hhi()`). They answer related but distinct questions — Gini = inequality across the whole surgeon-volume distribution; HHI = concentration driven especially by the largest-volume surgeons. Each physician is the production unit: this is **surgeon-level procedural concentration, not antitrust hospital/market competition**, and values are not comparable to FTC/DOJ thresholds.
 
 9. **Repeated-measures volume models (`R/volume_models.R`):** provider-year rows are not independent (each NPI recurs across years), so the Kruskal-Wallis/pairwise-Wilcoxon tests are descriptive only. `fit_volume_nb_mixed()` (negative-binomial mixed model, random intercept per NPI, via glmmTMB) and `fit_volume_gee()` (Poisson GEE clustered by NPI, via geepack) give adjusted rate ratios with 95% CIs for specialty, calendar year, specialty × year, and a 2020/COVID indicator; `test_per_physician_volume()` is the one-value-per-physician secondary. Run `scripts/fit_volume_models.R`. glmmTMB/geepack are optional (functions skip gracefully if absent). glmmTMB needs OpenMP-linked TMB — on macOS install `libomp` if it fails to load; the GEE path has no such requirement.
+
+10. **Specialty-classification sensitivity (`R/classification_schemes.R`):** because the headline concerns *changes* in specialty market share, `assign_specialty_scheme()` supports three assignments — `time_varying` (one specialty per physician-year; the primary, already time-varying at the CMS level), `modal` (single most-frequent specialty per physician), and `ever_urps_migs` (URPS if ever URPS, else MIGS if ever MIGS, else modal). `scripts/classification_sensitivity.R` compares the specialty distribution and market-share trends across all three. **Result:** distribution differs by <1 percentage point and the URPS/gynecologic share trend stays significant in every scheme (URPS +0.90 to +0.98 pp/yr, all p ≤ 0.001), so the conclusion is robust to classification. **Limitation:** the ABOG registry supplies no certification *date*, so ABOG URPS/MIGS membership cannot be switched on at a physician's certification year — it is fixed across the study period in every scheme, and only CMS provider type varies annually. True per-year subspecialty gating would require ABOG (and ABU) certification years.
 
 ---
 
