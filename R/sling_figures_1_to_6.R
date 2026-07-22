@@ -1,4 +1,4 @@
-# Publication-ready figures for the Medicare midurethral sling manuscript
+# Publication-ready figures for the Medicare sling-for-SUI manuscript
 #
 # Required input: one row per physician-year with these columns:
 #   npi

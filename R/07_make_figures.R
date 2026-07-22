@@ -127,7 +127,7 @@ if (!is.null(time_trends) && nrow(time_trends) > 0) {
         "Medicare PUF, {cfg$study_start_year}\u2013{cfg$study_end_year}"
       ),
       x = "Year",
-      y = "Share of all midurethral slings (%)"
+      y = "Share of reported services (%)"
     ) +
     theme_publication() +
     ggplot2::theme(
@@ -208,7 +208,7 @@ if (nrow(provider_volume) > 0) {
     ggplot2::labs(
       title    = "Annual Procedure Volume by Specialty",
       subtitle = glue::glue(
-        "CPT 57288 (midurethral sling), Medicare PUF ",
+        "CPT 57288 (sling for SUI), fee-for-service Medicare PUF ",
         "{cfg$study_start_year}\u2013{cfg$study_end_year}"
       ),
       x = NULL,
@@ -291,7 +291,7 @@ if (nrow(provider_volume) > 0) {
     ggplot2::labs(
       title    = "Lorenz Curve: Procedural Concentration by Specialty",
       subtitle = glue::glue(
-        "CPT 57288 (midurethral sling), Medicare PUF ",
+        "CPT 57288 (sling for SUI), fee-for-service Medicare PUF ",
         "{cfg$study_start_year}\u2013{cfg$study_end_year}"
       ),
       x = "Cumulative share of providers (ranked by volume)",

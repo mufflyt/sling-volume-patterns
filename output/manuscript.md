@@ -399,7 +399,7 @@ indicating that sling volume was distributed across many surgeons rather
 than dominated by a few. Because the specialties differ several-fold in
 provider count, raw HHI is not directly comparable across them (Table
 2). Adding hypothetical suppressed low-volume providers raised the Gini
-only modestly (Supplementary Table S9), so the low-concentration
+only modestly (Supplementary Table S8), so the low-concentration
 conclusion is robust to the unobserved tail. URPS had the highest median
 annual volume and upper quartile (median 19; p75 28). MIGS was excluded
 from these comparisons because only 10 physicians were identified (1–4
@@ -408,7 +408,7 @@ specialty-wide estimates.
 
 ### Workforce Entry and Exit
 
-Using the two-year washout (Supplementary Table S10), 48–168 surgeons
+Using the two-year washout (Supplementary Table S9), 48–168 surgeons
 became newly observable each year and performed 7.4%–22.5% of annual
 volume. Their median volume was low, at approximately 13 services,
 consistent with surgeons appearing just above the CMS suppression
@@ -968,49 +968,28 @@ OB/GYN)</td>
 ## Figures
 
 <img
+src="/Users/tylermuffly/sling-volume-patterns/output/figures/figure_rate_per_100k.png"
+style="width:6.5in" />
+
+**Figure 1.** Utilization of sling surgery for stress urinary
+incontinence (CPT 57288) in fee-for-service Medicare, 2013–2023. Bars
+show reported services; the line shows the denominator-adjusted rate per
+100,000 female Part B fee-for-service beneficiaries. The rate declined
+less than the raw count (-12.6% versus -25.5%) because the
+fee-for-service population contracted by -14.7%; the linear trend in the
+rate was not significant (p = 0.139).
+
+<img
 src="/Users/tylermuffly/sling-volume-patterns/output/figures/figure_1_market_share.png"
 style="width:6.5in" />
 
-**Figure 1.** Market share of sling operations for stress urinary
+**Figure 2.** Market share of sling operations for stress urinary
 incontinence (CPT 57288) by specialty, fee-for-service Medicare PUF
 2013–2023. The URPS share increased under every classification scenario.
-Fixed membership (URPS share 53.4% to 63.8%; +0.90 percentage
-points/year) and certification-gated classification (URPS share 42.2% to
-62.8%; +1.52 percentage points/year) differ in the estimated rate of
-increase and converge by 2023.
-
-<img
-src="/Users/tylermuffly/sling-volume-patterns/output/figures/figure_2_volume_distribution.png"
-style="width:6.5in" />
-
-**Figure 2.** Annual sling service volume (CPT 57288) by specialty
-(violin and box plots; logarithmic scale). The minimum observable volume
-is 11 because of CMS cell suppression.
-
-<img
-src="/Users/tylermuffly/sling-volume-patterns/output/figures/figure_3_lorenz_curve.png"
-style="width:6.5in" />
-
-**Figure 3.** Lorenz curves of procedural concentration by specialty.
-Greater distance from the diagonal indicates greater concentration. URPS
-(Gini 0.52) is closest to equality; MIGS (0.61) is farthest.
-
-<img
-src="/Users/tylermuffly/sling-volume-patterns/output/figures/figure_4_concentration_trends.png"
-style="width:6.5in" />
-
-**Figure 4.** Annual concentration by specialty, measured by Gini, HHI,
-top-20% share, and bottom-50% share. Within-year concentration was low
-and stable. MIGS was excluded because too few surgeons were observed
-each year for stable estimates.
-
-<img
-src="/Users/tylermuffly/sling-volume-patterns/output/figures/figure_5_supply_trends.png"
-style="width:6.5in" />
-
-**Figure 5.** Observable surgeons and total procedure volume by year and
-specialty. The decline in the surgeon pool was concentrated in urology
-and General OB/GYN.
+Fixed membership (all-pathway URPS share 53.4% to 63.8%; +0.90
+percentage points/year) and certification-gated classification (URPS
+share 42.2% to 62.8%; +1.52 percentage points/year) differ in the
+estimated rate of increase and converge by 2023.
 
 ------------------------------------------------------------------------
 
@@ -2860,60 +2839,7 @@ the CMS reporting threshold.
 </tbody>
 </table>
 
-**Supplementary Table S8.** Cross-sectional versus multi-year Gini
-coefficients (concentration sensitivity), showing that pooling years
-increases apparent concentration relative to any single year.
-
-<table>
-<colgroup>
-<col style="width: 14%" />
-<col style="width: 22%" />
-<col style="width: 17%" />
-<col style="width: 23%" />
-<col style="width: 22%" />
-</colgroup>
-<thead>
-<tr>
-<th>Specialty</th>
-<th>Year mode</th>
-<th>N providers</th>
-<th>Gini coefficient</th>
-<th>% of all slings</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>OB/GYN</td>
-<td>cross_sectional</td>
-<td>373</td>
-<td>0.275</td>
-<td>82.6%</td>
-</tr>
-<tr>
-<td>Urology</td>
-<td>cross_sectional</td>
-<td>93</td>
-<td>0.233</td>
-<td>17.4%</td>
-</tr>
-<tr>
-<td>OB/GYN</td>
-<td>multi_year</td>
-<td>964</td>
-<td>0.281</td>
-<td>74.8%</td>
-</tr>
-<tr>
-<td>Urology</td>
-<td>multi_year</td>
-<td>517</td>
-<td>0.225</td>
-<td>25.2%</td>
-</tr>
-</tbody>
-</table>
-
-**Supplementary Table S9.** Suppression sensitivity. Hypothetical
+**Supplementary Table S8.** Suppression sensitivity. Hypothetical
 suppressed low-volume providers (25% and 50% of the observed count, each
 performing 1–10 services) were added to each group before recomputing
 the Gini coefficient and HHI. Concentration rose only modestly, so the
@@ -2967,7 +2893,7 @@ tail.
 </tbody>
 </table>
 
-**Supplementary Table S10.** Annual observable participation transitions
+**Supplementary Table S9.** Annual observable participation transitions
 using a two-year washout. Newly observable surgeons were absent in both
 prior observable years; surgeons no longer observable were absent in
 both subsequent observable years. Newly observable and continuing counts
@@ -3101,3 +3027,40 @@ crossings, not definitive entry into or exit from practice.
 
 Newly observable episodes by specialty: URPS, 480; urology, 421; General
 OB/GYN, 205; MIGS, 8.
+
+------------------------------------------------------------------------
+
+## Supplementary Figures
+
+<img
+src="/Users/tylermuffly/sling-volume-patterns/output/figures/figure_2_volume_distribution.png"
+style="width:6.5in" />
+
+**Supplementary Figure S1.** Annual sling service volume (CPT 57288) by
+specialty (violin and box plots; logarithmic scale). The minimum
+observable volume is 11 because of CMS cell suppression.
+
+<img
+src="/Users/tylermuffly/sling-volume-patterns/output/figures/figure_3_lorenz_curve.png"
+style="width:6.5in" />
+
+**Supplementary Figure S2.** Lorenz curves of procedural concentration
+by specialty. Greater distance from the diagonal indicates greater
+concentration.
+
+<img
+src="/Users/tylermuffly/sling-volume-patterns/output/figures/figure_4_concentration_trends.png"
+style="width:6.5in" />
+
+**Supplementary Figure S3.** Annual within-year concentration by
+specialty (Gini, HHI, top-20% share, bottom-50% share). Within-year
+concentration was low and stable. MIGS was excluded because too few
+surgeons were observed each year for stable estimates.
+
+<img
+src="/Users/tylermuffly/sling-volume-patterns/output/figures/figure_5_supply_trends.png"
+style="width:6.5in" />
+
+**Supplementary Figure S4.** Observable surgeons and total reported
+services by year and specialty. The decline in the observable surgeon
+pool was concentrated in urology and General OB/GYN.
