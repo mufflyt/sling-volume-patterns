@@ -13,6 +13,7 @@
 #   05  Generate abstract text with programmatic statistics
 #   06  Produce publication tables (Table 1, low-volume burden, time trends)
 #   07  Produce publication figures (Figure 1 market share, Figure 2 volumes)
+#   07b Produce the six manuscript figures (sling_figures_1_to_6.R)
 #   08  Render the reproducible manuscript (output/manuscript.Rmd -> docx)
 #
 # Pattern from hollina/duke-replication (AER forthcoming) and
@@ -105,6 +106,7 @@ run_step(4,   "Sensitivity analyses (cross-sectional vs multi-year)","R/04_run_s
 run_step(5,   "Generate programmatic abstract",            "R/05_generate_abstract.R")
 run_step(6,   "Produce publication tables",                "R/06_make_tables.R")
 run_step(7,   "Produce publication figures",               "R/07_make_figures.R")
+run_step("7b","Produce six manuscript figures (1-6)",       "R/07b_make_manuscript_figures.R")
 run_step(8,   "Render reproducible manuscript (Rmd)",       "R/08_render_manuscript.R")
 
 # ── Post-pipeline reproducibility audit ──────────────────────────────────

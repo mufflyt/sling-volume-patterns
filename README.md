@@ -94,7 +94,8 @@ All parameters are in `config.yml`. The pipeline runs 7 steps:
 6. **05_generate_abstract.R** — Programmatic abstract with all statistics computed from data
 7. **06_make_tables.R** — Publication tables (CSV + HTML), incl. Table 5 (annual concentration) and Table 6 (year trends)
 8. **07_make_figures.R** — Market share trend, volume distributions, Lorenz curves, plus Figure 4 (annual concentration) and Figure 5 (supply trends)
-9. **08_render_manuscript.R** — Render `output/manuscript.Rmd` to `output/manuscript.docx`. The Rmd computes every number inline from the cache via `compute_manuscript_values()`, so prose and analysis never drift
+9. **07b_make_manuscript_figures.R** — The six manuscript figures (`sling_figures_1_to_6.R`): stacked specialty share with the two URPS bounds, workforce/volume panels, volume raincloud, physician-level Lorenz curves, state URPS-share map, and entrant-vs-exit diverging bars. Runs alongside step 07 (needs `ggdist`/`patchwork`/`sf`/`tigris`; skips gracefully if absent)
+10. **08_render_manuscript.R** — Render `output/manuscript.Rmd` to `output/manuscript.docx`. The Rmd computes every number inline from the cache via `compute_manuscript_values()`, so prose and analysis never drift
 
 ### Output files
 
