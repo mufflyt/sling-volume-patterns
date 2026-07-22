@@ -15,7 +15,7 @@
 #   MIGS
 #
 # The functions:
-#   * exclude 2017 by default;
+#   * include all years by default (pass excluded_years to drop any);
 #   * compute entrant and exit flags using two observable years;
 #   * append a timestamp to every saved file;
 #   * log inputs, transformations, and exact saved paths.
@@ -185,7 +185,7 @@ validate_sling_input <- function(physician_year_tbl) {
 
 prepare_sling_figure_input <- function(
     physician_year_tbl,
-    excluded_years = 2017L) {
+    excluded_years = integer(0)) {
   base::message("Preparing the physician-year analytic table.")
 
   physician_year_tbl <- as_analysis_tbl(physician_year_tbl)
@@ -685,23 +685,6 @@ figure_1_specialty_share <- function(
       linewidth = 1,
       color = "black"
     ) +
-    ggplot2::annotate(
-      geom = "rect",
-      xmin = 2016.5,
-      xmax = 2017.5,
-      ymin = -Inf,
-      ymax = Inf,
-      fill = "white",
-      color = NA
-    ) +
-    ggplot2::annotate(
-      geom = "text",
-      x = 2017,
-      y = 0.08,
-      label = "2017 excluded",
-      angle = 90,
-      size = 3
-    ) +
     ggplot2::geom_vline(
       xintercept = 2020,
       linetype = "dotted",
@@ -920,7 +903,7 @@ figure_2_workforce_and_volume <- function(
       ),
       caption = base::paste0(
         "Stacked bars show specialty composition; black lines show ",
-        "annual totals. Calendar year 2017 is excluded."
+        "annual totals. The dotted line marks 2020."
       )
     ) &
     ggplot2::theme(
@@ -1743,7 +1726,7 @@ figure_6_entrant_exit_balance <- function(
 create_sling_figures_1_to_6 <- function(
     physician_year_tbl,
     save_dir = "figures",
-    excluded_years = 2017L,
+    excluded_years = integer(0),
     reference_volume = 50,
     map_year = NULL,
     geometry_year = 2023L,

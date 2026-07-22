@@ -33,12 +33,11 @@ default:
   study_start_year: 2013
   study_end_year:   2023
   # Calendar years to drop from the analysis for data-quality reasons.
-  # 2017: the raw D17 PUF download is truncated (1.5 GB vs ~2.7 GB for adjacent
-  # years; ~376 sling provider-rows vs ~660-810), producing an artifactual dip
-  # that biases every temporal trend. Excluded pending a re-download; clear this
-  # list (exclude_years: []) once the full 2017 file is in place.
-  exclude_years:
-    - 2017
+  # 2017 was previously excluded because the raw D17 PUF download was truncated
+  # (1.5 GB vs ~2.7 GB; ~376 sling provider-rows). The complete 2017 file was
+  # re-downloaded (745 sling provider-rows, ~16,200 procedures) and merged into
+  # the cache on 2026-07-21, so all 11 years are now analyzed.
+  exclude_years: []
   # Column name added to the merged PUF in 01_build_puf_cache.R.
   # Must match the mutate() call in that script.
   # Bug fix B8: hardcoded "puf_year" in 05_generate_abstract.R now

@@ -2,7 +2,7 @@
 # recompute_gynecologic_share.R
 #
 # Recompute the annual market-share trend under the COMBINED-URPS taxonomy
-# (2017 excluded). Because urology-pathway URPS surgeons are now inside URPS,
+# (config exclude_years applied; currently none). Because urology-pathway URPS surgeons are now inside URPS,
 # "URPS + MIGS + General OB/GYN" is no longer purely OB/GYN-trained, so this
 # script reports several complementary share definitions and regresses each on
 # calendar year:
@@ -92,7 +92,7 @@ trends <- dplyr::bind_rows(
 dir.create("output/tables", recursive = TRUE, showWarnings = FALSE)
 readr::write_csv(trends, "output/tables/table_7_share_trends.csv")
 
-cat("=== Annual shares (%), 2017 excluded ===\n")
+cat("=== Annual shares (%), all years ===\n")
 print(as.data.frame(share |> rename(year = !!year_col) |>
   mutate(across(c(urps_combined, gyn_trained, spec_gyn_grp, urology_nonurps),
                 ~round(.x, 1)))), row.names = FALSE)

@@ -22,11 +22,14 @@ pyt <- build_physician_year_tbl(puf_path)
 message(sprintf("[figures] physician-year rows: %d | columns: %s",
                 nrow(pyt), paste(names(pyt), collapse = ", ")))
 
+excl <- tryCatch(as.integer(unlist(config::get("exclude_years"))),
+                 error = function(e) integer(0))
+
 ok <- tryCatch({
   create_sling_figures_1_to_6(
     physician_year_tbl = pyt,
     save_dir = save_dir,
-    excluded_years = 2017L,
+    excluded_years = excl,
     reference_volume = 50,
     map_year = NULL,
     geometry_year = 2023L
@@ -36,7 +39,7 @@ ok <- tryCatch({
   message("[figures] create_sling_figures_1_to_6 failed: ", conditionMessage(e))
   message("[figures] retrying figures 1-4 and 6 without the state map.")
   ts <- format(Sys.time(), "%Y%m%d_%H%M%S")
-  prepared <- prepare_sling_figure_input(pyt, excluded_years = 2017L)
+  prepared <- prepare_sling_figure_input(pyt, excluded_years = excl)
   flagged  <- add_observable_workforce_flags(prepared)
   figure_1_specialty_share(prepared, save_dir, ts)
   figure_2_workforce_and_volume(prepared, save_dir, ts)

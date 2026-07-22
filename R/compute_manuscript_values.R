@@ -23,11 +23,17 @@ compute_manuscript_values <- function(
     abog_csv     = "data/canonical_abog/canonical_abog_npi_LATEST.csv",
     abu_csv      = "data/abu_urology/abu_urps_npi_LATEST.csv",
     certyear_csv = "data/canonical_abog/abog_subspecialty_certyear_LATEST.csv",
-    exclude_years = 2017L,
+    exclude_years = NULL,
     year_col      = "puf_year",
     r_dir         = "R"
 ) {
   `%>%` <- dplyr::`%>%`
+  # Default: honour config exclude_years (empty now that the complete 2017 file
+  # is in the cache). Pass an explicit vector to override.
+  if (is.null(exclude_years)) {
+    exclude_years <- tryCatch(as.integer(unlist(config::get("exclude_years"))),
+                              error = function(e) integer(0))
+  }
   source(file.path(r_dir, "reporting_stats_helpers.R"), local = TRUE)
   source(file.path(r_dir, "analyze_sling_patterns.R"),  local = TRUE)
   source(file.path(r_dir, "classification_schemes.R"),  local = TRUE)
@@ -36,7 +42,7 @@ compute_manuscript_values <- function(
 
   pc <- readRDS(puf_classified_path)
 
-  # ── Analyses: full (all years) and analytic (2017 excluded) ────────────────
+  # ── Analyses: full (all years) and analytic (config exclude_years; now none) ─
   res_full <- analyze_midurethral_sling_patterns(
     pc, year_col = year_col, abog_npi_csv = abog_csv,
     urps_urology_npi_csv = abu_csv, verbose = FALSE

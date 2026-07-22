@@ -85,7 +85,7 @@ readr::write_csv(trend, "output/tables/table_10b_classification_trends.csv")
 
 fmt_p <- function(p) ifelse(p < 0.001, "<0.001", sprintf("%.3f", p))
 
-cat("=== Specialty distribution by classification scheme (2017 excluded) ===\n")
+cat("=== Specialty distribution by classification scheme (all years) ===\n")
 print(as.data.frame(dist |>
   mutate(pct_of_all = round(pct_of_all, 1)) |>
   arrange(scheme, desc(procedures))), row.names = FALSE)
