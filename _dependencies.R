@@ -20,4 +20,8 @@ if (FALSE) {
   library(geepack)      # Poisson GEE clustered by NPI (fit_volume_gee)
   library(glmmTMB)      # negative-binomial mixed model (fit_volume_nb_mixed)
   library(broom.mixed)  # tidy() output for glmmTMB fixed effects
+  library(ggdist)       # raincloud (stat_halfeye) in sling_figures_1_to_6
+  library(patchwork)    # multi-panel figure assembly
+  library(sf)           # spatial geometry for the state map (Figure 5)
+  library(tigris)       # Census state boundaries for the state map
 }

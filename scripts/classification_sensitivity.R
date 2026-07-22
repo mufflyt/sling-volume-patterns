@@ -62,7 +62,15 @@ if (!is.null(certyear_path) && file.exists(certyear_path)) {
   tv <- assign_time_varying_certgated(base, year_col, cw) |>
     dplyr::mutate(specialty_group = ifelse(
       Rndrng_NPI %in% abu & specialty_group != "MIGS", "URPS", specialty_group))
-  s_tv <- summarise_scheme(tv, year_col, "Time-varying cert-gated (ABOG sub1startdate)")
+  # Apply cert-gated labels onto the FIXED cohort so every scheme shares the
+  # same denominator; the no-ABOG base drops "Other" providers the primary
+  # analysis reassigns to Urology, which would otherwise inflate this share.
+  tv_labels <- tv |> dplyr::select(Rndrng_NPI, dplyr::all_of(year_col),
+                                   .cg = specialty_group)
+  tv_full <- pv |> dplyr::left_join(tv_labels, by = c("Rndrng_NPI", year_col)) |>
+    dplyr::mutate(specialty_group = dplyr::coalesce(.cg, specialty_group)) |>
+    dplyr::select(-.cg)
+  s_tv <- summarise_scheme(tv_full, year_col, "Time-varying cert-gated (ABOG sub1startdate)")
   summaries <- c(summaries, list(s_tv))
 } else {
   message("[classification] no cert-year crosswalk — skipping cert-gated scheme.")

@@ -215,7 +215,15 @@ compute_manuscript_values <- function(
   cw <- readr::read_csv(certyear_csv, show_col_types = FALSE) %>% dplyr::mutate(npi = as.character(npi))
   tv <- assign_time_varying_certgated(base, year_col, cw) %>%
     dplyr::mutate(specialty_group = ifelse(Rndrng_NPI %in% abu & specialty_group != "MIGS", "URPS", specialty_group))
-  cu <- share_trend(tv, is_urps); cgn <- share_trend(tv, is_gyn)
+  # Apply cert-gated labels onto the FIXED cohort so both bounds share the same
+  # denominator. The no-ABOG base drops "Other" providers that the primary
+  # analysis reassigns to Urology; without this join the cert-gated denominator
+  # is ~16,000 procedures smaller, spuriously inflating the cert-gated share.
+  tv_labels <- tv %>% dplyr::select(Rndrng_NPI, dplyr::all_of(year_col), .cg = specialty_group)
+  pvcg <- pv %>% dplyr::left_join(tv_labels, by = c("Rndrng_NPI", year_col)) %>%
+    dplyr::mutate(specialty_group = dplyr::coalesce(.cg, specialty_group)) %>%
+    dplyr::select(-.cg)
+  cu <- share_trend(pvcg, is_urps); cgn <- share_trend(pvcg, is_gyn)
   v$ct_urps_s13 <- round(cu$s13,1); v$ct_urps_s23 <- round(cu$s23,1); v$ct_urps_slope <- round(cu$slope,2)
   v$ct_gyn_slope <- round(cgn$slope,2)
   # modal + ever URPS slopes
@@ -225,12 +233,12 @@ compute_manuscript_values <- function(
   }
   v$modal_urps_slope <- su_slope("modal"); v$ever_urps_slope <- su_slope("ever_urps_migs")
   tab$t4 <- data.frame(
-    Analysis = c("Lower bound: gynecologic share (fixed; ABOG-URPS + MIGS + Gen OB/GYN)",
-                 "Lower bound: combined-URPS share (fixed)",
-                 "Sensitivity: URPS share (modal)",
-                 "Sensitivity: URPS share (ever-URPS/MIGS)",
-                 "**Upper bound: URPS share (time-varying, cert-gated)**",
-                 "Upper bound: gynecologic share (time-varying, cert-gated)"),
+    Analysis = c("Fixed membership: gynecologic share (ABOG-URPS + MIGS + Gen OB/GYN)",
+                 "Fixed membership: combined-URPS share",
+                 "Modal: URPS share",
+                 "Ever-URPS/MIGS: URPS share",
+                 "**Certification-gated: URPS share (time-varying)**",
+                 "Certification-gated: gynecologic share (time-varying)"),
     `2013 -> 2023` = c(sprintf("%.1f%% → %.1f%%", v$gyn_fixed_s13, v$gyn_fixed_s23),
                        sprintf("%.1f%% → %.1f%%", v$fixed_urps_s13, v$fixed_urps_s23),
                        "n/a", "n/a",
