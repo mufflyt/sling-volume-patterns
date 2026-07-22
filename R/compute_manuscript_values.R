@@ -183,20 +183,67 @@ compute_manuscript_values <- function(
 
   # ── Concentration (Table 2 + prose) ────────────────────────────────────────
   cm2 <- cm[match(order_grp, cm$specialty_group), ]
+  # Per-NPI pooled volume vectors per specialty, for bootstrap CIs (reviewer #3).
+  npi_tot <- pv %>% dplyr::group_by(specialty_group, Rndrng_NPI) %>%
+    dplyr::summarise(vv = sum(annual_sling_count), .groups = "drop")
+  vec <- function(grp) npi_tot$vv[npi_tot$specialty_group == grp]
+  gini_ci <- function(grp) bootstrap_concentration_ci(vec(grp), compute_gini)
   tab$t2 <- data.frame(
     Specialty = c("URPS","Urology (non-URPS)","General OB/GYN","MIGS"),
     `N providers` = disp(cm2$n_providers),
     Gini = sprintf("%.2f", cm2$gini_coefficient),
     `HHI (0-10,000)` = disp(round(cm2$hhi)),
+    `Normalized HHI` = ifelse(is.na(cm2$hhi_normalized), "n/a",
+                              sprintf("%.3f", cm2$hhi_normalized)),
+    `Effective providers` = ifelse(is.na(cm2$effective_providers), "n/a",
+                                   disp(round(cm2$effective_providers))),
     `% by top 10%` = sprintf("%.1f%%", cm2$pct_by_top_10),
     `% by top 20%` = sprintf("%.1f%%", cm2$pct_by_top_20),
     check.names = FALSE)
   cg <- function(grp, col) round(cm[[col]][cm$specialty_group == grp], 2)
+  cn <- function(grp, col) cm[[col]][cm$specialty_group == grp]
+  fmt_gini_ci <- function(grp) { ci <- gini_ci(grp)
+    sprintf("%.2f (95%% CI %.2f-%.2f)", cn(grp,"gini_coefficient"), ci[1], ci[2]) }
   v$urps_gini <- cg("URPS","gini_coefficient"); v$urps_hhi <- round(cm$hhi[cm$specialty_group=="URPS"])
   v$urps_top10 <- round(cm$pct_by_top_10[cm$specialty_group=="URPS"],1); v$urps_top20 <- round(cm$pct_by_top_20[cm$specialty_group=="URPS"],1)
   v$uro_gini <- cg("Urology","gini_coefficient"); v$uro_hhi <- round(cm$hhi[cm$specialty_group=="Urology"]); v$uro_top20 <- round(cm$pct_by_top_20[cm$specialty_group=="Urology"],1)
   v$gob_gini <- cg("General OB/GYN","gini_coefficient"); v$gob_hhi <- round(cm$hhi[cm$specialty_group=="General OB/GYN"]); v$gob_top20 <- round(cm$pct_by_top_20[cm$specialty_group=="General OB/GYN"],1)
   v$mig_gini <- cg("MIGS","gini_coefficient"); v$mig_hhi <- disp(round(cm$hhi[cm$specialty_group=="MIGS"]))
+  # Normalized HHI, effective providers, and Gini bootstrap CIs (reviewer #3)
+  v$urps_hhi_norm <- sprintf("%.3f", cn("URPS","hhi_normalized"))
+  v$uro_hhi_norm  <- sprintf("%.3f", cn("Urology","hhi_normalized"))
+  v$gob_hhi_norm  <- sprintf("%.3f", cn("General OB/GYN","hhi_normalized"))
+  v$urps_effn <- round(cn("URPS","effective_providers"))
+  v$uro_effn  <- round(cn("Urology","effective_providers"))
+  v$gob_effn  <- round(cn("General OB/GYN","effective_providers"))
+  v$urps_gini_ci <- fmt_gini_ci("URPS")
+  v$uro_gini_ci  <- fmt_gini_ci("Urology")
+  v$gob_gini_ci  <- fmt_gini_ci("General OB/GYN")
+
+  # Suppression sensitivity (reviewer #3): the PUF omits physician-years below
+  # 11 beneficiaries. Add hypothetical suppressed providers (a fraction of the
+  # observed count) each at low volume (services spread over 1-10) and recompute
+  # Gini/HHI, to bound how the unobserved tail could move the estimates.
+  supp_sens <- function(grp, frac) {
+    x <- vec(grp); n <- length(x)
+    k <- round(frac * n)
+    add <- rep_len(1:10, k)
+    y <- c(x, add)
+    c(gini = compute_gini(y), hhi = compute_hhi(y))
+  }
+  tab$t_suppress <- do.call(rbind, lapply(
+    c("URPS","Urology","General OB/GYN"), function(g) {
+      obs <- c(gini = cn(g,"gini_coefficient"), hhi = cn(g,"hhi"))
+      s25 <- supp_sens(g, 0.25); s50 <- supp_sens(g, 0.50)
+      data.frame(
+        Specialty = ifelse(g=="Urology","Urology (non-URPS)",g),
+        `Observed Gini` = sprintf("%.2f", obs["gini"]),
+        `Gini +25% suppressed` = sprintf("%.2f", s25["gini"]),
+        `Gini +50% suppressed` = sprintf("%.2f", s50["gini"]),
+        `Observed HHI` = round(obs["hhi"]),
+        `HHI +50% suppressed` = round(s50["hhi"]),
+        check.names = FALSE, row.names = NULL)
+    }))
   allc <- ac[ac$specialty_group == "All", ]
   v$annual_gini_lo <- sprintf("%.2f", min(allc$gini_coefficient)); v$annual_gini_hi <- sprintf("%.2f", max(allc$gini_coefficient))
   mg <- stats::lm(allc$gini_coefficient ~ allc[[year_col]]); v$annual_gini_p <- fmt_p(summary(mg)$coefficients[2,4])

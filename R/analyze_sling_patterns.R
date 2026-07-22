@@ -168,6 +168,54 @@ compute_hhi <- function(x) {
   sum(shares^2) * 10000
 }
 
+#' Size-adjusted (normalized) HHI, on a 0-1 scale.
+#'
+#' Raw HHI is not comparable across groups with very different provider counts
+#' because its minimum attainable value is 1/N (reviewer point #3: URPS has ~767
+#' providers, MIGS ~10). The normalized HHI, H* = (H - 1/N) / (1 - 1/N) with
+#' H = HHI/10000, rescales so 0 = perfectly even and 1 = a single provider,
+#' independent of N. Returns NA when N < 2 (undefined).
+#' @noRd
+compute_normalized_hhi <- function(x) {
+  x <- x[!is.na(x)]
+  n <- length(x)
+  if (n < 2L || sum(x) == 0) return(NA_real_)
+  h <- sum((x / sum(x))^2)
+  (h - 1 / n) / (1 - 1 / n)
+}
+
+#' Effective number of providers, 1 / sum(share^2) = 10000 / HHI.
+#'
+#' The count of equal-volume providers that would produce the observed HHI; a
+#' size-interpretable companion to HHI (reviewer point #3).
+#' @noRd
+compute_effective_providers <- function(x) {
+  x <- x[!is.na(x)]
+  if (length(x) == 0L || sum(x) == 0) return(NA_real_)
+  1 / sum((x / sum(x))^2)
+}
+
+#' Nonparametric bootstrap percentile CI for a concentration statistic.
+#'
+#' Resamples providers (the units) with replacement. Deterministic given `seed`
+#' so the manuscript stays reproducible (scripts cannot call set.seed via the
+#' pipeline's global seed alone here). Returns c(lo, hi).
+#' @noRd
+bootstrap_concentration_ci <- function(x, statistic, R = 2000L,
+                                       conf = 0.95, seed = 1L) {
+  x <- x[!is.na(x)]
+  n <- length(x)
+  if (n < 3L) return(c(NA_real_, NA_real_))
+  old <- if (exists(".Random.seed", envir = .GlobalEnv))
+    get(".Random.seed", envir = .GlobalEnv) else NULL
+  set.seed(seed)
+  on.exit(if (!is.null(old)) assign(".Random.seed", old, envir = .GlobalEnv))
+  est <- vapply(seq_len(R), function(i) statistic(x[sample.int(n, n, replace = TRUE)]),
+                numeric(1))
+  a <- (1 - conf) / 2
+  unname(stats::quantile(est, c(a, 1 - a), na.rm = TRUE))
+}
+
 #' Compute the share of total volume performed by the bottom `bottom_pct`
 #' fraction of providers (ranked by volume, ascending). Complements
 #' compute_top_pct_share(); together they describe both tails of the
@@ -213,6 +261,8 @@ build_concentration_metrics <- function(
       n_providers      = dplyr::n(),
       gini_coefficient = compute_gini(total_slings),
       hhi              = compute_hhi(total_slings),
+      hhi_normalized   = compute_normalized_hhi(total_slings),
+      effective_providers = compute_effective_providers(total_slings),
       total_slings     = sum(total_slings, na.rm = TRUE),
       .groups = "drop"
     )

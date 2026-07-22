@@ -34,27 +34,28 @@ was lower for urology (rate ratio \[RR\] 0.80 (0.70–0.92)), General
 OB/GYN (RR 0.68 (0.51–0.92)), and MIGS (RR 0.56 (0.40–0.79)). Volume
 fell by approximately 11% in 2020 (RR 0.88 (0.85–0.92); p &lt; 0.001),
 but per-physician volume did not change overall (RR 1.00 (0.99–1.01); p
-= 0.516). Among the three well-populated groups, pooled concentration
-was modest and lowest for URPS (Gini 0.52, HHI 27; top 20% performed
-53.9%); within-year concentration remained low and stable (annual Gini
-approximately 0.26–0.28; p for trend = 0.733). URPS share increased by
-0.90 percentage points per year (p &lt; 0.001), whereas urology (-0.55;
-p = 0.002) and General OB/GYN (-0.41; p = 0.004) declined. The increase
-remained significant under every classification scheme, and the two
-schemes bracketed the rate of increase rather than the level. Under
-fixed membership URPS rose from 53.4% to 63.8% (+0.90 percentage
-points/year); under certification-gated classification it rose more
-steeply, from 42.2% to 62.8% (+1.52 percentage points/year), because
-pre-certification physicians count as generalists, and the two estimates
-converged by 2023. Newly observable surgeons performed 7.4%–22.5% of
-annual volume at a median of approximately 13 cases; URPS contributed
-the most entrants (480), while urology showed substantial turnover (421
-entrants despite a declining share).
+= 0.516). Surgeon-level concentration was low and similar across the
+three well-populated groups, with overlapping bootstrap confidence
+intervals (Gini 0.52–0.56); within-year concentration remained low and
+stable (annual Gini approximately 0.26–0.28; p for trend = 0.733). URPS
+share increased by 0.90 percentage points per year (p &lt; 0.001),
+whereas urology (-0.55; p = 0.002) and General OB/GYN (-0.41; p = 0.004)
+declined. The increase remained significant under every classification
+scheme, and the two schemes bracketed the rate of increase rather than
+the level. Under fixed membership URPS rose from 53.4% to 63.8% (+0.90
+percentage points/year); under certification-gated classification it
+rose more steeply, from 42.2% to 62.8% (+1.52 percentage points/year),
+because pre-certification physicians count as generalists, and the two
+estimates converged by 2023. Newly observable surgeons performed
+7.4%–22.5% of annual volume at a median of approximately 13 cases; URPS
+contributed the most entrants (480), while urology showed substantial
+turnover (421 entrants despite a declining share).
 
 **Conclusions:** URPS physicians perform most sling operations for
 stress urinary incontinence in fee-for-service Medicare and have the
-highest adjusted per-physician volume and the most even within-group
-distribution. The rising gynecologic share reflects attrition among
+highest adjusted per-physician volume; within-year surgeon-level
+concentration was low and stable and did not differ meaningfully across
+specialties. The rising gynecologic share reflects attrition among
 non-URPS providers rather than increasing surgeon-level concentration,
 with implications for credentialing and workforce planning.
 
@@ -167,8 +168,13 @@ CMS suppresses provider-service data when a provider treats fewer than
 11 Medicare beneficiaries for a given code in a calendar year. Every
 observable provider in this study therefore treated at least 11 Medicare
 beneficiaries for CPT 57288 that year. Providers below the threshold are
-not observed, so the true number of low-volume surgeons is unknown and
-the reported concentration estimates are lower bounds.
+not observed, so the true number of low-volume surgeons is unknown.
+Suppression removes the lowest-volume physician-years and can bias the
+Gini coefficient and HHI in different directions, so the full-market
+concentration cannot be identified from the Public Use File. We
+therefore report bootstrap confidence intervals for the Gini coefficient
+and a sensitivity analysis that adds hypothetical suppressed low-volume
+providers before recomputing concentration.
 
 ### Outcome Measures and Statistical Analysis
 
@@ -181,12 +187,20 @@ Enrollment counts (table MDCR ENROLL AB 11, Sex = Female, Part B) as the
 denominator; absolute service counts are reported as a secondary
 measure. Because the Public Use File records no beneficiary age for the
 numerator, the rate is crude and is not age-standardized. We measured
-surgeon-level concentration with two complementary metrics. The Gini
+surgeon-level concentration with complementary metrics. The Gini
 coefficient summarizes inequality across the full surgeon-volume
-distribution. The Herfindahl–Hirschman Index (HHI) sums squared surgeon
-shares on a 0–10,000 scale and is more sensitive to the largest-volume
-surgeons. Both measures were calculated from aggregate provider totals
-and separately for each calendar year.
+distribution, and we bootstrapped its 95% confidence interval by
+resampling providers. The Herfindahl–Hirschman Index (HHI) sums squared
+surgeon shares on a 0–10,000 scale and is more sensitive to the
+largest-volume surgeons. Because the minimum attainable HHI depends on
+the number of providers, we do not compare raw HHI directly across
+groups of very different size (URPS 767, General OB/GYN 336, MIGS 10
+physicians); we also report the size-adjusted normalized HHI and the
+effective number of providers (1 divided by the sum of squared shares).
+Within-year concentration, computed separately for each calendar year,
+was the primary concentration measure; pooled multi-year values are
+secondary because they mix annual volume with how many years each
+physician remained observable.
 
 The physician was the operative production unit in these calculations.
 Thus, HHI describes surgeon-level procedural concentration rather than
@@ -309,27 +323,31 @@ both urology and General OB/GYN in pairwise comparisons (p &lt; 0.001).
 
 ### Surgeon Volume and Concentration
 
-Among the three well-populated groups, pooled multi-year concentration
-was lowest for URPS (Gini 0.52, HHI 27; top 10% performed 34.4% and top
-20% performed 53.9%). Concentration was slightly higher for urology
-(Gini 0.53, HHI 35; top 20% performed 58.7%) and General OB/GYN (Gini
-0.56, HHI 89; top 20% performed 62.2%) (Table 2).
-
-The Gini coefficient and HHI ranked the groups identically. However, the
-absolute HHI values for all three groups were very low (27–89 of
-10,000), indicating that sling volume was unevenly distributed across
-many surgeons rather than dominated by a few. URPS also had the highest
-median annual volume and upper quartile (median 19; p75 28).
-
-Within-year concentration was low and stable. The pooled annual Gini
-ranged from 0.26 to 0.28, with no temporal trend (p = 0.733), and the
-annual top 20% performed approximately 38% of cases. No
+The primary concentration analysis was within-year. Within-year
+concentration was low and stable across the study period: the annual
+Gini ranged from 0.26 to 0.28, with no temporal trend (p = 0.733), and
+the annual top 20% performed approximately 38% of cases. No
 specialty-specific annual Gini changed significantly (all p &gt; 0.15).
 Thus, care did not become concentrated among a smaller group of
-high-volume surgeons as the observable surgeon pool contracted. MIGS was
-excluded from these comparisons because only 10 physicians were
-identified (1–4 per year); its nominal Gini of 0.61 and HHI of 3,036 are
-not stable specialty-wide estimates.
+high-volume surgeons as the observable surgeon pool contracted.
+
+Pooled multi-year concentration was similar across the three
+well-populated groups, with overlapping confidence intervals: URPS Gini
+0.52 (95% CI 0.50-0.54), urology Gini 0.53 (95% CI 0.51-0.55), and
+General OB/GYN Gini 0.56 (95% CI 0.52-0.60) (Table 2). The size-adjusted
+normalized HHI was near zero for every group (URPS 0.001, urology 0.002,
+General OB/GYN 0.006 on a 0–1 scale), and the effective number of
+providers was large (URPS 368, urology 282, General OB/GYN 112),
+indicating that sling volume was distributed across many surgeons rather
+than dominated by a few. Because the specialties differ several-fold in
+provider count, raw HHI is not directly comparable across them (Table
+2). Adding hypothetical suppressed low-volume providers raised the Gini
+only modestly (Supplementary Table S9), so the low-concentration
+conclusion is robust to the unobserved tail. URPS had the highest median
+annual volume and upper quartile (median 19; p75 28). MIGS was excluded
+from these comparisons because only 10 physicians were identified (1–4
+per year); its nominal Gini of 0.61 and HHI of 3,036 are not stable
+specialty-wide estimates.
 
 ### Workforce Entry and Exit
 
@@ -409,12 +427,16 @@ understate the true subspecialty share.
 
 The Gini coefficient and HHI provide complementary views of
 concentration, and both supported the same conclusion. Moderate
-inequality across the full distribution (Gini 0.52–0.56) coexisted with
-very low absolute HHI values (27–89 of 10,000). In other words, sling
-volume was distributed unevenly across many surgeons but was not
-dominated by a few. Because the physician was the production unit, these
+inequality across the full distribution (Gini 0.52–0.56, with
+overlapping confidence intervals across the well-populated groups)
+coexisted with size-adjusted normalized HHI values near zero and
+effective provider counts in the hundreds. In other words, sling volume
+was distributed unevenly across many surgeons but was not dominated by a
+few, and the well-populated specialties did not differ meaningfully in
+concentration. Because the physician was the production unit, these
 values describe surgeon-level procedural concentration rather than
-market competition.
+market competition, and they should not be interpreted using antitrust
+thresholds.
 
 These patterns matter because greater surgeon volume has been associated
 with better outcomes after midurethral sling surgery. Berger et
@@ -458,10 +480,14 @@ whether this shift affects specialty-specific sling volume.
 
 This study has five limitations. First, CMS suppresses provider-level
 data for fewer than 11 beneficiaries, so the lowest-volume surgeons are
-not observed and concentration estimates are lower bounds. Second, the
-PUF includes only fee-for-service Medicare Part B claims; younger
-patients and those covered by Medicare Advantage, Medicaid, commercial
-insurance, or no insurance are not represented.
+not observed; suppression can bias the Gini coefficient and HHI in
+different directions, and the full-market concentration cannot be
+identified from the Public Use File, although a sensitivity analysis
+adding hypothetical suppressed providers left the low-concentration
+conclusion unchanged. Second, the PUF includes only fee-for-service
+Medicare Part B claims; younger patients and those covered by Medicare
+Advantage, Medicaid, commercial insurance, or no insurance are not
+represented.
 
 Third, specialty classification depends on CMS provider type and the
 ABOG/ABU rosters. Physicians who completed URPS fellowship but were not
@@ -492,9 +518,10 @@ analytic pipeline.
 ## Conclusions
 
 In this national fee-for-service Medicare cohort, URPS physicians
-performed most sling operations for SUI, had the highest adjusted
-per-physician volume, and had the most even within-group volume
-distribution. The growing gynecologic share reflected attrition among
+performed most sling operations for SUI and had the highest adjusted
+per-physician volume. Within-year surgeon-level concentration was low
+and stable and did not differ meaningfully across the well-populated
+specialties. The growing gynecologic share reflected attrition among
 non-URPS providers rather than increasing surgeon-level concentration.
 These workforce shifts should inform training requirements,
 credentialing standards, and access planning for pelvic floor surgical
@@ -674,16 +701,20 @@ estimates are descriptive because only 10 physicians were identified.
 </table>
 
 **Table 2.** Surgeon-level procedural concentration by specialty, based
-on aggregate provider volume.
+on aggregate provider volume. Raw HHI is not comparable across groups of
+different size; the normalized HHI (0–1) and effective number of
+providers are size-adjusted companions.
 
 <table>
 <colgroup>
-<col style="width: 24%" />
-<col style="width: 15%" />
-<col style="width: 7%" />
-<col style="width: 19%" />
 <col style="width: 16%" />
-<col style="width: 16%" />
+<col style="width: 10%" />
+<col style="width: 5%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 17%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
 </colgroup>
 <thead>
 <tr>
@@ -691,6 +722,8 @@ on aggregate provider volume.
 <th>N providers</th>
 <th>Gini</th>
 <th>HHI (0-10,000)</th>
+<th>Normalized HHI</th>
+<th>Effective providers</th>
 <th>% by top 10%</th>
 <th>% by top 20%</th>
 </tr>
@@ -701,6 +734,8 @@ on aggregate provider volume.
 <td>767</td>
 <td>0.52</td>
 <td>27</td>
+<td>0.001</td>
+<td>368</td>
 <td>34.4%</td>
 <td>53.9%</td>
 </tr>
@@ -709,6 +744,8 @@ on aggregate provider volume.
 <td>689</td>
 <td>0.53</td>
 <td>35</td>
+<td>0.002</td>
+<td>282</td>
 <td>39.5%</td>
 <td>58.7%</td>
 </tr>
@@ -717,6 +754,8 @@ on aggregate provider volume.
 <td>336</td>
 <td>0.56</td>
 <td>89</td>
+<td>0.006</td>
+<td>112</td>
 <td>44.4%</td>
 <td>62.2%</td>
 </tr>
@@ -725,6 +764,8 @@ on aggregate provider volume.
 <td>10</td>
 <td>0.61</td>
 <td>3,036</td>
+<td>0.226</td>
+<td>3</td>
 <td>49.8%</td>
 <td>69.3%</td>
 </tr>
@@ -2915,6 +2956,60 @@ increases apparent concentration relative to any single year.
 <td>517</td>
 <td>0.225</td>
 <td>25.2%</td>
+</tr>
+</tbody>
+</table>
+
+**Supplementary Table S9.** Suppression sensitivity. Hypothetical
+suppressed low-volume providers (25% and 50% of the observed count, each
+performing 1–10 services) were added to each group before recomputing
+the Gini coefficient and HHI. Concentration rose only modestly, so the
+low-concentration conclusion is robust to the unobserved low-volume
+tail.
+
+<table style="width:100%;">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 13%" />
+<col style="width: 19%" />
+<col style="width: 19%" />
+<col style="width: 12%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr>
+<th>Specialty</th>
+<th>Observed Gini</th>
+<th>Gini +25% suppressed</th>
+<th>Gini +50% suppressed</th>
+<th>Observed HHI</th>
+<th>HHI +50% suppressed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>URPS</td>
+<td>0.52</td>
+<td>0.60</td>
+<td>0.65</td>
+<td>27</td>
+<td>26</td>
+</tr>
+<tr>
+<td>Urology (non-URPS)</td>
+<td>0.53</td>
+<td>0.59</td>
+<td>0.63</td>
+<td>35</td>
+<td>32</td>
+</tr>
+<tr>
+<td>General OB/GYN</td>
+<td>0.56</td>
+<td>0.62</td>
+<td>0.65</td>
+<td>89</td>
+<td>81</td>
 </tr>
 </tbody>
 </table>
