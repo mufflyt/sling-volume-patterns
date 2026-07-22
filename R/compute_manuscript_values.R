@@ -58,12 +58,16 @@ compute_manuscript_values <- function(
   tt   <- res$time_trends
   cm   <- res$concentration_metrics
   ac   <- res$annual_concentration
+  ca <- res$classification_audit  # classification transparency counts (reviewer #5)
 
   fmt_p  <- function(p) ifelse(is.na(p), "n/a", ifelse(p < 0.001, "<0.001", sprintf("%.3f", p)))
   rr_ci  <- function(row) sprintf("%.2f (%.2f–%.2f)", row$rate_ratio, row$ci_low, row$ci_high)
   yr_val <- function(df, y, col) df[[col]][df[[year_col]] == y]
 
   v <- list()
+  v$class_reclass_urology <- ca$reclassified_other_to_urology
+  v$class_abu_pathway     <- ca$urps_via_abu_pathway
+  v$class_excluded_other  <- ca$excluded_other_records
 
   # ── Cohort and annual volume ───────────────────────────────────────────────
   v$full_physicians <- dplyr::n_distinct(pvf$Rndrng_NPI)
@@ -354,12 +358,12 @@ compute_manuscript_values <- function(
   }
   v$modal_urps_slope <- su_slope("modal"); v$ever_urps_slope <- su_slope("ever_urps_migs")
   tab$t4 <- data.frame(
-    Analysis = c("Fixed membership: gynecologic share (ABOG-URPS + MIGS + Gen OB/GYN)",
-                 "Fixed membership: combined-URPS share",
+    Analysis = c("Fixed membership: OB/GYN-based share (ABOG-URPS + MIGS + Gen OB/GYN)",
+                 "Fixed membership: all-pathway URPS share",
                  "Modal: URPS share",
                  "Ever-URPS/MIGS: URPS share",
                  "**Certification-gated: URPS share (time-varying)**",
-                 "Certification-gated: gynecologic share (time-varying)"),
+                 "Certification-gated: OB/GYN-based share (time-varying)"),
     `2013 -> 2023` = c(sprintf("%.1f%% → %.1f%%", v$gyn_fixed_s13, v$gyn_fixed_s23),
                        sprintf("%.1f%% → %.1f%%", v$fixed_urps_s13, v$fixed_urps_s23),
                        "n/a", "n/a",

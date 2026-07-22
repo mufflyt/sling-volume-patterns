@@ -42,24 +42,24 @@ groups, with overlapping bootstrap confidence intervals (Gini
 Gini approximately 0.26–0.28; p for trend = 0.733). URPS share increased
 by 0.90 percentage points per year (p &lt; 0.001), whereas urology
 (-0.55; p = 0.002) and General OB/GYN (-0.41; p = 0.004) declined. The
-increase remained significant under every classification scheme, and the
-two schemes bracketed the rate of increase rather than the level. Under
-fixed membership URPS rose from 53.4% to 63.8% (+0.90 percentage
-points/year); under certification-gated classification it rose more
-steeply, from 42.2% to 62.8% (+1.52 percentage points/year), because
-pre-certification physicians count as generalists, and the two estimates
-converged by 2023. Newly observable surgeons performed 7.4%–22.5% of
-annual volume at a median of approximately 13 cases; URPS contributed
-the most entrants (480), while urology showed substantial turnover (421
-entrants despite a declining share).
+increase remained significant under every classification scenario, and
+the two scenarios differed in the estimated rate of increase rather than
+the endpoint level. Under fixed membership URPS rose from 53.4% to 63.8%
+(+0.90 percentage points/year); under certification-gated classification
+it rose more steeply, from 42.2% to 62.8% (+1.52 percentage
+points/year), because pre-certification physicians count as generalists,
+and the two estimates converged by 2023. Newly observable surgeons
+performed 7.4%–22.5% of annual volume at a median of approximately 13
+cases; URPS contributed the most entrants (480), while urology showed
+substantial turnover (421 entrants despite a declining share).
 
 **Conclusions:** URPS physicians perform most sling operations for
 stress urinary incontinence in fee-for-service Medicare and have the
 highest adjusted per-physician volume; within-year surgeon-level
 concentration was low and stable and did not differ meaningfully across
-specialties. The rising gynecologic share reflects attrition among
-non-URPS providers rather than increasing surgeon-level concentration,
-with implications for credentialing and workforce planning.
+specialties. The rising URPS share reflects attrition among non-URPS
+providers rather than increasing surgeon-level concentration, with
+implications for credentialing and workforce planning.
 
 ------------------------------------------------------------------------
 
@@ -125,28 +125,44 @@ CMS file specifications for completeness before analysis.
 Providers were assigned to four mutually exclusive groups: URPS, MIGS,
 General OB/GYN, or non-URPS urology. We first used the annual CMS
 provider type (Rndrng\_Prvdr\_Type), which may vary by year, to identify
-OB/GYN, urology, or another specialty. Providers billing CPT 57288 who
-had neither an OB/GYN nor urology CMS type and were not in the ABOG
-registry were reclassified as urology. Among OB/GYN physicians, the ABOG
-subspecialty registry identified “Female Pelvic Medicine and
-Reconstructive Surgery” as URPS and “MIG” as MIGS; all other OB/GYN
-physicians were classified as General OB/GYN.
+OB/GYN, urology, or another specialty. Among OB/GYN physicians, the ABOG
+subspecialty registry (a snapshot of ABOG-certified diplomates linked to
+NPIs primarily by exact NPI match and, when needed, by full name and
+practice state) identified “Female Pelvic Medicine and Reconstructive
+Surgery” as URPS and “MIG” as MIGS; all other OB/GYN physicians were
+classified as General OB/GYN. This yielded 1789-cohort assignments of
+URPS, MIGS, and General OB/GYN through the OB/GYN pathway.
 
-We then cross-referenced the American Board of Urology roster to
-identify urology-pathway urogynecologists. These physicians were
-combined with ABOG-certified urogynecologists in a single URPS group;
-all remaining urologists were classified as non-URPS urology. Without
-this step, fellowship-trained urology-pathway urogynecologists would
-appear only as “Urology” in the PUF. We excluded other surgical provider
-types because they were too heterogeneous to interpret.
+Providers billing CPT 57288 who had neither an OB/GYN nor urology CMS
+type and were not in the ABOG registry (323 physicians, mostly with
+adjacent surgical provider types) were grouped with urology, on the
+rationale that non-gynecologic sling surgeons in Medicare are
+predominantly urologists; because they represent a small fraction of the
+cohort, this choice has limited influence on the specialty distribution.
+A further 84 records from heterogeneous non-OB/GYN, non-urology provider
+types (for example general surgery and osteopathic manipulative
+medicine) were excluded.
+
+We then cross-referenced the American Board of Urology roster (355
+urology-pathway urogynecologist NPIs) to identify urology-pathway
+urogynecologists; 151 cohort physicians matched. These physicians were
+combined with ABOG-certified urogynecologists into a single all-pathway
+URPS group; all remaining urologists were classified as non-URPS
+urology. Without this step, fellowship-trained urology-pathway
+urogynecologists would appear only as “Urology” in the PUF. Because an
+all-pathway URPS group includes urology-trained subspecialists who are
+not gynecologists, we report the all-pathway URPS share separately from
+the OB/GYN-based share (URPS plus MIGS plus General OB/GYN, restricted
+to the OB/GYN training pathway), rather than a single “gynecologic”
+share.
 
 Specialty assignment could affect the estimated market-share trend
 because 45% of URPS physicians in the cohort were certified after 2013.
-We therefore used two primary classification schemes to bound the likely
-change. Fixed-membership classification assigns each physician’s
-eventual subspecialty to every study year. Because this approach counts
-physicians as URPS before certification, it provides a lower bound on
-the rate of increase.
+We therefore examined two plausible classification scenarios that make
+opposite assumptions about pre-certification practice years.
+Fixed-membership classification assigns each physician’s eventual
+subspecialty to every study year; because it counts physicians as URPS
+before certification, it tends to produce a shallower estimated slope.
 
 Time-varying, certification-gated classification counts a physician as
 URPS or MIGS only beginning in the ABOG subspecialty certification year
@@ -154,9 +170,11 @@ URPS or MIGS only beginning in the ABOG subspecialty certification year
 Earlier years are classified by that year’s CMS provider type. Because
 certification generally follows the start of subspecialty practice (the
 2013 examination certified physicians already practicing urogynecology,
-and later diplomates also practiced before certification), this approach
-misclassifies some pre-certification practice years and provides an
-upper bound.
+and later diplomates also practiced before certification), this scenario
+removes some genuine pre-certification practice from the early URPS
+count and tends to produce a steeper estimated slope. We present these
+as plausible scenarios rather than formal statistical bounds, because
+neither assumption is guaranteed to bracket the true trend.
 
 Modal and ever-URPS/MIGS classifications were additional sensitivity
 analyses. Urology-pathway URPS classification remained fixed because no
@@ -322,15 +340,15 @@ with the descriptive ordinary least-squares estimate. Because total
 service counts declined, these changes represent redistribution among
 specialties rather than growth in services.
 
-The URPS increase was significant under every classification scheme, and
-the schemes bracketed its slope (Table 4). Fixed membership gave the
-shallower estimate because it counts physicians as URPS before
-certification: URPS share rose from 53.4% to 63.8% (+0.90 percentage
-points/year), and the gynecologic share from 60.8% to 70.1% (+0.85
-percentage points/year). Certification-gated classification gave the
-steeper estimate, from 42.2% to 62.8% (+1.52 percentage points/year),
-because it removes not-yet-certified physicians from the early URPS
-count; the two estimates converged near 62.8% by 2023.
+The URPS increase was significant under every classification scenario,
+which differed in the estimated slope (Table 4). Fixed membership gave
+the shallower estimate because it counts physicians as URPS before
+certification: the all-pathway URPS share rose from 53.4% to 63.8%
+(+0.90 percentage points/year), and the OB/GYN-based share from 60.8% to
+70.1% (+0.85 percentage points/year). Certification-gated classification
+gave the steeper estimate, from 42.2% to 62.8% (+1.52 percentage
+points/year), because it removes not-yet-certified physicians from the
+early URPS count; the two estimates converged near 62.8% by 2023.
 
 In the Poisson GEE clustered by NPI (calendar year centered at 2018),
 adjusted annual volume at mid-study was lower than URPS for every other
@@ -397,10 +415,10 @@ surgeon count 385 to 338; per-physician volume unchanged). Urology
 showed substantial turnover but net attrition, and General OB/GYN lost
 both surgeons and market share.
 
-Because total volume declined, the gynecologic gain represents a
-redistribution of a shrinking procedure pool toward URPS, not new
-procedure growth. All turnover counts describe newly observable rather
-than definitively new surgeons because low-volume providers are
+Because total service counts declined, the growth in URPS share
+represents a redistribution of a shrinking service pool toward URPS, not
+new procedure growth. All turnover counts describe newly observable
+rather than definitively new surgeons because low-volume providers are
 suppressed.
 
 ### Geographic Distribution (Secondary)
@@ -419,7 +437,7 @@ reserved for a separate access-focused analysis.
 
 This national Medicare analysis produced three main findings. First,
 URPS physicians performed most sling operations for SUI (60.8%) and had
-the highest adjusted per-physician volume. Second, the gynecologic share
+the highest adjusted per-physician volume. Second, the URPS share
 increased over the decade as URPS surgeons entered the observable
 workforce and non-URPS surgeons left. Third, surgeon-level concentration
 remained low and stable despite a shrinking surgeon pool. Together,
@@ -428,9 +446,12 @@ intensification of individual practice or concentration of care.
 
 ### Specialty Distribution and the Historical Reversal
 
-URPS physicians performed approximately three-fifths of Medicare slings,
-and gynecologists collectively performed the majority. This finding is
-consistent with contemporary practice-pattern data but reverses earlier
+All-pathway URPS physicians performed approximately three-fifths of
+fee-for-service Medicare slings, and OB/GYN-trained physicians
+collectively performed the majority. Because the all-pathway URPS group
+also includes urology-trained subspecialists, the URPS share is not
+equivalent to a gynecologist share. This finding is consistent with
+contemporary practice-pattern data but reverses earlier
 Medicare-specific patterns. In ACS-NSQIP data from 2006 through 2013,
 James et al. reported that gynecologists performed 74.2% of sling
 procedures and urologists performed 25.8%.<sup>9</sup> Cantrell et
@@ -483,14 +504,14 @@ addition, providers below the CMS suppression threshold are absent.
 
 ### Temporal Trends, Workforce Dynamics, and the Evolving SUI Landscape
 
-The repeated-measures model and turnover analysis clarify why the
-gynecologic share increased. Individual physician volume did not change
-over time, but the number of non-URPS surgeons fell while the URPS pool
-remained comparatively stable. URPS also contributed the largest inflow
-of newly observable surgeons, whereas urology had substantial turnover
-but a net decline. The market-share shift therefore reflects workforce
-composition within a shrinking procedure pool, not increasing individual
-volume or concentration.
+The repeated-measures model and turnover analysis clarify why the URPS
+share increased. Individual physician volume did not change over time,
+but the number of non-URPS surgeons fell while the URPS pool remained
+comparatively stable. URPS also contributed the largest inflow of newly
+observable surgeons, whereas urology had substantial turnover but a net
+decline. The market-share shift therefore reflects workforce composition
+within a shrinking procedure pool, not increasing individual volume or
+concentration.
 
 This mechanism is consistent with prior work. Siegal et al. found that
 the post-2011 decline in sling placement was driven mainly by non-FPMRS
@@ -520,14 +541,16 @@ represented.
 
 Third, specialty classification depends on CMS provider type and the
 ABOG/ABU rosters. Physicians who completed URPS fellowship but were not
-board-certified may therefore be misclassified. Fourth, the market-share
-trend is bounded rather than point-identified. Certification follows the
-start of subspecialty practice, so the certification-gated approach
-(upper bound) assigns some pre-certification practice years to General
-OB/GYN or urology. Conversely, fixed membership (lower bound) assigns
-physicians to URPS before they subspecialized. The true trend lies
-between these estimates and would require unavailable
-fellowship-completion dates for point identification.
+board-certified may therefore be misclassified, and the 323 providers
+reclassified from an adjacent provider type to urology could be
+misassigned. Fourth, the market-share trend is estimated under plausible
+classification scenarios rather than point-identified. Certification
+follows the start of subspecialty practice, so the certification-gated
+scenario assigns some pre-certification practice years to General OB/GYN
+or urology, whereas fixed membership assigns physicians to URPS before
+they subspecialized. We present these as plausible scenarios, not formal
+bounds; point identification would require unavailable
+fellowship-completion dates.
 
 Approximately 8% of URPS physicians could not be matched to a
 certification year, and urology-pathway URPS classification remained
@@ -550,11 +573,10 @@ In this national fee-for-service Medicare cohort, URPS physicians
 performed most sling operations for SUI and had the highest adjusted
 per-physician volume. Within-year surgeon-level concentration was low
 and stable and did not differ meaningfully across the well-populated
-specialties. The growing gynecologic share reflected attrition among
-non-URPS providers rather than increasing surgeon-level concentration.
-These workforce shifts should inform training requirements,
-credentialing standards, and access planning for pelvic floor surgical
-care.
+specialties. The growing URPS share reflected attrition among non-URPS
+providers rather than increasing surgeon-level concentration. These
+workforce shifts should inform training requirements, credentialing
+standards, and access planning for pelvic floor surgical care.
 
 ## References
 
@@ -860,17 +882,19 @@ year term plus its specialty-by-year interaction).
 </tbody>
 </table>
 
-**Table 4.** URPS and gynecologic market-share trends under alternative
-classification schemes. The schemes bracket the rate of increase: fixed
-membership gives the shallower slope because it counts physicians as
-URPS before certification, and certification-gated classification gives
-the steeper slope because it removes not-yet-certified physicians from
-the early URPS count. The 2023 levels converge. All estimated trends are
-positive and statistically significant.
+**Table 4.** All-pathway URPS and OB/GYN-based market-share trends under
+alternative classification scenarios. The scenarios differ in the
+estimated rate of increase: fixed membership gives the shallower slope
+because it counts physicians as URPS before certification, and
+certification-gated classification gives the steeper slope because it
+removes not-yet-certified physicians from the early URPS count. The 2023
+levels converge. These are plausible scenarios rather than formal
+statistical bounds. All estimated trends are positive and statistically
+significant.
 
 <table>
 <colgroup>
-<col style="width: 58%" />
+<col style="width: 59%" />
 <col style="width: 16%" />
 <col style="width: 14%" />
 <col style="width: 10%" />
@@ -885,14 +909,14 @@ positive and statistically significant.
 </thead>
 <tbody>
 <tr>
-<td>Fixed membership: gynecologic share (ABOG-URPS + MIGS + Gen
+<td>Fixed membership: OB/GYN-based share (ABOG-URPS + MIGS + Gen
 OB/GYN)</td>
 <td>60.8% → 70.1%</td>
 <td>0.85</td>
 <td>&lt;0.001</td>
 </tr>
 <tr>
-<td>Fixed membership: combined-URPS share</td>
+<td>Fixed membership: all-pathway URPS share</td>
 <td>53.4% → 63.8%</td>
 <td>0.90</td>
 <td>&lt;0.001</td>
@@ -916,7 +940,7 @@ OB/GYN)</td>
 <td><strong>&lt;0.001</strong></td>
 </tr>
 <tr>
-<td>Certification-gated: gynecologic share (time-varying)</td>
+<td>Certification-gated: OB/GYN-based share (time-varying)</td>
 <td>n/a</td>
 <td>0.54</td>
 <td>&lt;0.001</td>
@@ -1067,11 +1091,11 @@ style="width:6.5in" />
 
 **Figure 1.** Market share of sling operations for stress urinary
 incontinence (CPT 57288) by specialty, fee-for-service Medicare PUF
-2013–2023. The URPS share increased under every classification scheme.
+2013–2023. The URPS share increased under every classification scenario.
 Fixed membership (URPS share 53.4% to 63.8%; +0.90 percentage
 points/year) and certification-gated classification (URPS share 42.2% to
-62.8%; +1.52 percentage points/year) bracket the rate of increase and
-converge by 2023.
+62.8%; +1.52 percentage points/year) differ in the estimated rate of
+increase and converge by 2023.
 
 <img
 src="/Users/tylermuffly/sling-volume-patterns/output/figures/figure_2_volume_distribution.png"
@@ -2511,9 +2535,9 @@ certification-gated).
 </tbody>
 </table>
 
-**Supplementary Table S6b.** URPS and gynecologic market-share trends
-under each classification scheme. The URPS increase remains positive and
-significant in every scheme.
+**Supplementary Table S6b.** All-pathway URPS and OB/GYN-based
+market-share trends under each classification scheme. The URPS increase
+remains positive and significant in every scheme.
 
 <table>
 <colgroup>

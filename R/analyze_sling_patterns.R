@@ -1278,7 +1278,17 @@ analyze_midurethral_sling_patterns <- function(
     specialty_summary     = specialty_summary,
     concentration_metrics = concentration_metrics,
     time_trends           = time_trends,
-    annual_concentration  = annual_concentration
+    annual_concentration  = annual_concentration,
+    # Classification transparency counts (reviewer #5): how many providers each
+    # reclassification rule moved. Guarded so they are NA when a roster is absent.
+    classification_audit  = list(
+      reclassified_other_to_urology =
+        if (exists("reassign_to_urology")) length(reassign_to_urology) else NA_integer_,
+      urps_via_abu_pathway =
+        if (exists("n_promoted")) n_promoted else NA_integer_,
+      excluded_other_records =
+        if (exists("n_other")) n_other else NA_integer_
+    )
   )
 
   log_msg("── Output summary ──────────────────────────────────", verbose)
