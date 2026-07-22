@@ -30,26 +30,28 @@ contracted by -14.7% over the same period; after denominator adjustment
 the utilization rate declined only from 89.4 to 78.1 services per
 100,000 (-12.6%; rate trend not significant, p = 0.139), with a 2020
 nadir and partial recovery. Compared with URPS, adjusted annual volume
-was lower for urology (rate ratio \[RR\] 0.80 (0.70–0.92)), General
-OB/GYN (RR 0.68 (0.51–0.92)), and MIGS (RR 0.56 (0.40–0.79)). Volume
-fell by approximately 11% in 2020 (RR 0.88 (0.85–0.92); p &lt; 0.001),
-but per-physician volume did not change overall (RR 1.00 (0.99–1.01); p
-= 0.516). Surgeon-level concentration was low and similar across the
-three well-populated groups, with overlapping bootstrap confidence
-intervals (Gini 0.52–0.56); within-year concentration remained low and
-stable (annual Gini approximately 0.26–0.28; p for trend = 0.733). URPS
-share increased by 0.90 percentage points per year (p &lt; 0.001),
-whereas urology (-0.55; p = 0.002) and General OB/GYN (-0.41; p = 0.004)
-declined. The increase remained significant under every classification
-scheme, and the two schemes bracketed the rate of increase rather than
-the level. Under fixed membership URPS rose from 53.4% to 63.8% (+0.90
-percentage points/year); under certification-gated classification it
-rose more steeply, from 42.2% to 62.8% (+1.52 percentage points/year),
-because pre-certification physicians count as generalists, and the two
-estimates converged by 2023. Newly observable surgeons performed
-7.4%–22.5% of annual volume at a median of approximately 13 cases; URPS
-contributed the most entrants (480), while urology showed substantial
-turnover (421 entrants despite a declining share).
+was lower for urology (rate ratio \[RR\] 0.76 (0.67–0.87)), General
+OB/GYN (RR 0.68 (0.51–0.91)), and MIGS (RR 0.85 (0.55–1.32)). Volume
+fell by approximately 11% in 2020 (RR 0.88 (0.85–0.92); p &lt; 0.001);
+the specialty-by-year interaction showed flat per-physician trends for
+the well-populated groups (URPS RR 0.997 (0.990-1.005), urology RR 0.987
+(0.973-1.002), General OB/GYN RR 0.997 (0.974-1.019)). Surgeon-level
+concentration was low and similar across the three well-populated
+groups, with overlapping bootstrap confidence intervals (Gini
+0.52–0.56); within-year concentration remained low and stable (annual
+Gini approximately 0.26–0.28; p for trend = 0.733). URPS share increased
+by 0.90 percentage points per year (p &lt; 0.001), whereas urology
+(-0.55; p = 0.002) and General OB/GYN (-0.41; p = 0.004) declined. The
+increase remained significant under every classification scheme, and the
+two schemes bracketed the rate of increase rather than the level. Under
+fixed membership URPS rose from 53.4% to 63.8% (+0.90 percentage
+points/year); under certification-gated classification it rose more
+steeply, from 42.2% to 62.8% (+1.52 percentage points/year), because
+pre-certification physicians count as generalists, and the two estimates
+converged by 2023. Newly observable surgeons performed 7.4%–22.5% of
+annual volume at a median of approximately 13 cases; URPS contributed
+the most entrants (480), while urology showed substantial turnover (421
+entrants despite a declining share).
 
 **Conclusions:** URPS physicians perform most sling operations for
 stress urinary incontinence in fee-for-service Medicare and have the
@@ -208,24 +210,38 @@ hospital or health-system market competition and should not be
 interpreted using FTC/DOJ antitrust thresholds.
 
 Because each physician contributed as many as eleven annual
-observations, physician-year records were correlated. We modeled annual
-procedure count with a Poisson generalized estimating equation clustered
-by NPI, using an exchangeable working correlation and robust standard
-errors. Fixed effects included specialty (URPS reference), calendar
-year, specialty-by-year interaction, and a 2020 COVID indicator. We
-report adjusted rate ratios with 95% CIs. A negative-binomial mixed
-model with a random intercept for NPI produced concordant estimates.
+observations, physician-year records were correlated. We modeled the
+annual count of reported services, conditional on the physician-year
+being observable (above the CMS suppression threshold), with a Poisson
+generalized estimating equation clustered by NPI, using an exchangeable
+working correlation and robust standard errors. Fixed effects were
+specialty (URPS reference), calendar year centered at 2018, a
+specialty-by-year interaction, and a 2020 COVID indicator. Centering at
+mid-study makes the specialty main effects the adjusted rate ratios at
+2018; because the interaction makes the year term specialty-specific, we
+report each specialty’s annual slope as a marginal linear contrast (the
+year term plus its interaction) rather than a single overall time
+effect. We report adjusted rate ratios with 95% CIs. A negative-binomial
+mixed model with a random intercept for NPI was fit as a sensitivity
+analysis, and its estimates are reported alongside the GEE. Additional
+sensitivity analyses excluded calendar year 2020 and restricted the
+cohort to physicians observable in at least two years.
 
 As a secondary analysis with one independent observation per physician,
 we compared each physician’s median annual volume across specialties
 using the Kruskal-Wallis test and Bonferroni-adjusted pairwise Wilcoxon
 tests.
 
-To estimate market-share trends, we separately regressed each
-specialty’s annual percentage share on calendar year using ordinary
-least squares. We modeled URPS, urology, General OB/GYN, and the
-combined gynecologic share; MIGS was described without formal emphasis
-because only 10 physicians were identified.
+To estimate the URPS market-share trend, we modeled URPS services as a
+proportion of all annual services with a quasibinomial generalized
+linear model on calendar year (centered at 2018), which respects the
+compositional structure that separate ordinary least-squares regressions
+on annual percentages ignore. We express the trend as an odds ratio per
+year and as the marginal percentage-point change per year. Separate
+ordinary least-squares regressions of each specialty’s annual percentage
+share (URPS, urology, General OB/GYN) are reported as a descriptive
+sensitivity. MIGS was described without formal emphasis because only 10
+physicians were identified.
 
 To describe workforce turnover, we used a two-year washout. A surgeon
 was classified as an entrant when observable in a given year but absent
@@ -297,9 +313,14 @@ points/year; 95% CI 0.51 to 1.28; p &lt; 0.001). Urology decreased from
 0.002), and General OB/GYN decreased from 15.7% to 12.3% (-0.41
 percentage points/year; 95% CI -0.66 to -0.17; p = 0.004). MIGS
 increased descriptively from 0.2% to 0.8% (+0.07 percentage
-points/year), but this estimate is based on only 10 physicians. Because
-total volume declined, these changes represent redistribution among
-specialties rather than procedure growth.
+points/year), but this estimate is based on only 10 physicians. In the
+quasibinomial model of URPS services out of all annual services, which
+respects the compositional structure, the URPS share rose from a fitted
+56.5% in 2013 to 65.7% in 2023 (odds ratio 1.040 (95% CI 1.025-1.054)
+per year; 0.92 percentage points per year; p &lt; 0.001), consistent
+with the descriptive ordinary least-squares estimate. Because total
+service counts declined, these changes represent redistribution among
+specialties rather than growth in services.
 
 The URPS increase was significant under every classification scheme, and
 the schemes bracketed its slope (Table 4). Fixed membership gave the
@@ -311,15 +332,23 @@ steeper estimate, from 42.2% to 62.8% (+1.52 percentage points/year),
 because it removes not-yet-certified physicians from the early URPS
 count; the two estimates converged near 62.8% by 2023.
 
-In the Poisson GEE clustered by NPI, adjusted annual volume was lower
-than URPS for every other group: urology RR 0.80 (0.70–0.92), General
-OB/GYN RR 0.68 (0.51–0.92), and MIGS RR 0.56 (0.40–0.79) (Table 3).
-Annual volume was approximately 11% lower in 2020 (RR 0.88 (0.85–0.92);
-p &lt; 0.001). There was no overall change in per-physician volume over
-time (year RR 1.00 (0.99–1.01); p = 0.516). The
-one-observation-per-physician secondary analysis was concordant
-(Kruskal-Wallis H = 66.6, df = 3, p &lt; 0.001); URPS volume exceeded
-both urology and General OB/GYN in pairwise comparisons (p &lt; 0.001).
+In the Poisson GEE clustered by NPI (calendar year centered at 2018),
+adjusted annual volume at mid-study was lower than URPS for every other
+group: urology RR 0.76 (0.67–0.87), General OB/GYN RR 0.68 (0.51–0.91),
+and MIGS RR 0.85 (0.55–1.32) (Table 3). Annual volume was approximately
+11% lower in 2020 (RR 0.88 (0.85–0.92); p &lt; 0.001). The
+specialty-by-year interaction showed that per-physician volume did not
+change over time for the well-populated groups: the annual trend was
+flat for URPS (RR 0.997 (0.990-1.005); p = 0.516), urology (RR 0.987
+(0.973-1.002); p = 0.091), and General OB/GYN (RR 0.997 (0.974-1.019); p
+= 0.761), and increased only for the 10-physician MIGS group (RR 1.084
+(1.030-1.141); p = 0.002) (Table 3). A negative-binomial mixed model
+with a random intercept per NPI gave the same pattern of specialty
+differences (urology RR 0.86 (0.82–0.89), General OB/GYN RR 0.84
+(0.80–0.88), 2020 RR 0.90 (0.88–0.93)). The
+one-observation-per-physician secondary analysis agreed (Kruskal-Wallis
+H = 66.6, df = 3, p &lt; 0.001); URPS volume exceeded both urology and
+General OB/GYN in pairwise comparisons (p &lt; 0.001).
 
 ### Surgeon Volume and Concentration
 
@@ -772,9 +801,12 @@ providers are size-adjusted companions.
 </tbody>
 </table>
 
-**Table 3.** Adjusted rate ratios for annual sling volume from a Poisson
-GEE clustered by NPI (URPS reference; exchangeable correlation; robust
-standard errors).
+**Table 3.** Adjusted rate ratios for annual reported services from a
+Poisson GEE clustered by NPI (URPS reference; calendar year centered at
+2018; exchangeable correlation; robust standard errors). The first block
+gives specialty contrasts at mid-study and the 2020 effect; the second
+block gives each specialty’s annual trend as a marginal contrast (the
+year term plus its specialty-by-year interaction).
 
 <table>
 <thead>
@@ -786,29 +818,44 @@ standard errors).
 </thead>
 <tbody>
 <tr>
-<td>Urology (vs URPS)</td>
-<td>0.80 (0.70–0.92)</td>
-<td>0.001</td>
-</tr>
-<tr>
-<td>General OB/GYN (vs URPS)</td>
-<td>0.68 (0.51–0.92)</td>
-<td>0.011</td>
-</tr>
-<tr>
-<td>MIGS (vs URPS)</td>
-<td>0.56 (0.40–0.79)</td>
+<td>Urology vs URPS (at 2018)</td>
+<td>0.76 (0.67–0.87)</td>
 <td>&lt;0.001</td>
 </tr>
 <tr>
-<td>Calendar year (per year)</td>
-<td>1.00 (0.99–1.01)</td>
-<td>0.516</td>
+<td>General OB/GYN vs URPS (at 2018)</td>
+<td>0.68 (0.51–0.91)</td>
+<td>0.009</td>
+</tr>
+<tr>
+<td>MIGS vs URPS (at 2018)</td>
+<td>0.85 (0.55–1.32)</td>
+<td>0.466</td>
 </tr>
 <tr>
 <td>2020 (COVID) indicator</td>
 <td>0.88 (0.85–0.92)</td>
 <td>&lt;0.001</td>
+</tr>
+<tr>
+<td>Annual trend, URPS</td>
+<td>0.997 (0.990-1.005)</td>
+<td>0.516</td>
+</tr>
+<tr>
+<td>Annual trend, urology</td>
+<td>0.987 (0.973-1.002)</td>
+<td>0.091</td>
+</tr>
+<tr>
+<td>Annual trend, General OB/GYN</td>
+<td>0.997 (0.974-1.019)</td>
+<td>0.761</td>
+</tr>
+<tr>
+<td>Annual trend, MIGS</td>
+<td>1.084 (1.030-1.141)</td>
+<td>0.002</td>
 </tr>
 </tbody>
 </table>

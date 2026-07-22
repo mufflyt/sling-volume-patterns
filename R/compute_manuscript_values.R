@@ -250,22 +250,65 @@ compute_manuscript_values <- function(
   v$annual_top20 <- round(mean(allc$pct_by_top_20))
 
   # ── GEE + per-physician (Table 3 + prose) ──────────────────────────────────
-  gee <- fit_volume_gee(pv, year_col = year_col, reference_specialty = "URPS", verbose = FALSE)
+  # Poisson GEE clustered by NPI, year centered at 2018 (mid-study): specialty
+  # main effects are the rate ratios vs URPS at mid-study; specialty-specific
+  # annual slopes are the marginal year contrasts (year_c + specialty:year_c).
+  gee <- fit_volume_gee(pv, year_col = year_col, reference_specialty = "URPS",
+                        center_year = 2018, verbose = FALSE)
   gt <- gee$terms
   pick <- function(term) gt[gt$term == term, ]
   v$gee_urology <- rr_ci(pick("specialty_groupUrology")); v$gee_urology_p <- fmt_p(pick("specialty_groupUrology")$p_value)
   v$gee_gob     <- rr_ci(pick("specialty_groupGeneral OB/GYN")); v$gee_gob_p <- fmt_p(pick("specialty_groupGeneral OB/GYN")$p_value)
   v$gee_migs    <- rr_ci(pick("specialty_groupMIGS")); v$gee_migs_p <- fmt_p(pick("specialty_groupMIGS")$p_value)
-  v$gee_year    <- rr_ci(pick("year_c")); v$gee_year_p <- fmt_p(pick("year_c")$p_value)
   v$gee_covid   <- rr_ci(pick("covid_2020")); v$gee_covid_p <- fmt_p(pick("covid_2020")$p_value)
+  # Specialty-specific annual slopes (marginal contrasts) -> the reference-year
+  # main effect is NOT an "overall" time trend; report each specialty's slope.
+  sl <- specialty_year_slopes(gee$model, reference_specialty = "URPS")
+  slrow <- function(grp) sl[sl$specialty == grp, ]
+  slrr  <- function(grp) sprintf("%.3f (%.3f-%.3f)", slrow(grp)$slope_rr, slrow(grp)$ci_low, slrow(grp)$ci_high)
+  v$slope_urps <- slrr("URPS"); v$slope_urps_p <- fmt_p(slrow("URPS")$p_value)
+  v$slope_uro  <- slrr("Urology"); v$slope_uro_p <- fmt_p(slrow("Urology")$p_value)
+  v$slope_gob  <- slrr("General OB/GYN"); v$slope_gob_p <- fmt_p(slrow("General OB/GYN")$p_value)
+  v$slope_migs <- slrr("MIGS"); v$slope_migs_p <- fmt_p(slrow("MIGS")$p_value)
   tab$t3 <- data.frame(
-    Term = c("Urology (vs URPS)","General OB/GYN (vs URPS)","MIGS (vs URPS)","Calendar year (per year)","2020 (COVID) indicator"),
-    `Rate ratio (95% CI)` = c(v$gee_urology, v$gee_gob, v$gee_migs, v$gee_year, v$gee_covid),
-    `p-value` = c(v$gee_urology_p, v$gee_gob_p, v$gee_migs_p, v$gee_year_p, v$gee_covid_p),
+    Term = c("Urology vs URPS (at 2018)","General OB/GYN vs URPS (at 2018)","MIGS vs URPS (at 2018)",
+             "2020 (COVID) indicator",
+             "Annual trend, URPS","Annual trend, urology","Annual trend, General OB/GYN","Annual trend, MIGS"),
+    `Rate ratio (95% CI)` = c(v$gee_urology, v$gee_gob, v$gee_migs, v$gee_covid,
+                              v$slope_urps, v$slope_uro, v$slope_gob, v$slope_migs),
+    `p-value` = c(v$gee_urology_p, v$gee_gob_p, v$gee_migs_p, v$gee_covid_p,
+                  v$slope_urps_p, v$slope_uro_p, v$slope_gob_p, v$slope_migs_p),
     check.names = FALSE)
+  # Negative-binomial mixed model sensitivity (report numbers, not "concordant")
+  nb <- tryCatch(fit_volume_nb_mixed(pv, year_col = year_col, reference_specialty = "URPS",
+                                     center_year = 2018, verbose = FALSE), error = function(e) NULL)
+  v$has_nb <- !is.null(nb)
+  if (v$has_nb) {
+    nbpick <- function(term) nb$terms[nb$terms$term == term, ]
+    v$nb_urology <- rr_ci(nbpick("specialty_groupUrology"))
+    v$nb_gob     <- rr_ci(nbpick("specialty_groupGeneral OB/GYN"))
+    v$nb_migs    <- rr_ci(nbpick("specialty_groupMIGS"))
+    v$nb_covid   <- rr_ci(nbpick("covid_2020"))
+  }
   pp <- test_per_physician_volume(pv)
   kw <- pp[grepl("^Kruskal", pp$test), ]
   v$kw_H <- round(kw$statistic, 1); v$kw_df <- kw$df; v$kw_p <- fmt_p(kw$p_value)
+
+  # ── Binomial URPS-share model (reviewer #4) ────────────────────────────────
+  # Model URPS services out of all annual services with a quasibinomial GLM on
+  # year, respecting the compositional structure the 11 OLS points ignore.
+  ash <- pv %>% dplyr::group_by(year = .data[[year_col]]) %>%
+    dplyr::summarise(urps_services = sum(annual_sling_count[specialty_group == "URPS"]),
+                     total_services = sum(annual_sling_count), .groups = "drop")
+  bsh <- tryCatch(fit_urps_share_binomial(ash, center_year = 2018), error = function(e) NULL)
+  v$has_share_binom <- !is.null(bsh)
+  if (v$has_share_binom) {
+    v$share_binom_or   <- sprintf("%.3f (95%% CI %.3f-%.3f)", bsh$or_per_year, bsh$or_ci[1], bsh$or_ci[2])
+    v$share_binom_pp   <- sprintf("%.2f", bsh$pp_per_year)
+    v$share_binom_p    <- fmt_p(bsh$p_value)
+    v$share_binom_2013 <- sprintf("%.1f", bsh$fitted_2013)
+    v$share_binom_2023 <- sprintf("%.1f", bsh$fitted_2023)
+  }
 
   # ── Classification bounds (Table 4 + prose) ────────────────────────────────
   share_trend <- function(pvx, grp_expr) {

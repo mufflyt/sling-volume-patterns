@@ -41,6 +41,7 @@ fit_volume_nb_mixed <- function(
     year_col            = "puf_year",
     reference_specialty = "URPS",
     exclude_2020        = FALSE,
+    center_year         = 2018,
     verbose             = TRUE
 ) {
   if (!requireNamespace("glmmTMB", quietly = TRUE) ||
@@ -58,9 +59,11 @@ fit_volume_nb_mixed <- function(
     dat <- dat[dat[[year_col]] != 2020, , drop = FALSE]
   }
 
-  # Center year on the first study year so the year coefficient is the
-  # per-calendar-year rate ratio and specialty terms are read at baseline.
-  dat$year_c   <- dat[[year_col]] - min(dat[[year_col]], na.rm = TRUE)
+  # Center year (default 2018, mid-study) so the specialty main effects are the
+  # rate ratios at mid-study rather than at an endpoint, and the year_c
+  # coefficient is the per-year trend for the reference specialty.
+  ctr <- if (is.null(center_year)) min(dat[[year_col]], na.rm = TRUE) else center_year
+  dat$year_c   <- dat[[year_col]] - ctr
   dat$covid_2020 <- as.integer(dat[[year_col]] == 2020)
   dat$specialty_group <- stats::relevel(
     factor(dat$specialty_group), ref = reference_specialty
@@ -130,6 +133,7 @@ fit_volume_gee <- function(
     reference_specialty = "URPS",
     exclude_2020        = FALSE,
     corstr              = "exchangeable",
+    center_year         = 2018,
     verbose             = TRUE
 ) {
   if (!requireNamespace("geepack", quietly = TRUE)) {
@@ -145,7 +149,8 @@ fit_volume_gee <- function(
   if (isTRUE(exclude_2020)) {
     dat <- dat[dat[[year_col]] != 2020, , drop = FALSE]
   }
-  dat$year_c         <- dat[[year_col]] - min(dat[[year_col]], na.rm = TRUE)
+  ctr <- if (is.null(center_year)) min(dat[[year_col]], na.rm = TRUE) else center_year
+  dat$year_c         <- dat[[year_col]] - ctr
   dat$covid_2020     <- as.integer(dat[[year_col]] == 2020)
   dat$specialty_group <- stats::relevel(
     factor(dat$specialty_group), ref = reference_specialty
@@ -252,4 +257,89 @@ test_per_physician_volume <- function(
   )
 
   dplyr::bind_rows(kruskal, pw)
+}
+
+#' @noRd
+#' Specialty-specific annual volume slopes (marginal contrasts) from a fitted
+#' GEE or NB model that includes specialty_group * year_c.
+#'
+#' With an interaction, the year_c main effect is the slope for the reference
+#' specialty only; each non-reference specialty's slope is the sum of the
+#' year_c coefficient and its specialty:year_c interaction. This function forms
+#' those linear combinations and their standard errors from the model
+#' variance-covariance matrix, returning per-specialty annual rate ratios with
+#' 95% CIs (reviewer #4: report specialty-specific slopes / marginal contrasts,
+#' not just the reference-year main effects).
+#'
+#' @param model a fitted geeglm (or glmmTMB) object.
+#' @param reference_specialty the releveled reference (its slope is year_c).
+#' @return tibble(specialty, slope_rr, ci_low, ci_high, p_value, p_formatted).
+specialty_year_slopes <- function(model, reference_specialty = "URPS") {
+  b  <- stats::coef(model)
+  V  <- stats::vcov(model)
+  if (inherits(model, "glmmTMB")) { b <- b$cond; V <- V$cond }
+  nm <- names(b)
+  year_term <- "year_c"
+  if (!year_term %in% nm) return(NULL)
+  # specialty levels appear as specialty_group<Level> main effects
+  spec_main <- grep("^specialty_group", nm, value = TRUE)
+  spec_main <- spec_main[!grepl(":", spec_main)]
+  levels_nonref <- sub("^specialty_group", "", spec_main)
+  rows <- list()
+  add_row <- function(label, coefs) {
+    L <- rep(0, length(b)); names(L) <- nm; L[coefs] <- 1
+    est <- sum(L * b)
+    se  <- sqrt(as.numeric(t(L) %*% V %*% L))
+    z   <- est / se
+    p   <- 2 * stats::pnorm(-abs(z))
+    tibble::tibble(
+      specialty = label, slope_rr = exp(est),
+      ci_low = exp(est - stats::qnorm(0.975) * se),
+      ci_high = exp(est + stats::qnorm(0.975) * se),
+      p_value = p,
+      p_formatted = dplyr::case_when(
+        p < 0.001 ~ "<0.001", p < 0.01 ~ sprintf("%.3f", p), TRUE ~ sprintf("%.2f", p)))
+  }
+  rows[[reference_specialty]] <- add_row(reference_specialty, year_term)
+  for (lv in levels_nonref) {
+    inter <- paste0("specialty_group", lv, ":", year_term)
+    coefs <- if (inter %in% nm) c(year_term, inter) else year_term
+    rows[[lv]] <- add_row(lv, coefs)
+  }
+  dplyr::bind_rows(rows)
+}
+
+#' @noRd
+#' Model the annual URPS share of services with a quasibinomial GLM on year,
+#' respecting the compositional nature of shares (reviewer #4: the 11 annual
+#' percentages are not independent OLS points; model URPS services out of all
+#' annual services). Returns the per-year change on the odds and percentage-point
+#' scales with a 95% CI, plus the fitted 2013 and 2023 shares.
+#'
+#' @param annual_share data.frame with year, urps_services, total_services.
+#' @param center_year year at which to evaluate the marginal pp/year slope.
+fit_urps_share_binomial <- function(annual_share, center_year = 2018) {
+  stopifnot(all(c("year", "urps_services", "total_services") %in% names(annual_share)))
+  d <- annual_share
+  d$year_c <- d$year - center_year
+  d$other  <- d$total_services - d$urps_services
+  m <- stats::glm(cbind(urps_services, other) ~ year_c, data = d,
+                  family = stats::quasibinomial())
+  co <- summary(m)$coefficients
+  b_year <- co["year_c", "Estimate"]; se_year <- co["year_c", "Std. Error"]
+  p_year <- co["year_c", "Pr(>|t|)"]
+  # marginal pp/year at the mean fitted probability (approx dp/dyear = p(1-p)*b)
+  phat <- stats::predict(m, newdata = data.frame(year_c = 0), type = "response")
+  pp_per_year <- 100 * phat * (1 - phat) * b_year
+  fit_at <- function(y) 100 * stats::predict(m, newdata = data.frame(year_c = y - center_year),
+                                             type = "response")
+  list(
+    model = m,
+    or_per_year = exp(b_year),
+    or_ci = exp(b_year + c(-1, 1) * stats::qnorm(0.975) * se_year),
+    pp_per_year = pp_per_year,
+    p_value = p_year,
+    fitted_2013 = as.numeric(fit_at(2013)),
+    fitted_2023 = as.numeric(fit_at(2023))
+  )
 }
