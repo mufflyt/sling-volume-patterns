@@ -23,6 +23,7 @@ compute_manuscript_values <- function(
     abog_csv     = "data/canonical_abog/canonical_abog_npi_LATEST.csv",
     abu_csv      = "data/abu_urology/abu_urps_npi_LATEST.csv",
     certyear_csv = "data/canonical_abog/abog_subspecialty_certyear_LATEST.csv",
+    denom_csv    = NULL,
     exclude_years = NULL,
     year_col      = "puf_year",
     r_dir         = "R"
@@ -39,6 +40,7 @@ compute_manuscript_values <- function(
   source(file.path(r_dir, "classification_schemes.R"),  local = TRUE)
   source(file.path(r_dir, "workforce_dynamics.R"),      local = TRUE)
   source(file.path(r_dir, "volume_models.R"),           local = TRUE)
+  source(file.path(r_dir, "build_ffs_denominator.R"),   local = TRUE)
 
   pc <- readRDS(puf_classified_path)
 
@@ -89,6 +91,29 @@ compute_manuscript_values <- function(
   v$procs_2020 <- yr_val(yr, 2020, "procs"); v$procs_2022 <- yr_val(yr, 2022, "procs")
   m <- stats::lm(procs ~ yr[[year_col]], yr)
   v$proc_slope <- round(stats::coef(m)[2]); v$proc_slope_p <- fmt_p(summary(m)$coefficients[2, 4])
+
+  # ── Denominator-adjusted rate (reviewer #2) ────────────────────────────────
+  # Rate = CPT 57288 services per 100,000 female Part B fee-for-service Medicare
+  # beneficiaries. Original Medicare = FFS, matching the PUF numerator. Adjusting
+  # for the shrinking FFS denominator separates a falling count from falling use.
+  denom <- tryCatch(read_ffs_denominator(denom_csv), error = function(e) NULL)
+  v$has_denominator <- !is.null(denom)
+  if (v$has_denominator) {
+    rate_tbl <- attach_ffs_rate(
+      data.frame(year = yr[[year_col]], services = yr$procs),
+      year_col = "year", services_col = "services", denom = denom)
+    rget <- function(y) rate_tbl$rate_per_100k[rate_tbl$year == y]
+    dget <- function(y) rate_tbl$denominator[rate_tbl$year == y]
+    v$rate_2013 <- round(rget(2013), 1); v$rate_2020 <- round(rget(2020), 1)
+    v$rate_2022 <- round(rget(2022), 1); v$rate_2023 <- round(rget(2023), 1)
+    v$den_2013_m <- round(dget(2013) / 1e6, 2); v$den_2023_m <- round(dget(2023) / 1e6, 2)
+    v$den_pct_change <- round(100 * (dget(2023) / dget(2013) - 1), 1)
+    mr <- stats::lm(rate_per_100k ~ year, rate_tbl)
+    v$rate_slope   <- round(stats::coef(mr)[2], 2)
+    v$rate_slope_p <- fmt_p(summary(mr)$coefficients[2, 4])
+    v$rate_pct_change   <- round(100 * (rget(2023) / rget(2013) - 1), 1)
+    v$count_pct_change  <- round(100 * (v$procs_2023 / v$procs_2013 - 1), 1)
+  }
 
   # ── Specialty distribution + per-specialty share trends (Table 1) ──────────
   order_grp <- c("URPS", "Urology", "General OB/GYN", "MIGS")

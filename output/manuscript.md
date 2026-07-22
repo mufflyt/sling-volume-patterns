@@ -24,9 +24,12 @@ sensitivity analyses.
 group (767 physicians; 89,773 procedures, 60.8%; median 19/year
 \[p25–p75, 14–28\]), followed by non-URPS urology (689 physicians;
 26.1%; median 16), General OB/GYN (336; 12.4%; median 15), and MIGS (10;
-0.6%; median 16). Annual procedures declined from 16,399 in 2013 to
-12,223 in 2023 (-490/year; p = 0.023), with a low of 9,228 in 2020 and
-partial recovery thereafter. Compared with URPS, adjusted annual volume
+0.6%; median 16). Reported services fell from 16,399 in 2013 to 12,223
+in 2023 (-25.5%), but the female Part B fee-for-service population
+contracted by -14.7% over the same period; after denominator adjustment
+the utilization rate declined only from 89.4 to 78.1 services per
+100,000 (-12.6%; rate trend not significant, p = 0.139), with a 2020
+nadir and partial recovery. Compared with URPS, adjusted annual volume
 was lower for urology (rate ratio \[RR\] 0.80 (0.70–0.92)), General
 OB/GYN (RR 0.68 (0.51–0.92)), and MIGS (RR 0.56 (0.40–0.79)). Volume
 fell by approximately 11% in 2020 (RR 0.88 (0.85–0.92); p &lt; 0.001),
@@ -169,14 +172,21 @@ the reported concentration estimates are lower bounds.
 
 ### Outcome Measures and Statistical Analysis
 
-The primary outcome was the annual number of CPT 57288 services per
-provider (Tot\_Srvcs, reported services). We measured surgeon-level
-concentration with two complementary metrics. The Gini coefficient
-summarizes inequality across the full surgeon-volume distribution. The
-Herfindahl–Hirschman Index (HHI) sums squared surgeon shares on a
-0–10,000 scale and is more sensitive to the largest-volume surgeons.
-Both measures were calculated from aggregate provider totals and
-separately for each calendar year.
+The primary surgeon-level outcome was the annual number of CPT 57288
+services per provider (Tot\_Srvcs, reported services). To describe
+population utilization over time, we also computed the annual rate of
+CPT 57288 services per 100,000 female Part B fee-for-service Medicare
+beneficiaries, using the CMS Program Statistics Original Medicare
+Enrollment counts (table MDCR ENROLL AB 11, Sex = Female, Part B) as the
+denominator; absolute service counts are reported as a secondary
+measure. Because the Public Use File records no beneficiary age for the
+numerator, the rate is crude and is not age-standardized. We measured
+surgeon-level concentration with two complementary metrics. The Gini
+coefficient summarizes inequality across the full surgeon-volume
+distribution. The Herfindahl–Hirschman Index (HHI) sums squared surgeon
+shares on a 0–10,000 scale and is more sensitive to the largest-volume
+surgeons. Both measures were calculated from aggregate provider totals
+and separately for each calendar year.
 
 The physician was the operative production unit in these calculations.
 Thus, HHI describes surgeon-level procedural concentration rather than
@@ -215,9 +225,10 @@ observable rather than definitively new sling surgeon.
 In a secondary geographic analysis, we tabulated observable surgeons and
 URPS share by practice state and identified states with no observable
 URPS surgeon performing at least 11 Medicare slings in any study year.
-We did not calculate population-based rates because fee-for-service
-denominators adjusted for Medicare Advantage enrollment were outside the
-scope of this analysis.
+We did not calculate state-level population-based rates because
+state-by-sex fee-for-service enrollment denominators were outside the
+scope of this analysis; the national utilization rate above uses the
+national female Part B fee-for-service denominator.
 
 Analyses were performed in R 4.4, with package versions locked through
 renv. The complete analytic pipeline is available at
@@ -234,13 +245,20 @@ appeared in one year, 756 (42%) in 2–5 years, 365 (20%) in 6–10 years,
 and 108 (6%) in all 11 years. Thus, only a small proportion maintained
 an observable Medicare sling practice throughout the study window.
 
-Observed annual volume declined from 16,399 procedures in 2013 to 12,223
-in 2023 (linear trend, -490 procedures/year; p = 0.023). The number of
-observable surgeons also fell, from 812 to 562. Volume reached a low of
-9,228 procedures in 2020, consistent with pandemic-related deferral of
-elective surgery. It partially recovered to 12,053 in 2022 and 12,223 in
-2023 but remained below pre-2020 levels. Therefore, the pooled total
-masks a decade-long decline in Medicare sling volume.
+The observed count of reported services fell from 16,399 in 2013 to
+12,223 in 2023 (-25.5%). Over the same period, however, the female Part
+B fee-for-service population contracted from 18.35 million to 15.65
+million beneficiaries (-14.7%), reflecting migration into Medicare
+Advantage. After denominator adjustment, the utilization rate declined
+more modestly, from 89.4 to 78.1 services per 100,000 female Part B
+fee-for-service beneficiaries (-12.6%), and the linear trend in the rate
+was not statistically significant (-1.65 per 100,000 per year; p =
+0.139). The rate reached a low of 52.4 per 100,000 in 2020, consistent
+with pandemic-related deferral of elective surgery, then partially
+recovered. The number of observable surgeons also fell, from 812 to 562.
+Thus, much of the apparent decline in service counts reflected the
+shrinking fee-for-service denominator rather than a clear fall in
+age-eligible utilization.
 
 ### Specialty Distribution and Trends
 

@@ -95,6 +95,13 @@ default:
   # from their certification year onward).
   abog_subspecialty_certyear_csv: "data/canonical_abog/abog_subspecialty_certyear_LATEST.csv"
 
+  # Female Original Medicare (fee-for-service) enrollment denominator, by year.
+  # Source: CMS Program Statistics - Original Medicare Enrollment, table
+  # MDCR ENROLL AB 11 (Sex -> Female). Column `female_ffs_partB` is the primary
+  # denominator for CPT 57288 services per 100,000 female Part B FFS
+  # beneficiaries. See data/denominator/README.md for provenance.
+  ffs_denominator_csv: "data/denominator/female_ffs_denominator.csv"
+
   # ── Data provenance (Pattern 4: data_raw/ README) ──────────────────────────
   # data_raw/ holds original CMS downloads; never modified after download.
   # data_raw_readme documents exact URLs, file hashes, and download dates.
