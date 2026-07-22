@@ -28,9 +28,9 @@ Tyler Muffly, MD
 
 The midurethral sling is the most commonly performed surgical procedure for stress urinary incontinence (SUI) and is considered the gold standard treatment when conservative measures fail.^1,2^ Coded as CPT 57288, the procedure involves placement of a synthetic mesh sling beneath the mid-urethra to restore continence. Despite its central role in pelvic floor surgery, the specialty distribution and procedural concentration among physicians performing this operation in the Medicare population have not been well characterized.
 
-Understanding who performs midurethral slings—and how procedure volume is distributed within each specialty—has direct implications for surgical quality, training requirements, and workforce planning. The volume-outcome relationship in surgery is well established: higher-volume surgeons and hospitals tend to achieve better patient outcomes across a range of procedures.^3,4^ However, the evidence base for volume thresholds in midurethral sling surgery specifically is limited, and the specialty landscape has evolved considerably over the past decade.
+Understanding who performs midurethral slings—and how procedure volume is distributed within each specialty—has direct implications for surgical quality, training requirements, and workforce planning. The volume-outcome relationship in surgery is well established: higher-volume surgeons and hospitals tend to achieve better patient outcomes across a range of procedures.^4,5^ However, the evidence base for volume thresholds in midurethral sling surgery specifically is limited, and the specialty landscape has evolved considerably over the past decade.
 
-Several trends make this analysis timely. First, the subspecialty of Female Pelvic Medicine and Reconstructive Surgery—recently renamed Urogynecology and Reconstructive Pelvic Surgery (URPS)—has grown substantially since achieving American Board of Medical Specialties (ABMS) recognition in 2013,^5^ and is certifiable through both obstetrics-gynecology (ABOG) and urology (ABU) training pathways. Second, the US Food and Drug Administration's reclassification of urogynecologic surgical mesh as a Class III device in 2016 and subsequent market withdrawal orders may have shifted the procedural landscape.^6^ Third, there is growing interest in procedural concentration—the degree to which a small number of providers account for a disproportionate share of procedures—as a metric relevant to quality improvement and resource allocation.^7^
+Several trends make this analysis timely. First, the subspecialty of Female Pelvic Medicine and Reconstructive Surgery—recently renamed Urogynecology and Reconstructive Pelvic Surgery (URPS)—has grown substantially since achieving American Board of Medical Specialties (ABMS) recognition in 2013,^6^ and is certifiable through both obstetrics-gynecology (ABOG) and urology (ABU) training pathways. Second, the US Food and Drug Administration's actions on urogynecologic surgical mesh, culminating in the 2019 order to stop selling transvaginal mesh for prolapse, reshaped public perception and may have shifted the procedural landscape for slings.^7^ Third, there is growing interest in procedural concentration—the degree to which a small number of providers account for a disproportionate share of procedures—as a metric relevant to quality improvement and resource allocation.^8^
 
 The objective of this study was to characterize the specialty distribution, annual procedure volumes, and procedural concentration among physicians performing midurethral sling procedures in Medicare beneficiaries from 2013 to 2023, and to assess time trends in the gynecologic share of sling procedures.
 
@@ -96,19 +96,23 @@ Provider practice location spanned 52 states and territories. The URPS share of 
 
 ## Discussion
 
-This national analysis of Medicare claims from 2013 to 2023 shows that URPS physicians perform the majority of midurethral sling procedures (60.8%), with the highest adjusted per-physician volume and the most equitable within-group distribution. The combined gynecologic share increased significantly over the decade, from 60.8% to 70.1%.
+This national analysis of Medicare claims from 2013 to 2023 shows that URPS physicians perform the majority of midurethral sling procedures (60.8%), with the highest adjusted per-physician volume and the most equitable within-group distribution. The combined gynecologic share increased significantly over the decade, and workforce decomposition attributes that rise to non-URPS attrition and URPS entry rather than to intensifying individual practice or concentrating care.
 
-### Subspecialty Dominance and Both Training Pathways
+### Specialty Distribution and the Historical Reversal
 
-A key methodological contribution is the identification of urogynecologists through **both** certifying pathways — ABOG (OB/GYN) and ABU (urology). Cross-referencing the ABU roster reassigned 150 urology-typed providers (8.2% of all slings) to URPS, sharpening the finding that midurethral sling surgery in Medicare is predominantly performed by fellowship-trained urogynecologists. The finding is robust: the pooled URPS Gini changed negligibly (0.51 → 0.52) under the reclassification.
+Our finding that fellowship-trained urogynecologists perform roughly three-fifths of Medicare slings, with gynecologists collectively performing the majority, is consistent with contemporary practice-pattern data but marks a reversal from earlier Medicare-specific analyses. Using ACS-NSQIP (2006–2013), James et al. found gynecologists performed 74.2% of sling procedures versus 25.8% by urologists,^9^ and Cantrell et al. reported that urogynecologists performed 54% of stress-incontinence procedures at academic centers (2009–2014).^10^ In the Medicare population specifically, however, Rogo-Gupta et al. found that urologists performed the majority of sling operations in 2002–2007.^11^ Our data, spanning 2013–2023, show that this historical pattern has reversed, with URPS now accounting for the single largest share.
 
-### Procedural Concentration
+Identifying urogynecologists through both the ABOG (obstetrics-gynecology) and ABU (urology) certifying pathways is central to this result, because URPS is certifiable from either residency. Cross-referencing the ABU roster reassigned 150 urology-typed physicians (8.2% of all slings) to URPS, and the finding was robust — the pooled URPS Gini changed negligibly (0.51 → 0.52). A pathway-agnostic definition is important given that urology- and gynecology-based URPS fellows accrue different intraoperative case volumes during training^14^ and that FPMRS exposure during urology residency is variable;^15^ classifying urology-pathway urogynecologists as general urologists would understate the true subspecialty share.
 
-Reporting the Gini coefficient and HHI together makes the concentration finding difficult to attribute to a single metric: the two answer related but distinct questions and agree here. The low absolute HHI for the three main groups (27–89) shows that, although volume is unequally distributed (Gini 0.51–0.55), no individual surgeon approaches a dominant share — this is inequality across many surgeons, not domination by a few. Reporting each physician as the production unit follows workforce-concentration analyses in other surgical specialties; it is explicitly a surgeon-level, not a market-competition, measure.
+### Procedural Concentration and the Volume–Outcome Relationship
 
-### Temporal Trends and Workforce Implications
+Reporting the Gini coefficient and the Herfindahl–Hirschman Index together makes the concentration finding difficult to attribute to a single metric: the two answer related but distinct questions and agree here. Moderate inequality (Gini 0.51–0.55) coexists with very low absolute HHI (27–89 of 10,000), indicating that sling volume is spread unevenly across many surgeons rather than dominated by a few. Treating each physician as the operative production unit is a surgeon-level, not a market-competition, measure and follows workforce-concentration approaches used in other surgical specialties.
 
-The repeated-measures model clarifies the mechanism behind the rising gynecologic share. Individual physician volume did not change over time (year RR 1.00), but the number of non-URPS surgeons fell sharply while URPS numbers held steady. The market-share shift is therefore a workforce-composition change — non-URPS attrition — rather than a change in how much any individual operates. The significant 2020 decline (RR 0.89) is consistent with pandemic-related deferral of elective surgery and was robust to excluding 2020.
+These patterns have clinical significance given the established volume–outcome relationship for midurethral slings. Berger et al. found that higher-volume surgeons had a substantially lower adjusted risk of reoperation for sling failure,^16^ and a systematic review by Cartier et al. found that low-volume surgeons had higher odds of both mesh revision and repeat incontinence procedures.^17^ Brennand and Quan identified a threshold effect, with revision odds declining above roughly 50 cases per year,^18^ and Holdø and Svenningsen found that greater surgeon experience and annual volume improved objective cure rates.^19^ The median observed volumes here (15–19 procedures/year) fall below these thresholds, but the PUF captures only Medicare fee-for-service claims; true per-surgeon volumes — including commercially insured, Medicare Advantage, and younger patients — are higher, and the reported concentration is a lower bound because sub-11-beneficiary providers are suppressed.
+
+### Temporal Trends, Workforce Dynamics, and the Evolving SUI Landscape
+
+The repeated-measures model and workforce decomposition together clarify the mechanism behind the rising gynecologic share. Individual physician volume did not change over time (year rate ratio 1.00), while the number of non-URPS surgeons fell sharply and URPS numbers held steady; entrant analysis showed URPS contributing the largest inflow of newly observable surgeons and urology exhibiting churn (many entrants offset by more exits) alongside net decline. The market-share shift is therefore a change in workforce composition superimposed on a shrinking total pool, not intensification of individual practice or concentration of care. This mechanism echoes prior work: Siegal et al. showed that the post-2011 decline in sling placement was driven primarily by non-FPMRS providers, while FPMRS providers maintained their volumes,^12^ and Lee et al. documented an approximately 50% national decline in incontinence surgery from 2004 to 2013.^13^ The significant 2020 decline (rate ratio 0.89) is consistent with pandemic-related deferral of elective surgery and was robust to excluding 2020. Finally, the SUI treatment landscape continues to diversify — urethral bulking agents are now positioned alongside slings as a first-line surgical option^3,20^ — and whether this differentially affects specialty-specific sling volumes warrants continued surveillance.
 
 ### Limitations
 
@@ -124,19 +128,45 @@ In this national Medicare cohort, URPS physicians perform the majority of midure
 
 ## References
 
-1. Ford AA, Rogerson L, Cody JD, Aluko P, Ogah JA. Mid-urethral sling operations for stress urinary incontinence in women. Cochrane Database Syst Rev. 2017;7(7):CD006375.
+1. Wu JM. Stress incontinence in women. N Engl J Med. 2021;384(25):2428-2436.
 
-2. Kobashi KC, Albo ME, Dmochowski RR, et al. Surgical treatment of female stress urinary incontinence: AUA/SUFU guideline. J Urol. 2017;198(4):875-883.
+2. Ford AA, Rogerson L, Cody JD, Aluko P, Ogah JA. Mid-urethral sling operations for stress urinary incontinence in women. Cochrane Database Syst Rev. 2017;7(7):CD006375.
 
-3. Birkmeyer JD, Stukel TA, Siewers AE, Goodney PP, Wennberg DE, Lucas FL. Surgeon volume and operative mortality in the United States. N Engl J Med. 2003;349(22):2117-2127.
+3. Kobashi KC, Vasavada S, Bloschichak A, et al. Updates to surgical treatment of female stress urinary incontinence (SUI): AUA/SUFU guideline (2023). J Urol. 2023;209(6):1091-1098.
 
-4. Reames BN, Ghaferi AA, Birkmeyer JD, Dimick JB. Hospital volume and operative mortality in the modern era. Ann Surg. 2014;260(2):244-251.
+4. Birkmeyer JD, Stukel TA, Siewers AE, Goodney PP, Wennberg DE, Lucas FL. Surgeon volume and operative mortality in the United States. N Engl J Med. 2003;349(22):2117-2127.
 
-5. American Board of Medical Specialties. ABMS announces approval of new subspecialty certificate in female pelvic medicine and reconstructive surgery. 2011. Available at: https://www.abms.org.
+5. Reames BN, Ghaferi AA, Birkmeyer JD, Dimick JB. Hospital volume and operative mortality in the modern era. Ann Surg. 2014;260(2):244-251.
 
-6. US Food and Drug Administration. FDA takes action to protect women's health, orders manufacturers of surgical mesh intended for transvaginal repair of pelvic organ prolapse to stop selling all devices. April 16, 2019. Available at: https://www.fda.gov.
+6. American Board of Medical Specialties. ABMS announces approval of new subspecialty certificate in female pelvic medicine and reconstructive surgery. 2011. Available at: https://www.abms.org.
 
-7. Stitzenberg KB, Sigurdson ER, Egleston BL, Starkey RB, Meropol NJ. Centralization of cancer surgery: implications for patient access to optimal care. J Clin Oncol. 2009;27(28):4671-4678.
+7. Berger AA, Tan-Kim J, Menefee SA. The impact of the 2011 US Food and Drug Administration transvaginal mesh communication on utilization of synthetic mid-urethral sling procedures. Int Urogynecol J. 2021;32(8):2227-2231.
+
+8. Stitzenberg KB, Sigurdson ER, Egleston BL, Starkey RB, Meropol NJ. Centralization of cancer surgery: implications for patient access to optimal care. J Clin Oncol. 2009;27(28):4671-4678.
+
+9. James MB, Theofanides MC, Sui W, Onyeji I, Badalato GM, Chung DE. Sling procedures for the treatment of stress urinary incontinence: comparison of national practice patterns between urologists and gynecologists. J Urol. 2017;198(6):1386-1391.
+
+10. Cantrell AB, Rothschild J, Durbin-Johnson B, Gonzalez R, Kurzrock EA. Surgical trends in the correction of female stress urinary incontinence in academic centers within the United States. Neurourol Urodyn. 2017;36(2):394-398.
+
+11. Rogo-Gupta L, Litwin MS, Saigal CS, Anger JT; Urologic Diseases in America Project. Trends in the surgical management of stress urinary incontinence among female Medicare beneficiaries, 2002-2007. Urology. 2013;82(1):38-41.
+
+12. Siegal AR, Huang Z, Gross MD, Mehraban-Far S, Weissbart SJ, Kim JM. Trends of mesh utilization for stress urinary incontinence before and after the 2011 Food and Drug Administration notification between FPMRS-certified and non-FPMRS-certified physicians: a statewide all-payer database analysis. Urology. 2021;150:151-157.
+
+13. Lee UJ, Feinstein L, Ward JB, et al; Urologic Diseases in America Project. National trends in the surgical management of urinary incontinence among insured women, 2004 to 2013. J Urol. 2020;203(2):365-371.
+
+14. Tabakin AL, Sawhney R, Daily AM, Winkler HA, Shalom DF, Tam J, Lee W. Case log trends of urogynecology and reconstructive pelvic surgery fellows: a comparison of urology- and gynecology-based fellowship programs. Neurourol Urodyn. 2024;43(8):1970-1976.
+
+15. Wang CN, Su IW, Smith AL, Badalato GM, Chung DE. Current exposure to female pelvic medicine and reconstructive surgery faculty during urology residency. Neurourol Urodyn. 2023;42(7):1569-1573.
+
+16. Berger AA, Tan-Kim J, Menefee SA. Surgeon volume and reoperation risk after midurethral sling surgery. Am J Obstet Gynecol. 2019;221(5):523.e1-523.e8.
+
+17. Cartier S, Cerantola GM, Leung AA, Brennand E. The impact of surgeon operative volume on risk of reoperation within 5 years of mid-urethral sling: a systematic review. Int Urogynecol J. 2023;34(5):981-992.
+
+18. Brennand EA, Quan H. Evaluation of the effect of surgeon's operative volume and specialty on likelihood of revision after mesh midurethral sling placement. Obstet Gynecol. 2019;133(6):1099-1108.
+
+19. Holdø B, Svenningsen R. The impact from surgical experience on short- and long-term success rates after mid-urethral sling surgery. Int Urogynecol J. 2026 (epub ahead of print).
+
+20. Gallo K, Weiner H, Mishra K. An update on surgical management for stress urinary incontinence. Curr Opin Obstet Gynecol. 2024;36(6):433-438.
 
 ---
 
