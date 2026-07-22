@@ -1,19 +1,9 @@
-> **Revision note (analysis update).** This version incorporates five
-> changes: (1) URPS includes both certification pathways, ABOG (OB/GYN)
-> and ABU (urology); (2) all 11 calendar years are analyzed, after the
-> 2017 file (initially a truncated download) was replaced with the
-> complete release; (3) surgeon-level concentration is reported with
-> both the Gini coefficient and Herfindahl–Hirschman Index (HHI); (4)
-> annual volume is analyzed with a repeated-measures model; and (5)
-> specialty-classification assumptions are examined in sensitivity
-> analyses. These updates changed several estimates from the original
-> submission.
-
 ## Abstract
 
 **Objective:** To describe the specialty distribution, annual surgeon
-volume, and procedural concentration of physicians performing
-midurethral sling surgery (CPT 57288) for Medicare beneficiaries.
+volume, and surgeon-level concentration of physicians performing sling
+surgery for stress urinary incontinence (CPT 57288) in fee-for-service
+Medicare.
 
 **Methods:** We analyzed the CMS Medicare Physician and Other
 Practitioners Public Use File across all 11 calendar years, 2013 through
@@ -58,30 +48,33 @@ annual volume at a median of approximately 13 cases; URPS contributed
 the most entrants (480), while urology showed substantial turnover (421
 entrants despite a declining share).
 
-**Conclusions:** URPS physicians perform most midurethral sling
-procedures in fee-for-service Medicare and have the highest adjusted
-per-physician volume and the most even within-group distribution. The
-rising gynecologic share reflects attrition among non-URPS providers
-rather than increasing surgeon-level concentration, with implications
-for credentialing and workforce planning.
+**Conclusions:** URPS physicians perform most sling operations for
+stress urinary incontinence in fee-for-service Medicare and have the
+highest adjusted per-physician volume and the most even within-group
+distribution. The rising gynecologic share reflects attrition among
+non-URPS providers rather than increasing surgeon-level concentration,
+with implications for credentialing and workforce planning.
 
 ------------------------------------------------------------------------
 
 ## Introduction
 
-Midurethral sling surgery is the most common operation for stress
-urinary incontinence (SUI) and remains the standard surgical treatment
-when conservative care fails.<sup>1,2</sup> The procedure, coded as CPT
-57288, places a synthetic mesh sling beneath the midurethra. Despite its
-widespread use, little is known about which specialties perform these
-procedures in the Medicare population or how volume is distributed among
-surgeons.
+Sling surgery is a common operation for stress urinary incontinence
+(SUI) and remains a standard surgical treatment when conservative care
+fails.<sup>1,2</sup> These operations are reported under CPT 57288,
+whose descriptor is “sling operation for stress incontinence (eg, fascia
+or synthetic).” The code therefore captures autologous fascial and
+synthetic sling operations together and does not identify the sling
+material or distinguish retropubic, transobturator, single-incision, or
+pubovaginal technique. Despite the procedure’s widespread use, little is
+known about which specialties perform these operations in the Medicare
+population or how volume is distributed among surgeons.
 
 These questions matter for surgical quality, training, and workforce
 planning. Across surgery, higher surgeon and hospital volume is
 generally associated with better outcomes.<sup>4,5</sup> Evidence for
-procedure-specific volume thresholds in midurethral sling surgery is
-more limited. The specialty mix has also changed during the past decade.
+procedure-specific volume thresholds in sling surgery is more limited.
+The specialty mix has also changed during the past decade.
 
 Three developments make this analysis timely. First, Female Pelvic
 Medicine and Reconstructive Surgery, now named Urogynecology and
@@ -89,18 +82,20 @@ Reconstructive Pelvic Surgery (URPS), has grown since receiving American
 Board of Medical Specialties recognition in 2013.<sup>6</sup>
 Certification is available through both obstetrics and gynecology (ABOG)
 and urology (ABU) pathways. Second, US Food and Drug Administration
-actions on urogynecologic mesh, including the 2019 order ending sales of
-transvaginal mesh for prolapse, changed public perception and may have
-affected sling use.<sup>7</sup> Third, procedural concentration, the
-extent to which a relatively small group of clinicians performs a large
-share of procedures, has become relevant to quality improvement and
-resource allocation.<sup>8</sup>
+actions on urogynecologic mesh changed public perception of mesh and may
+have affected sling use.<sup>7</sup> The 2019 FDA order concerned
+transvaginal mesh for pelvic organ prolapse and did not remove synthetic
+midurethral slings for stress incontinence from the market; the two
+devices are frequently conflated in public discussion. Third, procedural
+concentration, the extent to which a relatively small group of
+clinicians performs a large share of procedures, has become relevant to
+quality improvement and resource allocation.<sup>8</sup>
 
 We therefore characterized specialty distribution, annual surgeon
-volume, and procedural concentration among physicians performing
-midurethral sling surgery for Medicare beneficiaries from 2013 through
-2023. We also evaluated changes in each specialty’s share of procedures
-over time.
+volume, and surgeon-level concentration among physicians performing
+sling surgery for stress urinary incontinence in fee-for-service
+Medicare from 2013 through 2023. We also evaluated changes in each
+specialty’s share of reported services over time.
 
 ## Methods
 
@@ -116,11 +111,8 @@ System code, place of service, and calendar year. Because the dataset is
 publicly available and contains no protected health information,
 institutional review board approval was not required.
 
-The 2017 file initially obtained was an incomplete download (roughly
-half the expected size, with only 376 sling provider-year records versus
-approximately 660–810 in neighboring years). It was replaced with the
-complete 2017 release before analysis, so all 11 calendar years are
-included.
+All 11 annual PUF releases (2013 through 2023) were verified against the
+CMS file specifications for completeness before analysis.
 
 ### Specialty Classification
 
@@ -177,27 +169,28 @@ the reported concentration estimates are lower bounds.
 
 ### Outcome Measures and Statistical Analysis
 
-The primary outcome was the annual number of midurethral sling
-procedures per provider. We measured surgeon-level concentration with
-two complementary metrics. The Gini coefficient summarizes inequality
-across the full surgeon-volume distribution. The Herfindahl–Hirschman
-Index (HHI) sums squared surgeon shares on a 0–10,000 scale and is more
-sensitive to the largest-volume surgeons. Both measures were calculated
-from aggregate provider totals and separately for each calendar year.
+The primary outcome was the annual number of CPT 57288 services per
+provider (Tot\_Srvcs, reported services). We measured surgeon-level
+concentration with two complementary metrics. The Gini coefficient
+summarizes inequality across the full surgeon-volume distribution. The
+Herfindahl–Hirschman Index (HHI) sums squared surgeon shares on a
+0–10,000 scale and is more sensitive to the largest-volume surgeons.
+Both measures were calculated from aggregate provider totals and
+separately for each calendar year.
 
 The physician was the operative production unit in these calculations.
 Thus, HHI describes surgeon-level procedural concentration rather than
 hospital or health-system market competition and should not be
 interpreted using FTC/DOJ antitrust thresholds.
 
-Because each physician contributed as many as ten annual observations,
-physician-year records were correlated. We modeled annual procedure
-count with a Poisson generalized estimating equation clustered by NPI,
-using an exchangeable working correlation and robust standard errors.
-Fixed effects included specialty (URPS reference), calendar year,
-specialty-by-year interaction, and a 2020 COVID indicator. We report
-adjusted rate ratios with 95% CIs. A negative-binomial mixed model with
-a random intercept for NPI produced concordant estimates.
+Because each physician contributed as many as eleven annual
+observations, physician-year records were correlated. We modeled annual
+procedure count with a Poisson generalized estimating equation clustered
+by NPI, using an exchangeable working correlation and robust standard
+errors. Fixed effects included specialty (URPS reference), calendar
+year, specialty-by-year interaction, and a 2020 COVID indicator. We
+report adjusted rate ratios with 95% CIs. A negative-binomial mixed
+model with a random intercept for NPI produced concordant estimates.
 
 As a secondary analysis with one independent observation per physician,
 we compared each physician’s median annual volume across specialties
@@ -360,9 +353,9 @@ reserved for a separate access-focused analysis.
 ## Discussion
 
 This national Medicare analysis produced three main findings. First,
-URPS physicians performed most midurethral sling procedures (60.8%) and
-had the highest adjusted per-physician volume. Second, the gynecologic
-share increased over the decade as URPS surgeons entered the observable
+URPS physicians performed most sling operations for SUI (60.8%) and had
+the highest adjusted per-physician volume. Second, the gynecologic share
+increased over the decade as URPS surgeons entered the observable
 workforce and non-URPS surgeons left. Third, surgeon-level concentration
 remained low and stable despite a shrinking surgeon pool. Together,
 these findings indicate a change in workforce composition rather than
@@ -480,13 +473,14 @@ analytic pipeline.
 
 ## Conclusions
 
-In this national Medicare cohort, URPS physicians performed most
-midurethral slings, had the highest adjusted per-physician volume, and
-had the most even within-group volume distribution. The growing
-gynecologic share reflected attrition among non-URPS providers rather
-than increasing surgeon-level concentration. These workforce shifts
-should inform training requirements, credentialing standards, and access
-planning for pelvic floor surgical care.
+In this national fee-for-service Medicare cohort, URPS physicians
+performed most sling operations for SUI, had the highest adjusted
+per-physician volume, and had the most even within-group volume
+distribution. The growing gynecologic share reflected attrition among
+non-URPS providers rather than increasing surgeon-level concentration.
+These workforce shifts should inform training requirements,
+credentialing standards, and access planning for pelvic floor surgical
+care.
 
 ## References
 
@@ -965,20 +959,21 @@ MIGS, 8.
 src="/Users/tylermuffly/sling-volume-patterns/output/figures/figure_1_market_share.png"
 style="width:6.5in" />
 
-**Figure 1.** Market share of midurethral sling procedures (CPT 57288)
-by specialty, Medicare PUF 2013–2023. The URPS share increased under
-every classification scheme. Fixed membership (URPS share 53.4% to
-63.8%; +0.90 percentage points/year) and certification-gated
-classification (URPS share 42.2% to 62.8%; +1.52 percentage points/year)
-bracket the rate of increase and converge by 2023.
+**Figure 1.** Market share of sling operations for stress urinary
+incontinence (CPT 57288) by specialty, fee-for-service Medicare PUF
+2013–2023. The URPS share increased under every classification scheme.
+Fixed membership (URPS share 53.4% to 63.8%; +0.90 percentage
+points/year) and certification-gated classification (URPS share 42.2% to
+62.8%; +1.52 percentage points/year) bracket the rate of increase and
+converge by 2023.
 
 <img
 src="/Users/tylermuffly/sling-volume-patterns/output/figures/figure_2_volume_distribution.png"
 style="width:6.5in" />
 
-**Figure 2.** Annual midurethral sling volume by specialty (violin and
-box plots; logarithmic scale). The minimum observable volume is 11
-because of CMS cell suppression.
+**Figure 2.** Annual sling service volume (CPT 57288) by specialty
+(violin and box plots; logarithmic scale). The minimum observable volume
+is 11 because of CMS cell suppression.
 
 <img
 src="/Users/tylermuffly/sling-volume-patterns/output/figures/figure_3_lorenz_curve.png"
