@@ -50,16 +50,20 @@ it rose more steeply, from 42.2% to 62.8% (+1.52 percentage
 points/year), because pre-certification physicians count as generalists,
 and the two estimates converged by 2023. Newly observable surgeons
 performed 7.4%–22.5% of annual volume at a median of approximately 13
-cases; URPS contributed the most entrants (480), while urology showed
-substantial turnover (421 entrants despite a declining share).
+services; URPS accounted for the most newly observable episodes (480),
+while urology showed substantial threshold-crossing turnover (421)
+despite a declining share.
 
 **Conclusions:** URPS physicians perform most sling operations for
 stress urinary incontinence in fee-for-service Medicare and have the
 highest adjusted per-physician volume; within-year surgeon-level
 concentration was low and stable and did not differ meaningfully across
-specialties. The rising URPS share reflects attrition among non-URPS
-providers rather than increasing surgeon-level concentration, with
-implications for credentialing and workforce planning.
+specialties. The rising URPS share reflects declining observable
+participation by non-URPS providers rather than increasing surgeon-level
+concentration. These findings describe the observable fee-for-service
+workforce and may inform workforce surveillance and fellowship planning;
+outcome and access studies are needed before drawing credentialing
+implications.
 
 ------------------------------------------------------------------------
 
@@ -261,14 +265,20 @@ share (URPS, urology, General OB/GYN) are reported as a descriptive
 sensitivity. MIGS was described without formal emphasis because only 10
 physicians were identified.
 
-To describe workforce turnover, we used a two-year washout. A surgeon
-was classified as an entrant when observable in a given year but absent
-in both prior observable years; as continuing when observable and not an
-entrant; and as apparently exiting when absent in both subsequent
-observable years. We calculated entrant share of annual volume, median
-entrant volume, and entrants by specialty. Because CMS suppression
-removes providers below 11 beneficiaries, we use the term newly
-observable rather than definitively new sling surgeon.
+To describe observable participation transitions, we used a two-year
+washout. A surgeon was counted as newly observable in a given year when
+present but absent in both prior observable years; as continuing when
+present and not newly observable; and as no longer observable when
+absent in both subsequent observable years. We tabulated the share of
+annual volume performed by newly observable surgeons, their median
+volume, and their distribution by specialty. Because CMS suppression
+removes providers below 11 beneficiaries, these transitions describe
+when a surgeon crosses the reporting threshold, not genuine entry into
+or exit from practice; a surgeon may become unobservable and later
+reappear. Counts of newly observable surgeons by specialty are episode
+counts (a physician observed as newly observable in more than one year,
+after an intervening gap, contributes more than once), not counts of
+unique physicians.
 
 In a secondary geographic analysis, we tabulated observable surgeons and
 URPS share by practice state and identified states with no observable
@@ -398,40 +408,37 @@ specialty-wide estimates.
 
 ### Workforce Entry and Exit
 
-Using the two-year washout (Table 5), 48–168 surgeons were newly
-observable each year and performed 7.4%–22.5% of annual volume. Their
-median annual volume was low, at approximately 13 procedures, consistent
-with surgeons appearing just above the CMS suppression threshold. Entry
-fell to 48 surgeons and 7.4% of volume in 2020, then rebounded to 168
-surgeons and 22.5% of volume in 2022. Continuing surgeons (381–584 per
-year) performed most annual procedures, while apparent exits ranged from
-66 to 230 per year.
+Using the two-year washout (Supplementary Table S10), 48–168 surgeons
+became newly observable each year and performed 7.4%–22.5% of annual
+volume. Their median volume was low, at approximately 13 services,
+consistent with surgeons appearing just above the CMS suppression
+threshold. Newly observable counts fell to 48 surgeons (7.4% of volume)
+in 2020, then rebounded to 168 (22.5%) in 2022; the 2022 rebound may
+partly reflect re-observation of surgeons who fell below the threshold
+during the pandemic rather than genuinely new surgeons. Continuing
+surgeons (381–584 per year) performed most annual services, while
+surgeons no longer observable ranged from 66 to 230 per year.
 
-Across the study period, URPS contributed the most entrants (480),
-followed by urology (421), General OB/GYN (205), and MIGS (8). The
-rising URPS share reflected the largest inflow of newly observable
+Across the study period, URPS accounted for the most newly observable
+episodes (480), followed by urology (421), General OB/GYN (205), and
+MIGS (8); these are episode counts, not unique physicians. The rising
+URPS share coincided with the largest inflow of newly observable
 surgeons together with a relatively stable continuing-URPS base (URPS
 surgeon count 385 to 338; per-physician volume unchanged). Urology
-showed substantial turnover but net attrition, and General OB/GYN lost
-both surgeons and market share.
+showed substantial turnover with net decline, and General OB/GYN
+declined in both observable surgeons and market share.
 
 Because total service counts declined, the growth in URPS share
 represents a redistribution of a shrinking service pool toward URPS, not
-new procedure growth. All turnover counts describe newly observable
-rather than definitively new surgeons because low-volume providers are
-suppressed.
+new procedure growth. These transitions describe crossings of the CMS
+reporting threshold, not definitive entry into or exit from practice.
 
-### Geographic Distribution (Secondary)
-
-Practice locations spanned 52 states and territories. The URPS share of
-observable sling surgeons varied from 100% in Hawaii and 82%–85% in
-Minnesota, the District of Columbia, and Connecticut to 15% in Nebraska.
-Alaska, North Dakota, Puerto Rico, and Wyoming had no observable URPS
-surgeon performing at least 11 Medicare slings in any study year.
-Because of CMS suppression, this finding indicates no observable
-higher-volume URPS surgeon, not necessarily no URPS physician.
-Population-based rates and formal geographic inequality measures were
-reserved for a separate access-focused analysis.
+Observable surgeons and the URPS share by practice state are reported as
+an exploratory secondary analysis in Supplementary Table S7. Because
+state-by-sex fee-for-service denominators were not available and CMS
+suppression removes low-volume providers, we do not draw access
+conclusions from these counts; population-based geographic analysis is
+reserved for a separate access-focused study.
 
 ## Discussion
 
@@ -497,10 +504,13 @@ revision and repeat incontinence procedures.<sup>17</sup> Brennand and
 Quan observed lower revision odds above approximately 50 cases per
 year,<sup>18</sup> and Holdø and Svenningsen found better objective cure
 rates with greater surgeon experience and annual volume.<sup>19</sup>
-The observed Medicare medians of 15–19 procedures per year fall below
-these thresholds. However, the PUF omits commercially insured, Medicare
-Advantage, and younger patients, so total practice volume is higher. In
-addition, providers below the CMS suppression threshold are absent.
+The observed fee-for-service Medicare medians of 15–19 services per year
+cannot be compared directly with all-payer thresholds such as
+approximately 50 operations per year, because the PUF omits commercially
+insured, Medicare Advantage, and younger patients and providers below
+the CMS suppression threshold; total surgeon experience is therefore
+higher than the observed Medicare median, and Medicare PUF volume is an
+incomplete proxy for it.
 
 ### Temporal Trends, Workforce Dynamics, and the Evolving SUI Landscape
 
@@ -569,14 +579,19 @@ analytic pipeline.
 
 ## Conclusions
 
-In this national fee-for-service Medicare cohort, URPS physicians
-performed most sling operations for SUI and had the highest adjusted
-per-physician volume. Within-year surgeon-level concentration was low
-and stable and did not differ meaningfully across the well-populated
-specialties. The growing URPS share reflected attrition among non-URPS
-providers rather than increasing surgeon-level concentration. These
-workforce shifts should inform training requirements, credentialing
-standards, and access planning for pelvic floor surgical care.
+Among observable fee-for-service Medicare claims, the proportion of
+sling services for stress urinary incontinence performed by all-pathway
+URPS physicians increased between 2013 and 2023, while observable
+participation by non-URPS physicians declined. Within-year surgeon-level
+concentration remained low and stable and did not differ meaningfully
+across the well-populated specialties. Because the data exclude
+low-volume physician-years and Medicare Advantage claims and do not
+distinguish synthetic midurethral from fascial sling procedures, these
+findings describe changes in the observable fee-for-service workforce
+rather than the entire national sling market. They may inform workforce
+surveillance and fellowship planning; studies linking all-payer volume,
+geographic access, and patient outcomes are needed before drawing
+credentialing implications.
 
 ## References
 
@@ -947,139 +962,6 @@ OB/GYN)</td>
 </tr>
 </tbody>
 </table>
-
-**Table 5.** Annual sling workforce dynamics using a two-year washout.
-Entrants were absent in both prior observable years; apparent exits were
-absent in both subsequent observable years. Entrant and continuing
-counts are undefined for the first two years, and exit counts are
-undefined for the last two years.
-
-<table style="width:100%;">
-<colgroup>
-<col style="width: 6%" />
-<col style="width: 12%" />
-<col style="width: 10%" />
-<col style="width: 12%" />
-<col style="width: 9%" />
-<col style="width: 23%" />
-<col style="width: 24%" />
-</colgroup>
-<thead>
-<tr>
-<th>Year</th>
-<th>Observable</th>
-<th>Entrants</th>
-<th>Continuing</th>
-<th>Exiting</th>
-<th>% volume by entrants</th>
-<th>Median entrant volume</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>2013</td>
-<td>812</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>214</td>
-<td>n/a</td>
-<td>n/a</td>
-</tr>
-<tr>
-<td>2014</td>
-<td>685</td>
-<td>n/a</td>
-<td>n/a</td>
-<td>164</td>
-<td>n/a</td>
-<td>n/a</td>
-</tr>
-<tr>
-<td>2015</td>
-<td>655</td>
-<td>127</td>
-<td>528</td>
-<td>129</td>
-<td>14.2%</td>
-<td>13</td>
-</tr>
-<tr>
-<td>2016</td>
-<td>701</td>
-<td>158</td>
-<td>543</td>
-<td>126</td>
-<td>15.3%</td>
-<td>13</td>
-</tr>
-<tr>
-<td>2017</td>
-<td>735</td>
-<td>151</td>
-<td>584</td>
-<td>204</td>
-<td>13.9%</td>
-<td>14</td>
-</tr>
-<tr>
-<td>2018</td>
-<td>672</td>
-<td>134</td>
-<td>538</td>
-<td>154</td>
-<td>13.7%</td>
-<td>14</td>
-</tr>
-<tr>
-<td>2019</td>
-<td>650</td>
-<td>125</td>
-<td>525</td>
-<td>230</td>
-<td>12.7%</td>
-<td>13</td>
-</tr>
-<tr>
-<td>2020</td>
-<td>445</td>
-<td>48</td>
-<td>397</td>
-<td>66</td>
-<td>7.4%</td>
-<td>13</td>
-</tr>
-<tr>
-<td>2021</td>
-<td>458</td>
-<td>77</td>
-<td>381</td>
-<td>81</td>
-<td>12.1%</td>
-<td>13</td>
-</tr>
-<tr>
-<td>2022</td>
-<td>562</td>
-<td>168</td>
-<td>394</td>
-<td>n/a</td>
-<td>22.5%</td>
-<td>14</td>
-</tr>
-<tr>
-<td>2023</td>
-<td>562</td>
-<td>126</td>
-<td>436</td>
-<td>n/a</td>
-<td>15.7%</td>
-<td>13</td>
-</tr>
-</tbody>
-</table>
-
-Entrants by specialty: URPS, 480; urology, 421; General OB/GYN, 205;
-MIGS, 8.
 
 ------------------------------------------------------------------------
 
@@ -3084,3 +2966,138 @@ tail.
 </tr>
 </tbody>
 </table>
+
+**Supplementary Table S10.** Annual observable participation transitions
+using a two-year washout. Newly observable surgeons were absent in both
+prior observable years; surgeons no longer observable were absent in
+both subsequent observable years. Newly observable and continuing counts
+are undefined for the first two years, and no-longer-observable counts
+are undefined for the last two years. These describe threshold
+crossings, not definitive entry into or exit from practice.
+
+<table style="width:100%;">
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 12%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+<col style="width: 9%" />
+<col style="width: 23%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr>
+<th>Year</th>
+<th>Observable</th>
+<th>Entrants</th>
+<th>Continuing</th>
+<th>Exiting</th>
+<th>% volume by entrants</th>
+<th>Median entrant volume</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2013</td>
+<td>812</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>214</td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>2014</td>
+<td>685</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>164</td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>2015</td>
+<td>655</td>
+<td>127</td>
+<td>528</td>
+<td>129</td>
+<td>14.2%</td>
+<td>13</td>
+</tr>
+<tr>
+<td>2016</td>
+<td>701</td>
+<td>158</td>
+<td>543</td>
+<td>126</td>
+<td>15.3%</td>
+<td>13</td>
+</tr>
+<tr>
+<td>2017</td>
+<td>735</td>
+<td>151</td>
+<td>584</td>
+<td>204</td>
+<td>13.9%</td>
+<td>14</td>
+</tr>
+<tr>
+<td>2018</td>
+<td>672</td>
+<td>134</td>
+<td>538</td>
+<td>154</td>
+<td>13.7%</td>
+<td>14</td>
+</tr>
+<tr>
+<td>2019</td>
+<td>650</td>
+<td>125</td>
+<td>525</td>
+<td>230</td>
+<td>12.7%</td>
+<td>13</td>
+</tr>
+<tr>
+<td>2020</td>
+<td>445</td>
+<td>48</td>
+<td>397</td>
+<td>66</td>
+<td>7.4%</td>
+<td>13</td>
+</tr>
+<tr>
+<td>2021</td>
+<td>458</td>
+<td>77</td>
+<td>381</td>
+<td>81</td>
+<td>12.1%</td>
+<td>13</td>
+</tr>
+<tr>
+<td>2022</td>
+<td>562</td>
+<td>168</td>
+<td>394</td>
+<td>n/a</td>
+<td>22.5%</td>
+<td>14</td>
+</tr>
+<tr>
+<td>2023</td>
+<td>562</td>
+<td>126</td>
+<td>436</td>
+<td>n/a</td>
+<td>15.7%</td>
+<td>13</td>
+</tr>
+</tbody>
+</table>
+
+Newly observable episodes by specialty: URPS, 480; urology, 421; General
+OB/GYN, 205; MIGS, 8.
