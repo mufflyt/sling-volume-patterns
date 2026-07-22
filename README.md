@@ -1,6 +1,6 @@
-# Midurethral Sling Volume Patterns in Medicare
+# Sling Surgery for Stress Urinary Incontinence in Fee-for-Service Medicare
 
-**Specialty Distribution, Procedural Concentration, and Time Trends for CPT 57288 (Midurethral Sling) Among Medicare Beneficiaries, 2013–2023**
+**Specialty Distribution and Surgeon-Level Concentration of Sling Surgery for Stress Urinary Incontinence in Fee-for-Service Medicare, 2013–2023** (CPT 57288)
 
 Authors: Tyler Muffly, MD
 
@@ -11,17 +11,21 @@ Status: Submitted April 2026
 
 ## Abstract
 
-**OBJECTIVE**
-To characterize the specialty distribution, annual procedure volumes, and procedural concentration among physicians performing midurethral sling procedures (CPT 57288) in Medicare beneficiaries.
+The authoritative, reproducible manuscript (with the current abstract, tables,
+figures, and supplementary material) is **`output/manuscript.docx`**, knitted
+from `output/manuscript.Rmd`. Every number there is computed from the frozen
+cache by `compute_manuscript_values()`, so it never drifts. To avoid maintaining
+a second copy that can go stale, the abstract is not duplicated here.
 
-**METHODS**
-We analyzed the CMS Medicare Physician and Other Practitioners Public Use File (all 11 years, 2013–2023). Providers billing CPT 57288 were classified as Urogynecology and Reconstructive Pelvic Surgery (URPS), Minimally Invasive Gynecologic Surgery (MIGS), General OB/GYN, or non-URPS urology using CMS provider type cross-referenced with the ABOG and ABU subspecialty registries (urology-pathway urogynecologists folded into a single combined URPS group). Surgeon-level procedural concentration was quantified with both the Gini coefficient and the Herfindahl-Hirschman Index (HHI), plus top-decile/quintile shares, each computed pooled and per year. Because physician-year rows recur, adjusted volume differences were estimated with a negative-binomial mixed model and a Poisson GEE clustered by NPI (Kruskal-Wallis/Wilcoxon reported descriptively). Specialty market-share trends were assessed by linear regression under fixed-membership and certification-gated (`sub1startdate`) classification. CMS suppresses counts of 1–10 services; providers below this threshold are absent from the data.
-
-**RESULTS**
-Across 2013 through 2023, 1,789 physicians performed 147,632 procedures across 6,937 physician-years. URPS was the largest group (767 physicians; 89,773 procedures, 60.8%; median 19/year [p25–p75, 14–28]), followed by non-URPS urology (689 physicians; 26.1%; median 16), General OB/GYN (336; 12.4%; median 15), and MIGS (10; 0.6%; median 16). Annual procedures declined from 16,399 in 2013 to 12,223 in 2023 (−490/year; p = 0.023), with a low of 9,228 in 2020 and partial recovery thereafter. Among the three well-populated groups, pooled concentration was modest and lowest for URPS (Gini 0.52, HHI 27; top 20% performed 53.9%); within-year concentration remained low and stable (annual Gini approximately 0.26–0.28; p for trend = 0.733). URPS share increased by 0.90 percentage points per year (p <0.001), whereas urology (−0.55; p = 0.002) and General OB/GYN (−0.41; p = 0.004) declined. Under fixed membership URPS rose from 53.4% to 63.8% (+0.90 percentage points/year); under certification-gated classification it rose more steeply, from 42.2% to 62.8% (+1.52 percentage points/year), and the two estimates converged by 2023.
-
-**CONCLUSIONS**
-In this national Medicare cohort, URPS physicians perform the greatest share of midurethral sling procedures in Medicare. Procedural concentration is highest among MIGS providers (Gini 0.59) and lowest among URPS (Gini 0.51), indicating that a minority of providers perform a disproportionate share of procedures. True concentration may be greater, as CMS suppresses claims from providers with fewer than 11 beneficiaries. The combined gynecologic share increased significantly over the study period, with potential workforce implications. These findings inform credentialing standards and workforce planning for pelvic floor surgical care.
+In brief: among physicians billing CPT 57288 (sling surgery for stress urinary
+incontinence) in fee-for-service Medicare, 2013-2023, all-pathway URPS
+physicians (identified through both the ABOG and ABU certification pathways)
+performed most operations and their share rose over the decade. Raw service
+counts fell, but after adjusting for the shrinking female Part B fee-for-service
+population the utilization rate declined only modestly and its trend was not
+statistically significant. Within-year surgeon-level concentration was low,
+stable, and similar across the well-populated specialties. Findings describe the
+observable fee-for-service workforce, not the entire national sling market.
 
 ---
 
