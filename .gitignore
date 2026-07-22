@@ -28,3 +28,6 @@ Thumbs.db
 
 # RDS artifacts (generated, not source)
 *.rds
+
+# Machine-specific symlink to the external-drive cache (see CLAUDE.md)
+/data/cache
