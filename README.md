@@ -94,6 +94,7 @@ All parameters are in `config.yml`. The pipeline runs 7 steps:
 6. **05_generate_abstract.R** — Programmatic abstract with all statistics computed from data
 7. **06_make_tables.R** — Publication tables (CSV + HTML), incl. Table 5 (annual concentration) and Table 6 (year trends)
 8. **07_make_figures.R** — Market share trend, volume distributions, Lorenz curves, plus Figure 4 (annual concentration) and Figure 5 (supply trends)
+9. **08_render_manuscript.R** — Render `output/manuscript.Rmd` to `output/manuscript.docx`. The Rmd computes every number inline from the cache via `compute_manuscript_values()`, so prose and analysis never drift
 
 ### Output files
 
@@ -118,7 +119,9 @@ All parameters are in `config.yml`. The pipeline runs 7 steps:
 | `output/tables/table_11_workforce_dynamics.csv` (+ `11b` by specialty) | Annual entrant/continuing/exiting surgeons (2-yr washout) |
 | `output/tables/table_12_specialty_share_trends.csv` | Per-specialty annual market-share trends |
 | `output/tables/table_13_geography_by_state.csv` | State-level observable surgeons & URPS share |
-| `output/manuscript.docx` | Manuscript rendered from `output/manuscript.md` (pandoc) |
+| `output/manuscript.Rmd` | **Reproducible manuscript source**: every number is delivered inline from the cache via `compute_manuscript_values()` (no hardcoded values) |
+| `output/manuscript.docx` | Manuscript rendered from `manuscript.Rmd` by pipeline step 08 |
+| `output/manuscript.md` | Static markdown copy of the manuscript (superseded by the Rmd; kept for reference) |
 
 ---
 
@@ -159,6 +162,8 @@ All parameters are in `config.yml`. The pipeline runs 7 steps:
 12. **Specialty-specific market-share trends:** each specialty's annual share is regressed on year separately (not only the combined gynecologic figure): URPS +0.90 pp/yr (p<0.001), urology −0.55 (p=0.004), General OB/GYN −0.42 (p=0.006), MIGS +0.07 descriptive (n=10). Total observable volume did not grow — the change is specialty ownership, not volume growth.
 
 13. **Geography (secondary, `scripts/workforce_and_geography.R`):** state-level observable-surgeon counts and URPS share by provider practice state, and the suppression-respecting question "which states have no observable URPS surgeon performing ≥11 Medicare slings in any year" (North Dakota, Alaska, Puerto Rico, Wyoming). Per-capita rates and maps are deliberately deferred — they need female Medicare fee-for-service denominators with Medicare Advantage adjustment, proposed as a separate access paper.
+
+14. **Reproducible manuscript with inline data (`output/manuscript.Rmd`, `R/compute_manuscript_values.R`):** the manuscript is knitted, not hand-typed. `compute_manuscript_values()` reads the frozen `puf_classified` cache and returns one list holding every scalar and every table (~120 values); the Rmd references them with inline `` `r v$...` `` expressions and renders the five tables with `knitr::kable`. Pipeline step 08 renders it to docx. Because the numbers come from the analysis rather than being typed in, the prose can never drift from the data (running `analyze_*()` differently updates the manuscript automatically). To render ad hoc: `Rscript -e 'rmarkdown::render("output/manuscript.Rmd", knit_root_dir=getwd())'` (set the `PUF_CLASSIFIED` env var to point at a cache elsewhere).
 
 ---
 
