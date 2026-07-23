@@ -15,6 +15,21 @@
 # Authors: Tyler Muffly, MD
 # =============================================================================
 
+#' Classification options, read once from config (single source of truth).
+#'
+#' Every analysis path (pipeline step 03, compute_manuscript_values(), and the
+#' supplementary-table scripts) calls this, so main and supplementary outputs
+#' cannot drift apart. Falls back to the documented defaults if config is absent.
+#' @return list(other_handling, split_urps_pathway)
+classification_opts <- function() {
+  oh <- tryCatch(config::get("other_handling"), error = function(e) NULL)
+  su <- tryCatch(config::get("split_urps_pathway"), error = function(e) NULL)
+  list(
+    other_handling     = if (is.null(oh)) "separate" else as.character(oh),
+    split_urps_pathway = if (is.null(su)) TRUE else isTRUE(su)
+  )
+}
+
 #' Read the female FFS enrollment denominator.
 #'
 #' @param path CSV with columns year, female_ffs_partB (and the two other

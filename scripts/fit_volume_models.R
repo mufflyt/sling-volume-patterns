@@ -21,14 +21,17 @@ puf_classified_path <- if (length(args) >= 1) args[[1]] else
   "/Volumes/MufflySamsung 1/sling-volume-patterns/data/cache/puf_classified.rds"
 year_col <- "puf_year"
 
+source("R/build_ffs_denominator.R")
+.copts <- classification_opts()
+.ref <- if (.copts$split_urps_pathway) "URPS (OB/GYN)" else "URPS"
 res <- analyze_midurethral_sling_patterns(
   medicare_puf_data    = readRDS(puf_classified_path),
   year_col             = year_col,
   abog_npi_csv         = "data/canonical_abog/canonical_abog_npi_LATEST.csv",
   urps_urology_npi_csv = "data/abu_urology/abu_urps_npi_LATEST.csv",
   exclude_years        = tryCatch(config::get("exclude_years"), error = function(e) NULL),
-  other_handling       = "separate",
-  split_urps_pathway   = TRUE,
+  other_handling       = .copts$other_handling,
+  split_urps_pathway   = .copts$split_urps_pathway,
   verbose              = FALSE
 )
 pv <- res$provider_volume
@@ -40,7 +43,7 @@ fmt <- function(tbl) tbl |>
   select(term, `RR (95% CI)`, p_value = p_formatted)
 
 # ── Primary: Poisson GEE, cluster = NPI ──────────────────────────────────────
-gee <- fit_volume_gee(pv, year_col = year_col, reference_specialty = "URPS (OB/GYN)")
+gee <- fit_volume_gee(pv, year_col = year_col, reference_specialty = .ref)
 if (!is.null(gee)) {
   readr::write_csv(fmt(gee$terms), "output/tables/table_8_volume_gee.csv")
   cat("=== Table 8: Poisson GEE (ref = URPS, cluster = NPI) ===\n")
@@ -49,13 +52,13 @@ if (!is.null(gee)) {
 
 # ── Sensitivity: exclude 2020 (COVID) ────────────────────────────────────────
 gee_no2020 <- fit_volume_gee(pv, year_col = year_col,
-                             reference_specialty = "URPS (OB/GYN)", exclude_2020 = TRUE)
+                             reference_specialty = .ref, exclude_2020 = TRUE)
 if (!is.null(gee_no2020)) {
   readr::write_csv(fmt(gee_no2020$terms), "output/tables/table_8b_volume_gee_no2020.csv")
 }
 
 # ── NB mixed model (glmmTMB) — runs where OpenMP/TMB is available ─────────────
-nb <- fit_volume_nb_mixed(pv, year_col = year_col, reference_specialty = "URPS (OB/GYN)")
+nb <- fit_volume_nb_mixed(pv, year_col = year_col, reference_specialty = .ref)
 if (!is.null(nb)) {
   readr::write_csv(fmt(nb$terms), "output/tables/table_8_volume_nb_mixed.csv")
   cat("\n=== NB mixed model (glmmTMB) ===\n")

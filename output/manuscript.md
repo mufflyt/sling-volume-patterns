@@ -1062,7 +1062,7 @@ significant.
 OB/GYN)</td>
 <td>16.5% → 13.9%</td>
 <td>-0.32</td>
-<td>&lt;0.001</td>
+<td>0.019</td>
 </tr>
 <tr>
 <td>Fixed membership: all-pathway URPS share</td>
@@ -1073,14 +1073,14 @@ OB/GYN)</td>
 <tr>
 <td>Modal: URPS share</td>
 <td>n/a</td>
-<td>0.00</td>
+<td>1.20</td>
 <td>&lt;0.001</td>
 </tr>
 <tr>
 <td>Ever-URPS/MIGS: URPS share</td>
 <td>n/a</td>
-<td>0.00</td>
-<td>0.001</td>
+<td>1.17</td>
+<td>&lt;0.001</td>
 </tr>
 <tr>
 <td><strong>Certification-gated: URPS share (time-varying)</strong></td>

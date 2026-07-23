@@ -102,6 +102,19 @@ default:
   # beneficiaries. See data/denominator/README.md for provenance.
   ffs_denominator_csv: "data/denominator/female_ffs_denominator.csv"
 
+  # ── Specialty-classification options (single source of truth) ──────────────
+  # Set these once here; every analysis path (pipeline step 03, the manuscript
+  # values function, and the supplementary-table scripts) reads them, so the
+  # main and supplementary outputs cannot drift apart.
+  #   other_handling: how to treat CPT 57288 billers that are neither OB/GYN nor
+  #     urology and not in ABOG ("separate" = drop organizations/facilities and
+  #     put remaining clinicians in an Other/uncertain group; "exclude"; or the
+  #     legacy "urology").
+  #   split_urps_pathway: TRUE splits URPS into OB/GYN-pathway (ABOG) and
+  #     urology-pathway (ABU) groups; FALSE keeps a single combined URPS group.
+  other_handling: "separate"
+  split_urps_pathway: yes
+
   # ── Data provenance (Pattern 4: data_raw/ README) ──────────────────────────
   # data_raw/ holds original CMS downloads; never modified after download.
   # data_raw_readme documents exact URLs, file hashes, and download dates.

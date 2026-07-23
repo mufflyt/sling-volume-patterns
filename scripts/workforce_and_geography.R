@@ -21,14 +21,16 @@ args <- commandArgs(trailingOnly = TRUE)
 puf_classified_path <- if (length(args) >= 1) args[[1]] else
   "/Volumes/MufflySamsung 1/sling-volume-patterns/data/cache/puf_classified.rds"
 year_col <- "puf_year"
+source("R/build_ffs_denominator.R")
+.copts <- classification_opts()
 pc  <- readRDS(puf_classified_path)
 res <- analyze_midurethral_sling_patterns(
   pc, year_col = year_col,
   abog_npi_csv = "data/canonical_abog/canonical_abog_npi_LATEST.csv",
   urps_urology_npi_csv = "data/abu_urology/abu_urps_npi_LATEST.csv",
   exclude_years = tryCatch(config::get("exclude_years"), error = function(e) NULL),
-  other_handling = "separate",
-  split_urps_pathway = TRUE,
+  other_handling = .copts$other_handling,
+  split_urps_pathway = .copts$split_urps_pathway,
   verbose = FALSE
 )
 pv <- res$provider_volume

@@ -45,15 +45,17 @@ compute_manuscript_values <- function(
   pc <- readRDS(puf_classified_path)
 
   # ── Analyses: full (all years) and analytic (config exclude_years; now none) ─
-  res_full <- analyze_midurethral_sling_patterns(
-    pc, year_col = year_col, abog_npi_csv = abog_csv,
-    urps_urology_npi_csv = abu_csv, split_urps_pathway = TRUE, verbose = FALSE
-  )
-  res <- analyze_midurethral_sling_patterns(
-    pc, year_col = year_col, abog_npi_csv = abog_csv,
-    urps_urology_npi_csv = abu_csv, exclude_years = exclude_years,
-    split_urps_pathway = TRUE, verbose = FALSE
-  )
+  # Classification options come from config (single source of truth), so the
+  # manuscript numbers and the pipeline cache use identical grouping (reviewer
+  # #3/#4: main and supplementary outputs cannot drift).
+  copts <- classification_opts()
+  run_analyze <- function(excl) analyze_midurethral_sling_patterns(
+    pc, year_col = year_col, abog_npi_csv = abog_csv, urps_urology_npi_csv = abu_csv,
+    exclude_years = excl, other_handling = copts$other_handling,
+    split_urps_pathway = copts$split_urps_pathway, verbose = FALSE)
+  res <- run_analyze(exclude_years)
+  # res_full (all years) equals res when no years are excluded; avoid re-running.
+  res_full <- if (length(exclude_years) == 0L) res else run_analyze(NULL)
   pv   <- res$provider_volume
   pvf  <- res_full$provider_volume
   tt   <- res$time_trends
@@ -433,6 +435,7 @@ compute_manuscript_values <- function(
   mgy <- stats::lm(gy$s ~ gy[[year_col]], gy)
   v$gyn_fixed_s13 <- round(gy$s[which.min(gy[[year_col]])],1); v$gyn_fixed_s23 <- round(gy$s[which.max(gy[[year_col]])],1)
   v$gyn_fixed_slope <- round(stats::coef(mgy)[2],2)
+  v$gyn_fixed_p <- fmt_p(summary(mgy)$coefficients[2,4]); v$fixed_urps_p <- fmt_p(fu$p)
   # cert-gated time-varying
   base <- analyze_midurethral_sling_patterns(pc, year_col = year_col, abog_npi_csv = NULL,
              urps_urology_npi_csv = NULL, exclude_years = exclude_years, verbose = FALSE)$provider_volume %>%
@@ -451,12 +454,20 @@ compute_manuscript_values <- function(
   cu <- share_trend(pvcg, is_urps); cgn <- share_trend(pvcg, is_gyn)
   v$ct_urps_s13 <- round(cu$s13,1); v$ct_urps_s23 <- round(cu$s23,1); v$ct_urps_slope <- round(cu$slope,2)
   v$ct_gyn_slope <- round(cgn$slope,2)
-  # modal + ever URPS slopes
+  v$ct_urps_p <- fmt_p(cu$p); v$ct_gyn_p <- fmt_p(cgn$p)
+  # modal + ever URPS slopes (with p-values from the same scheme regressions).
+  # The scheme functions define URPS as the single "URPS" group, so collapse the
+  # two pathways first (the scheme sensitivity is about combined URPS).
+  pv_comb <- pv %>% dplyr::mutate(
+    specialty_group = ifelse(grepl("^URPS", specialty_group), "URPS", specialty_group))
   su_slope <- function(scheme) {
-    st <- summarise_scheme(assign_specialty_scheme(pv, scheme), year_col, scheme)$trends
-    round(st$urps_slope_pp_yr, 2)
+    st <- summarise_scheme(assign_specialty_scheme(pv_comb, scheme), year_col, scheme)$trends
+    list(slope = round(st$urps_slope_pp_yr, 2), p = fmt_p(st$urps_p))
   }
-  v$modal_urps_slope <- su_slope("modal"); v$ever_urps_slope <- su_slope("ever_urps_migs")
+  msl <- su_slope("modal"); esl <- su_slope("ever_urps_migs")
+  v$modal_urps_slope <- msl$slope; v$modal_urps_p <- msl$p
+  v$ever_urps_slope  <- esl$slope; v$ever_urps_p  <- esl$p
+  bold_p <- function(p) sprintf("**%s**", p)
   tab$t4 <- data.frame(
     Analysis = c("Fixed membership: OB/GYN-based share (ABOG-URPS + MIGS + Gen OB/GYN)",
                  "Fixed membership: all-pathway URPS share",
@@ -471,7 +482,8 @@ compute_manuscript_values <- function(
     `Slope (pp/year)` = c(sprintf("%.2f", v$gyn_fixed_slope), sprintf("%.2f", v$fixed_urps_slope),
                           sprintf("%.2f", v$modal_urps_slope), sprintf("%.2f", v$ever_urps_slope),
                           sprintf("**%.2f**", v$ct_urps_slope), sprintf("%.2f", v$ct_gyn_slope)),
-    `p-value` = c("<0.001","<0.001","<0.001","0.001","**<0.001**","<0.001"),
+    `p-value` = c(v$gyn_fixed_p, v$fixed_urps_p, v$modal_urps_p, v$ever_urps_p,
+                  bold_p(v$ct_urps_p), v$ct_gyn_p),
     check.names = FALSE)
 
   # ── Workforce (Table 5 + prose) ────────────────────────────────────────────

@@ -19,8 +19,10 @@
 source("R/artifact_manifest.R")
 source("R/analyze_sling_patterns.R")
 source("R/reporting_stats_helpers.R")
+source("R/build_ffs_denominator.R")   # classification_opts()
 
 cfg          <- config::get()
+.copts       <- classification_opts()  # single source of truth (config)
 phase_label  <- "03_primary_analysis"
 phase_script <- "R/03_run_primary_analysis.R"
 
@@ -50,8 +52,8 @@ results <- analyze_midurethral_sling_patterns(
   abog_npi_csv          = cfg$abog_npi_csv,
   urps_urology_npi_csv  = cfg$urps_urology_npi_csv,
   exclude_years         = cfg$exclude_years,
-  other_handling        = "separate",
-  split_urps_pathway    = TRUE
+  other_handling        = .copts$other_handling,
+  split_urps_pathway    = .copts$split_urps_pathway
 )
 validate_reporting_analysis_output(
   results,
