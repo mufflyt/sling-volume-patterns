@@ -94,238 +94,205 @@ standards.
 
 ## Introduction
 
-Sling surgery is a common operation for stress urinary incontinence
-(SUI) and remains a standard surgical treatment when conservative care
-fails.<sup>1,2</sup> These operations are reported under CPT 57288,
-whose descriptor is “sling operation for stress incontinence (eg, fascia
-or synthetic).” The code therefore captures autologous fascial and
-synthetic sling operations together and does not identify the sling
-material or distinguish retropubic, transobturator, single-incision, or
-pubovaginal technique. Despite the procedure’s widespread use, little is
-known about which specialties perform these operations in the Medicare
-population or how volume is distributed among surgeons.
+Sling surgery is a standard surgical treatment for stress urinary
+incontinence (SUI) when conservative treatment is
+insufficient.<sup>1,2</sup> CPT 57288 describes a “sling operation for
+stress incontinence (eg, fascia or synthetic).” The code therefore
+includes both autologous fascial and synthetic sling procedures and does
+not distinguish sling material or retropubic, transobturator,
+single-incision, and pubovaginal techniques. Despite the procedure’s
+widespread use, little is known about which specialties perform it in
+the Medicare population or how case volume is distributed among
+surgeons.
 
-These questions matter for surgical quality, training, and workforce
-planning. Across surgery, higher surgeon and hospital volume is
-generally associated with better outcomes.<sup>4,5</sup> Evidence for
-procedure-specific volume thresholds in sling surgery is more limited.
-The specialty mix has also changed during the past decade.
+These questions are relevant to surgical quality, training, and
+workforce planning. Across surgical fields, greater surgeon and hospital
+volume is generally associated with better outcomes,<sup>4,5</sup>
+although procedure-specific volume thresholds for sling surgery remain
+uncertain. Changes in the specialty mix may also affect training needs
+and patient access.
 
 Three developments make this analysis timely. First, Female Pelvic
-Medicine and Reconstructive Surgery, now named Urogynecology and
-Reconstructive Pelvic Surgery (URPS), has grown since receiving American
-Board of Medical Specialties recognition in 2013.<sup>6</sup>
-Certification is available through both obstetrics and gynecology (ABOG)
-and urology (ABU) pathways. Second, US Food and Drug Administration
-actions on urogynecologic mesh changed public perception of mesh and may
-have affected sling use.<sup>7</sup> The 2019 FDA order concerned
-transvaginal mesh for pelvic organ prolapse and did not remove synthetic
-midurethral slings for stress incontinence from the market; the two
-devices are frequently conflated in public discussion. Third, procedural
-concentration, the extent to which a relatively small group of
-clinicians performs a large share of procedures, has become relevant to
-quality improvement and resource allocation.<sup>8</sup>
+Medicine and Reconstructive Surgery, now Urogynecology and
+Reconstructive Pelvic Surgery (URPS), has expanded since receiving
+American Board of Medical Specialties recognition in 2013.<sup>6</sup>
+Certification is available through both the American Board of Obstetrics
+and Gynecology (ABOG) and the American Board of Urology (ABU). Second,
+US Food and Drug Administration actions involving urogynecologic mesh
+changed public perceptions and may have affected sling use.<sup>7</sup>
+The 2019 order concerned transvaginal mesh for pelvic organ prolapse; it
+did not remove synthetic midurethral slings for SUI from the market.
+Third, the distribution of procedures across clinicians has become
+increasingly relevant to quality improvement and resource
+planning.<sup>8</sup>
 
-We therefore characterized specialty distribution, annual surgeon
-volume, and surgeon-level concentration among physicians performing
-sling surgery for stress urinary incontinence in fee-for-service
-Medicare from 2013 through 2023. We also evaluated changes in each
-specialty’s share of reported services over time.
+We therefore examined specialty distribution, annual clinician volume,
+and surgeon-level concentration among clinicians reporting CPT 57288
+services in fee-for-service Medicare from 2013 through 2023. We also
+evaluated changes in each specialty’s share of observable services.
 
 ## Materials and Methods
 
 ### Study Design and Data Source
 
-We conducted a repeated cross-sectional analysis of the Centers for
-Medicare & Medicaid Services (CMS) Medicare Physician and Other
-Practitioners Public Use File (PUF) from 2013 through 2023. The PUF
-contains all fee-for-service Medicare Part B claims aggregated to the
-provider-service level. Each row represents a unique combination of
-National Provider Identifier (NPI), Healthcare Common Procedure Coding
-System code, place of service, and calendar year. Because the dataset is
-publicly available and contains no protected health information,
-institutional review board approval was not required.
+We conducted a repeated cross-sectional analysis of the CMS Medicare
+Physician and Other Practitioners Public Use File (PUF) from 2013
+through 2023. The PUF contains publicly reportable fee-for-service
+Medicare Part B claims aggregated to the provider-service level. Each
+row represents a unique combination of National Provider Identifier
+(NPI), Healthcare Common Procedure Coding System code, place of service,
+and calendar year. Because the data are public and contain no protected
+health information, institutional review board approval was not
+required.
 
-All 11 annual PUF releases (2013 through 2023) were verified against the
-CMS file specifications for completeness before analysis.
+Before analysis, we verified all 11 annual PUF releases against the CMS
+file specifications and confirmed that each expected year was complete.
 
 ### Specialty Classification
 
-Providers were assigned to four mutually exclusive groups: URPS, MIGS,
-General OB/GYN, or non-URPS urology. We first used the annual CMS
-provider type (Rndrng\_Prvdr\_Type), which may vary by year, to identify
-OB/GYN, urology, or another specialty. Among OB/GYN physicians, the ABOG
-subspecialty registry (a snapshot of ABOG-certified diplomates linked to
-NPIs primarily by exact NPI match and, when needed, by full name and
-practice state) identified “Female Pelvic Medicine and Reconstructive
-Surgery” as URPS and “MIG” as MIGS; all other OB/GYN physicians were
-classified as General OB/GYN. This yielded 1666-cohort assignments of
-URPS, MIGS, and General OB/GYN through the OB/GYN pathway.
+Individual clinicians were assigned to six mutually exclusive groups:
+URPS through the OB/GYN pathway, URPS through the urology pathway,
+Minimally Invasive Gynecologic Surgery (MIGS), other non-URPS OB/GYN,
+non-URPS urology, or Other/uncertain. We first used the annual CMS
+rendering-provider type, which may vary by year, to identify OB/GYN,
+urology, and other clinicians. Among OB/GYN physicians, the ABOG
+registry identified diplomates certified in Female Pelvic Medicine and
+Reconstructive Surgery as URPS and those with a MIG designation as MIGS.
+Records were linked primarily by exact NPI and, when necessary, by full
+name and practice state. Remaining OB/GYN physicians were classified as
+other non-URPS OB/GYN.
 
-Billers of CPT 57288 who had neither an OB/GYN nor urology CMS provider
-type and were not in the ABOG registry (323 NPIs) were predominantly
-facilities (ambulatory surgical centers) and non-physician clinicians
-(physician assistants, nurse practitioners), not urologists; none
-matched the ABU roster. We therefore did not assign them to urology.
-Organizational NPIs (NPPES entity type 2, flagged in the Public Use File
-by a rendering-provider entity code of “O”: ambulatory surgical centers,
-hospitals, laboratories, and groups; 123 NPIs) were excluded because
-they identify a billing organization rather than an individual clinician
-and cannot be given a physician specialty. The remaining 200 individual
-non-physician or unclassifiable clinicians were placed in a distinct
-“Other/uncertain” group (8.2% of observable services). The full
-classification flow, with counts at each step, is shown in Figure 3. We
-report the specialty distribution under three handlings of these
-billers, as a sensitivity analysis (Supplementary Table S11): the
-primary “Other/uncertain” grouping, exclusion, and the legacy assignment
-to urology; the latter inflates the apparent non-URPS urology share
-roughly two-fold and is not used. A further small number of
-provider-year records from ABOG-registered NPIs with a miscellaneous CMS
-type remained “Other” and were excluded.
+Among 323 NPIs with neither an OB/GYN nor urology CMS provider type and
+no ABOG match, most represented organizations or nonphysician clinicians
+rather than urologists, and none matched the ABU roster. We excluded 123
+organizational NPIs (NPPES entity type 2, flagged by a
+rendering-provider entity code of “O”) because they represented billing
+entities, such as ambulatory surgery centers, hospitals, laboratories,
+or groups, rather than individual clinicians. The remaining 200
+individual nonphysician or unclassifiable clinicians formed the
+Other/uncertain group and accounted for 8.2% of observable services.
+Figure 3 shows the full classification flow. Supplementary Table S11
+compares the primary approach with exclusion of these clinicians and
+with the legacy approach of assigning them to urology; the legacy
+approach approximately doubled the apparent non-URPS urology share.
 
-We then cross-referenced the American Board of Urology roster (355
-urology-pathway urogynecologist NPIs) to identify urology-pathway
-urogynecologists; 151 cohort physicians matched. These physicians were
-combined with ABOG-certified urogynecologists into a single all-pathway
-URPS group; all remaining urologists were classified as non-URPS
-urology. Without this step, fellowship-trained urology-pathway
-urogynecologists would appear only as “Urology” in the PUF. Because an
-all-pathway URPS group includes urology-trained subspecialists who are
-not gynecologists, we report the all-pathway URPS share separately from
-the OB/GYN-based share (URPS plus MIGS plus General OB/GYN, restricted
-to the OB/GYN training pathway), rather than a single “gynecologic”
-share.
+We then cross-referenced the ABU roster of 355 urology-pathway
+urogynecologists. Of these, 151 appeared in the analytic cohort and were
+classified as urology-pathway URPS; all remaining urology physicians
+were classified as non-URPS urology. Without this linkage,
+fellowship-trained urology-pathway urogynecologists would appear as
+general urologists in the PUF. We therefore report all-pathway URPS
+separately from the OB/GYN-based share, because all-pathway URPS
+includes urology-trained subspecialists who are not gynecologists.
 
-Specialty assignment could affect the estimated market-share trend
-because 45% of URPS physicians in the cohort were certified after 2013.
-We therefore examined two plausible classification scenarios that make
-opposite assumptions about pre-certification practice years.
-Fixed-membership classification assigns each physician’s eventual
-subspecialty to every study year; because it counts physicians as URPS
-before certification, it tends to produce a shallower estimated slope.
+Because 45% of URPS physicians in the cohort were certified after 2013,
+the treatment of pre-certification years could affect the estimated
+market-share trend. We therefore used two plausible scenarios with
+opposing assumptions. Fixed membership assigned each physician’s
+eventual subspecialty to every study year and therefore tended to
+produce a shallower slope by counting physicians as URPS before
+certification.
 
-Time-varying, certification-gated classification counts a physician as
-URPS or MIGS only beginning in the ABOG subspecialty certification year
-(sub1startdate, 2013–2024, distinct from the initial OB/GYN board date).
-Earlier years are classified by that year’s CMS provider type. Because
-certification generally follows the start of subspecialty practice (the
-2013 examination certified physicians already practicing urogynecology,
-and later diplomates also practiced before certification), this scenario
-removes some genuine pre-certification practice from the early URPS
-count and tends to produce a steeper estimated slope. We present these
-as plausible scenarios rather than formal statistical bounds, because
-neither assumption is guaranteed to bracket the true trend.
+Certification-gated classification assigned URPS or MIGS status only
+beginning in the ABOG subspecialty certification year (sub1startdate,
+distinct from the initial OB/GYN board date). Earlier years were
+classified using the annual CMS provider type. Because certification
+generally follows the start of subspecialty practice, this scenario may
+misclassify genuine pre-certification subspecialty practice and
+therefore tends to produce a steeper slope. We treat the two approaches
+as plausible scenarios rather than formal bounds.
 
 Modal and ever-URPS/MIGS classifications were additional sensitivity
-analyses. Urology-pathway URPS classification remained fixed because no
-urology subspecialty certification date was available. For the
-whole-period distribution, concentration, and volume analyses (Tables
-1–3), each physician was assigned to the eventual combined subspecialty.
+analyses. Urology-pathway URPS status remained fixed because the ABU
+roster did not include a subspecialty certification date. For pooled
+distribution, concentration, and volume analyses (Tables 1–3), each
+physician was assigned to the eventual combined specialty group.
 
 ### CMS Data Suppression
 
-CMS suppresses provider-service data when a provider treats fewer than
-11 Medicare beneficiaries for a given code in a calendar year. Every
-observable provider in this study therefore treated at least 11 Medicare
-beneficiaries for CPT 57288 that year. Providers below the threshold are
-not observed, so the true number of low-volume surgeons is unknown.
-Suppression removes the lowest-volume physician-years and can bias the
-Gini coefficient and HHI in different directions, so the full-market
-concentration cannot be identified from the Public Use File. We
-therefore report bootstrap confidence intervals for the Gini coefficient
-and a sensitivity analysis that adds hypothetical suppressed low-volume
-providers before recomputing concentration.
+CMS suppresses provider-service records when a clinician treats fewer
+than 11 Medicare beneficiaries for a given code in a calendar year.
+Every observable physician-year in this study therefore represents at
+least 11 beneficiaries with CPT 57288. Clinicians below that threshold
+are not visible, so the number and volume of low-volume surgeons cannot
+be recovered from the PUF. Because suppression may affect the Gini
+coefficient and HHI differently, full-market concentration is not
+identified. We therefore report bootstrap confidence intervals and a
+sensitivity analysis that adds hypothetical suppressed low-volume
+providers before recalculating concentration.
 
 ### Outcome Measures and Statistical Analysis
 
-The primary surgeon-level outcome was the annual number of CPT 57288
-services per provider (Tot\_Srvcs, reported services). To describe
-population utilization over time, we also computed the annual rate of
-CPT 57288 services per 100,000 female Part B fee-for-service Medicare
-beneficiaries, using the CMS Program Statistics Original Medicare
-Enrollment counts (table MDCR ENROLL AB 11, Sex = Female, Part B) as the
-denominator; absolute service counts are reported as a secondary
-measure. Because the Public Use File records no beneficiary age for the
-numerator, the rate is crude and is not age-standardized. We measured
-surgeon-level concentration with complementary metrics. The Gini
-coefficient summarizes inequality across the full surgeon-volume
-distribution, and we bootstrapped its 95% confidence interval by
-resampling providers. The Herfindahl–Hirschman Index (HHI) sums squared
-surgeon shares on a 0–10,000 scale and is more sensitive to the
-largest-volume surgeons. Because the minimum attainable HHI depends on
-the number of providers, we do not compare raw HHI directly across
-groups of very different size (URPS 616, General OB/GYN 336, MIGS 10
-physicians); we also report the size-adjusted normalized HHI and the
-effective number of providers (1 divided by the sum of squared shares).
-Within-year concentration, computed separately for each calendar year,
-was the primary concentration measure; pooled multi-year values are
-secondary because they mix annual volume with how many years each
-physician remained observable.
+The primary clinician-level outcome was annual reported CPT 57288
+services per provider (Tot\_Srvcs). To describe utilization, we
+calculated observable services per 100,000 female Part B fee-for-service
+beneficiaries using CMS Program Statistics Original Medicare enrollment
+counts (table MDCR ENROLL AB 11, Sex = Female, Part B). We modeled
+annual service counts with log female fee-for-service enrollment as an
+offset and included a 2020 indicator. Because the PUF does not report
+beneficiary age for the numerator, this rate is crude and not age
+standardized.
 
-The physician was the operative production unit in these calculations.
-Thus, HHI describes surgeon-level procedural concentration rather than
-hospital or health-system market competition and should not be
-interpreted using FTC/DOJ antitrust thresholds.
+We assessed surgeon-level concentration with complementary measures. The
+Gini coefficient summarizes inequality across the surgeon-volume
+distribution, and its 95% confidence interval was estimated by
+bootstrapping providers. The Herfindahl–Hirschman Index (HHI) is more
+sensitive to the largest-volume surgeons, but its minimum depends on the
+number of providers. We therefore report raw HHI descriptively and also
+present normalized HHI and the effective number of providers.
+Within-year concentration was primary; pooled multi-year measures were
+secondary because they also reflect the number of years each physician
+remained observable. The physician, rather than the hospital or health
+system, was the production unit, so these measures should not be
+interpreted using antitrust thresholds.
 
-Because each physician contributed as many as eleven annual
-observations, physician-year records were correlated. We modeled the
-annual count of reported services, conditional on the physician-year
-being observable (above the CMS suppression threshold), with a Poisson
-generalized estimating equation clustered by NPI, using an exchangeable
-working correlation and robust standard errors. Fixed effects were
-specialty (URPS reference), calendar year centered at 2018, a
-specialty-by-year interaction, and a 2020 COVID indicator. Centering at
-mid-study makes the specialty main effects the adjusted rate ratios at
-2018; because the interaction makes the year term specialty-specific, we
-report each specialty’s annual slope as a marginal linear contrast (the
-year term plus its interaction) rather than a single overall time
-effect. We report adjusted rate ratios with 95% CIs. A negative-binomial
-mixed model with a random intercept for NPI was fit as a sensitivity
-analysis, and its estimates are reported alongside the GEE. Additional
-sensitivity analyses excluded calendar year 2020 and restricted the
-cohort to physicians observable in at least two years.
+Because physicians could contribute up to 11 annual observations, we
+modeled annual reported services with a Poisson generalized estimating
+equation clustered by NPI, using an exchangeable working correlation and
+robust standard errors. The model was conditional on the physician-year
+being observable above the CMS threshold. Fixed effects included
+specialty (OB/GYN-pathway URPS reference), calendar year centered at
+2018, specialty-by-year interactions, and a 2020 indicator. Specialty
+main effects therefore represent adjusted rate ratios at 2018, and
+specialty-specific annual trends were reported as marginal contrasts. A
+negative-binomial mixed model with an NPI random intercept served as a
+sensitivity analysis. We also repeated the analysis after excluding 2020
+and after restricting the cohort to clinicians observable in at least
+two years.
 
 As a secondary analysis with one independent observation per physician,
 we compared each physician’s median annual volume across specialties
-using the Kruskal-Wallis test and Bonferroni-adjusted pairwise Wilcoxon
-tests.
+using the Kruskal-Wallis test followed by Bonferroni-adjusted pairwise
+Wilcoxon tests.
 
-To estimate the URPS market-share trend, we modeled URPS services as a
-proportion of all annual services with a quasibinomial generalized
-linear model on calendar year (centered at 2018), which respects the
-compositional structure that separate ordinary least-squares regressions
-on annual percentages ignore. We express the trend as an odds ratio per
-year and as the marginal percentage-point change per year. Separate
-ordinary least-squares regressions of each specialty’s annual percentage
-share (URPS, urology, General OB/GYN) are reported as a descriptive
-sensitivity. MIGS was described without formal emphasis because only 10
-physicians were identified.
+For the primary market-share analysis, we modeled OB/GYN-pathway URPS
+services as a proportion of all annual observable services using a
+quasibinomial generalized linear model with calendar year centered at
+2018. We report the annual odds ratio and the marginal change in
+percentage points per year. Separate ordinary least-squares regressions
+of annual specialty shares are presented descriptively. MIGS was not
+emphasized inferentially because only 10 physicians were identified.
 
-To describe observable participation transitions, we used a two-year
-washout. A surgeon was counted as newly observable in a given year when
-present but absent in both prior observable years; as continuing when
-present and not newly observable; and as no longer observable when
-absent in both subsequent observable years. We tabulated the share of
-annual volume performed by newly observable surgeons, their median
-volume, and their distribution by specialty. Because CMS suppression
-removes providers below 11 beneficiaries, these transitions describe
-when a surgeon crosses the reporting threshold, not genuine entry into
-or exit from practice; a surgeon may become unobservable and later
-reappear. Counts of newly observable surgeons by specialty are episode
-counts (a physician observed as newly observable in more than one year,
-after an intervening gap, contributes more than once), not counts of
-unique physicians.
+To describe changes in observable participation, we used a two-year
+washout. A surgeon was newly observable when present in a year but
+absent from both preceding observable years, continuing when present and
+not newly observable, and no longer observable when absent from both
+subsequent observable years. We summarized their annual service share,
+median volume, and specialty distribution. Because CMS suppression can
+move clinicians above or below the reporting threshold, these categories
+describe observation episodes rather than true entry into or exit from
+clinical practice. A physician could contribute more than one newly
+observable episode after an intervening gap.
 
-In a secondary geographic analysis, we tabulated observable surgeons and
-URPS share by practice state and identified states with no observable
-URPS surgeon performing at least 11 Medicare slings in any study year.
-We did not calculate state-level population-based rates because
+In a secondary geographic analysis, we summarized observable surgeons
+and URPS share by practice state and identified states with no
+observable URPS surgeon performing at least 11 Medicare slings in any
+study year. We did not calculate state-level population rates because
 state-by-sex fee-for-service enrollment denominators were outside the
-scope of this analysis; the national utilization rate above uses the
-national female Part B fee-for-service denominator.
+scope of this analysis.
 
-Analyses were performed in R 4.4, with package versions locked through
-renv. The complete analytic pipeline is available at
+Analyses were performed in R version 4.4, with package versions locked
+through renv. The complete analytic pipeline is available at
 <https://github.com/mufflyt/sling-volume-patterns>.
 
 ## Results
@@ -431,38 +398,32 @@ advantage may be overstated.
 
 ### Surgeon Volume and Concentration
 
-The primary concentration analysis was within-year. Within-year
-concentration was low and stable across the study period: the annual
-Gini ranged from 0.26 to 0.28, with no temporal trend (p = 0.451), and
-the annual top 20% performed approximately 38% of cases. No
-specialty-specific annual Gini changed significantly (all p &gt; 0.15).
-Thus, care did not become concentrated among a smaller group of
-high-volume surgeons as the observable surgeon pool contracted.
+Within-year concentration was the primary concentration analysis. The
+annual Gini coefficient remained stable, ranging from 0.26 to 0.28, with
+no temporal trend (p = 0.451); the top 20% of observable surgeons
+performed approximately 38% of annual services. No specialty-specific
+annual Gini changed significantly. Thus, the contraction in the
+observable surgeon pool was not accompanied by increasing concentration
+among a smaller group of high-volume surgeons.
 
-Pooled multi-year concentration was modest for every group: URPS Gini
-0.51 (95% CI 0.48-0.53), urology Gini 0.52 (95% CI 0.49-0.55), and other
-non-URPS OB/GYN Gini 0.56 (95% CI 0.52-0.60) (Table 2). Because
-overlapping individual confidence intervals are not a test of
-between-group difference, we bootstrapped the pairwise differences: URPS
-and urology did not differ (Gini difference -0.016 (95% CI -0.050 to
-+0.021)), whereas URPS was modestly less concentrated than other OB/GYN
-(-0.056 (95% CI -0.098 to -0.006), confidence interval excluding zero).
-The size-adjusted normalized HHI was near zero for every group (URPS
-0.002, urology 0.004, other OB/GYN 0.006 on a 0–1 scale). The effective
-number of providers, expressed as a fraction of the actual provider
-count, showed a gradient (URPS 305 of 616, 50%; urology 42%; other
-OB/GYN 33%), indicating that sling volume was distributed across many
-surgeons rather than dominated by a few, though somewhat less evenly in
-the smaller groups. Because the specialties differ several-fold in
-provider count, raw HHI is not directly comparable across them (Table
-2). Adding hypothetical suppressed low-volume providers raised the Gini
-(Supplementary Table S8): under the 50% scenario the URPS Gini rose from
-0.51 toward the mid-0.6 range, so the sensitivity supports only the
-narrower claim that observed services were not dominated by a handful of
-surgeons, not a precise estimate of the full-market distribution. URPS
-had the highest median annual volume and upper quartile (median 19; p75
-29). MIGS was excluded from these comparisons because only 10 physicians
-were identified (1–4 per year); its estimates are exploratory.
+Pooled multi-year concentration was moderate: the Gini coefficient was
+0.51 (95% CI 0.48-0.53) for OB/GYN-pathway URPS, 0.52 (95% CI 0.49-0.55)
+for non-URPS urology, and 0.56 (95% CI 0.52-0.60) for other non-URPS
+OB/GYN (Table 2). Bootstrap comparisons showed no difference between
+URPS and urology (difference -0.016 (95% CI -0.050 to +0.021)), whereas
+URPS was modestly less concentrated than other non-URPS OB/GYN (-0.056
+(95% CI -0.098 to -0.006), confidence interval excluding zero).
+Normalized HHI values were near zero. The effective provider count
+represented 50% of OB/GYN-pathway URPS physicians, 42% of non-URPS
+urologists, and 33% of other non-URPS OB/GYN physicians, indicating
+broad distribution with somewhat greater inequality in the smaller
+groups. A sensitivity analysis that added hypothetical suppressed
+low-volume providers increased the Gini, particularly under the 50%
+scenario (Supplementary Table S8); it therefore supports the narrow
+conclusion that observable services were not dominated by a handful of
+surgeons, but not a precise estimate of full-market concentration. MIGS
+estimates were considered exploratory because only 10 physicians were
+identified.
 
 ### Observable Participation Over Time
 
@@ -500,153 +461,141 @@ reserved for a separate access-focused study.
 
 ## Discussion
 
-This national Medicare analysis produced three main findings. First,
-OB/GYN-pathway URPS was the largest single group (55%) and had the
-highest adjusted per-physician volume, and the two URPS pathways
-together performed the majority (63.7%) of observable services. Second,
-the OB/GYN-pathway URPS share increased over the decade, coinciding with
-more URPS surgeons becoming observable and fewer non-URPS surgeons
-remaining observable, while the urology-pathway URPS share was roughly
-stable. Third, surgeon-level concentration remained low and stable
-despite a shrinking observable surgeon pool. Together, these findings
-indicate a change in the composition of observable fee-for-service
-practice rather than intensification of individual practice or
-concentration of care; they are best read as a practice-pattern study,
-not a study of entry into or exit from the clinical workforce.
+This analysis yielded three principal findings. First, OB/GYN-pathway
+URPS was the largest individual group, accounting for 55% of observable
+services and the highest adjusted annual volume; the two URPS pathways
+together accounted for 63.7%. Second, the OB/GYN-pathway URPS share
+increased substantially, while the urology-pathway share changed
+comparatively little and non-URPS participation declined. Third,
+within-year surgeon concentration remained stable despite a smaller
+observable surgeon pool. These findings describe a shift in
+claims-visible fee-for-service practice rather than increasing
+individual volume or concentration. They should be interpreted as
+practice patterns, not direct evidence of entry into or exit from the
+clinical workforce.
 
 ### Specialty Distribution in Context
 
-The two URPS pathways together performed approximately three-fifths of
-observable fee-for-service Medicare slings (63.7%; OB/GYN pathway 55%,
-urology pathway 8.7%), and non-URPS urologists a much smaller share
-(14.5%). Because the all-pathway URPS group also includes
-urology-trained subspecialists, the URPS share is not equivalent to a
-gynecologist share. The apparent non-URPS urology share is sensitive to
-classification: a naive provider-type approach that assigns ambulatory
-surgical centers and non-physician billers to urology roughly doubles it
-(Supplementary Table S11), which likely explains why some earlier
-analyses reported a larger urology share. Direct comparison with prior
-studies is limited because they used different datasets, specialty
-definitions, and care settings. In ACS-NSQIP data from 2006 through
-2013, James et al. reported that gynecologists performed 74.2% of sling
-procedures and urologists 25.8%;<sup>9</sup> Cantrell et al. found
-urogynecologists performed 54% of stress-incontinence procedures at
-academic centers from 2009 through 2014;<sup>10</sup> and in Medicare
-data from 2002 through 2007, Rogo-Gupta et al. found urologists
-performed most sling operations.<sup>11</sup> Rather than asserting a
-single historical reversal across these heterogeneous sources, we
-conclude more cautiously that OB/GYN-pathway URPS was the largest single
-contemporary fee-for-service Medicare group performing this procedure.
+The two URPS pathways together performed 63.7% of observable
+fee-for-service Medicare sling services: 55% through the OB/GYN pathway
+and 8.7% through the urology pathway. Non-URPS urologists performed
+14.5%. Because all-pathway URPS includes urology-trained subspecialists,
+it is not equivalent to a gynecologist share. The estimated non-URPS
+urology share was sensitive to classification: assigning facility and
+nonphysician billers to urology approximately doubled it (Supplementary
+Table S11), illustrating how a simple provider-type approach can inflate
+urology estimates. Comparisons with earlier studies require caution
+because datasets, specialty definitions, and care settings differed.
+James et al. reported that gynecologists performed 74.2% of sling
+procedures in ACS-NSQIP data from 2006 through 2013;<sup>9</sup>
+Cantrell et al. found that urogynecologists performed 54% of
+stress-incontinence procedures at academic centers from 2009 through
+2014;<sup>10</sup> and Rogo-Gupta et al. found that urologists performed
+most Medicare sling operations from 2002 through 2007.<sup>11</sup> The
+most defensible contemporary conclusion is that OB/GYN-pathway URPS was
+the largest single fee-for-service Medicare group performing CPT 57288.
 
-Including both certification pathways was essential to this result.
-Cross-referencing the ABU roster reassigned 151 urology-typed
-physicians, representing 8.7% of all sling procedures, to URPS. The
-concentration estimate was robust: the pooled URPS Gini changed only
-from 0.51 to 0.52. A pathway-neutral definition also reflects
-differences in operative case volume between urology- and
-gynecology-based URPS fellowships<sup>14</sup> and variable FPMRS
-exposure during urology residency.<sup>15</sup> Classifying
-urology-pathway urogynecologists as general urologists would therefore
-understate the true subspecialty share.
+Including both certification pathways was essential. Linking the ABU
+roster reclassified 151 urology-typed physicians, representing 8.7% of
+all observable services, as urology-pathway URPS. This pathway-neutral
+definition reflects differences in operative case volume between
+urology- and gynecology-based URPS fellowships<sup>14</sup> and variable
+URPS exposure during urology residency.<sup>15</sup> Classifying these
+subspecialists as general urologists would understate the URPS share and
+overstate non-URPS urology.
 
 ### Procedural Concentration and the Volume–Outcome Relationship
 
-The Gini coefficient and HHI provide complementary views of
-concentration, and both supported the same conclusion. Moderate
-inequality across the full distribution (Gini 0.51–0.56, with
-overlapping confidence intervals across the well-populated groups)
-coexisted with size-adjusted normalized HHI values near zero and
-effective provider counts in the hundreds. In other words, sling volume
-was distributed unevenly across many surgeons but was not dominated by a
-few, and the well-populated specialties did not differ meaningfully in
-concentration. Because the physician was the production unit, these
-values describe surgeon-level procedural concentration rather than
-market competition, and they should not be interpreted using antitrust
-thresholds.
+The concentration measures offered complementary information.
+Within-year Gini coefficients were low and stable, while pooled
+multi-year Gini coefficients showed moderate inequality because they
+also reflected the number of years each surgeon remained observable.
+URPS and non-URPS urology had similar pooled concentration, whereas
+other non-URPS OB/GYN was modestly more concentrated. Normalized HHI
+values remained near zero, and effective provider counts were large. In
+practical terms, observable sling volume was spread across many surgeons
+rather than dominated by a few. Because physicians were the production
+unit, these measures describe surgeon-level procedural distribution, not
+hospital or health-system market competition.
 
-These patterns matter because greater surgeon volume has been associated
-with better outcomes after midurethral sling surgery. Berger et
-al. reported a lower adjusted risk of reoperation for sling failure
-among higher-volume surgeons.<sup>16</sup> A systematic review by
-Cartier et al. found that low-volume surgeons had higher odds of mesh
-revision and repeat incontinence procedures.<sup>17</sup> Brennand and
-Quan observed lower revision odds above approximately 50 cases per
-year,<sup>18</sup> and Holdø and Svenningsen found better objective cure
-rates with greater surgeon experience and annual volume.<sup>19</sup>
-The observed fee-for-service Medicare medians of 15–19 services per year
-cannot be compared directly with all-payer thresholds such as
-approximately 50 operations per year, because the PUF omits commercially
-insured, Medicare Advantage, and younger patients and providers below
-the CMS suppression threshold; total surgeon experience is therefore
-higher than the observed Medicare median, and Medicare PUF volume is an
-incomplete proxy for it.
+This distribution is relevant because higher surgeon volume has been
+associated with better outcomes after midurethral sling surgery. Berger
+et al. reported lower adjusted reoperation risk among higher-volume
+surgeons,<sup>16</sup> and a systematic review found greater risks of
+mesh revision and repeat incontinence procedures among low-volume
+surgeons.<sup>17</sup> Other studies have reported lower revision odds
+above approximately 50 cases per year<sup>18</sup> and better objective
+cure rates with greater experience and annual volume.<sup>19</sup> The
+fee-for-service Medicare medians of 15–19 observable services per year
+cannot be compared directly with all-payer thresholds. The PUF excludes
+younger patients, Medicare Advantage, commercial insurance, and
+physician-years below the suppression threshold; total surgeon volume
+may therefore exceed the observed Medicare count, but cannot be inferred
+precisely.
 
 ### Temporal Trends and the Evolving SUI Landscape
 
-The repeated-measures model and turnover analysis clarify why the URPS
-share increased. Individual physician volume did not change over time,
-but the number of non-URPS surgeons fell while the URPS pool remained
-comparatively stable. URPS also contributed the largest inflow of newly
-observable surgeons, whereas urology had substantial turnover but a net
-decline. The market-share shift therefore reflects workforce composition
-within a shrinking procedure pool, not increasing individual volume or
-concentration.
+The repeated-measures and participation analyses help explain the
+changing specialty shares. Annual volume among observable physicians was
+stable, but non-URPS participation declined while the URPS pool remained
+comparatively stable. URPS also accounted for the largest number of
+newly observable episodes. The shift therefore reflects a change in the
+specialty composition of a contracting observable service pool, not
+increasing individual volume or concentration.
 
-This mechanism is consistent with prior work. Siegal et al. found that
-the post-2011 decline in sling placement was driven mainly by non-FPMRS
-providers, while FPMRS providers maintained their volumes.<sup>12</sup>
+This pattern is consistent with prior work. Siegal et al. found that the
+post-2011 decline in sling placement was driven mainly by non-FPMRS
+providers, whereas FPMRS providers maintained their volume.<sup>12</sup>
 Lee et al. documented an approximately 50% national decline in
-incontinence surgery from 2004 through 2013.<sup>13</sup> The 2020
-decline in our study (RR 0.88) is consistent with pandemic-related
-deferral of elective surgery and remained robust when 2020 was excluded.
+incontinence surgery from 2004 through 2013.<sup>13</sup> In the present
+study, the 2020 decrease (RR 0.88) was consistent with pandemic-related
+deferral of elective surgery, and the principal specialty comparisons
+were similar when 2020 was excluded.
 
-The SUI treatment landscape also continues to change. Urethral bulking
-agents are now positioned alongside slings as a first-line surgical
-option,<sup>3,20</sup> and ongoing surveillance is needed to determine
-whether this shift affects specialty-specific sling volume.
+The SUI treatment landscape is also evolving. Urethral bulking is now
+positioned alongside sling surgery as a first-line procedural
+option,<sup>3,20</sup> and continued surveillance will be needed to
+determine whether changing treatment preferences alter
+specialty-specific sling volume.
 
 ### Limitations
 
-This study has five limitations. First, CMS suppresses provider-level
-data for fewer than 11 beneficiaries, so the lowest-volume surgeons are
-not observed; suppression can bias the Gini coefficient and HHI in
-different directions, and the full-market concentration cannot be
-identified from the Public Use File, although a sensitivity analysis
-adding hypothetical suppressed providers left the low-concentration
-conclusion unchanged. Second, the PUF includes only fee-for-service
-Medicare Part B claims; younger patients and those covered by Medicare
-Advantage, Medicaid, commercial insurance, or no insurance are not
-represented.
+This study has several limitations. First, CMS suppresses records for
+clinicians treating fewer than 11 beneficiaries, so the lowest-volume
+physician-years are not observed. Full-market concentration cannot be
+identified, and the sensitivity analysis supports only the narrower
+conclusion that observable services were not dominated by a handful of
+surgeons. Second, the PUF includes only fee-for-service Medicare Part B
+claims. It excludes Medicare Advantage, commercial insurance, Medicaid,
+uninsured care, and most younger patients.
 
-Third, specialty classification depends on CMS provider type and the
-ABOG/ABU rosters. Physicians who completed URPS fellowship but were not
-board-certified may therefore be misclassified, and the 323 providers
-reclassified from an adjacent provider type to urology could be
-misassigned. Fourth, the market-share trend is estimated under plausible
-classification scenarios rather than point-identified. Certification
-follows the start of subspecialty practice, so the certification-gated
-scenario assigns some pre-certification practice years to General OB/GYN
-or urology, whereas fixed membership assigns physicians to URPS before
-they subspecialized. We present these as plausible scenarios, not formal
-bounds; point identification would require unavailable
-fellowship-completion dates.
+Third, specialty classification depends on annual CMS provider type and
+ABOG and ABU roster linkage. Fellowship-trained physicians who were not
+board certified may be misclassified, and the Other/uncertain group
+contains nonphysician and incompletely classified individual billers.
+Although organizational NPIs were excluded and alternative handling of
+ambiguous billers was examined, residual misclassification is possible.
+Fourth, the market-share trend is not point identified. Fixed membership
+assigns eventual subspecialty status to pre-certification years, whereas
+certification-gated classification may assign genuine subspecialty
+practice to an earlier general category. We therefore present these as
+plausible scenarios rather than formal bounds.
 
-Approximately 8% of URPS physicians could not be matched to a
-certification year, and urology-pathway URPS classification remained
-fixed because no urology subspecialty date was available; both features
-narrow the certification-gated estimate. Fifth, Tot\_Srvcs may include
-bilateral or modifier-inflated services.
+Approximately 8% of URPS physicians lacked a matched certification year,
+and urology-pathway URPS status remained fixed because a urology
+subspecialty certification date was unavailable. Finally, Tot\_Srvcs may
+include bilateral or modifier-related inflation and should be
+interpreted as reported services rather than unique operations.
 
 ### Strengths
 
-Strengths include a national sample of all publicly reported,
-nonsuppressed fee-for-service provider-service records; identification
-of urogynecologists through both certification pathways; complementary
-surgeon-level concentration measures with bootstrap confidence
-intervals, calculated both overall and by year; models that account for
-repeated observations within physicians; transparent handling of
-ambiguous and facility billers with sensitivity analyses; and a fully
-reproducible analytic pipeline.
+Strengths include a national sample of publicly reported, nonsuppressed
+fee-for-service provider-service records; identification of URPS
+physicians through both certification pathways; explicit separation of
+organizational and ambiguous billers; within-year and pooled
+concentration measures with bootstrap confidence intervals; models that
+account for repeated physician observations; multiple classification
+sensitivities; and a fully reproducible analytic pipeline.
 
 ## Conclusions
 
