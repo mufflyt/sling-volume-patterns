@@ -305,8 +305,11 @@ gyn_trained_annual_share <- function(provider_volume_data, year_col) {
 
   provider_volume_data |>
     dplyr::mutate(
+      # OB/GYN-based share = ABOG (OB/GYN-pathway) URPS + MIGS + General OB/GYN.
+      # Handles both the combined-URPS label ("URPS") and the split label
+      # ("URPS (OB/GYN)"); urology-pathway URPS is deliberately excluded.
       .is_gyn_trained =
-        specialty_group %in% c("OB/GYN", "General OB/GYN", "MIGS") |
+        specialty_group %in% c("OB/GYN", "General OB/GYN", "MIGS", "URPS (OB/GYN)") |
         (specialty_group == "URPS" & (!has_abog | abog_urps))
     ) |>
     dplyr::group_by(dplyr::across(dplyr::all_of(year_col))) |>

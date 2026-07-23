@@ -13,15 +13,18 @@ no conflicts of interest” if applicable\]*
 
 **Acknowledgments:** *\[to be completed\]*
 
-**Data and code availability:** The complete, reproducible analytic
-pipeline and this manuscript source are available at
-<https://github.com/mufflyt/sling-volume-patterns>. The CMS Medicare
+**Data and code availability:** The analytic code and non-restricted
+derived outputs, together with this manuscript source, are available at
+<https://github.com/mufflyt/sling-volume-patterns> *(repository to be
+made public, with a tagged release, at acceptance)*. The CMS Medicare
 Physician and Other Practitioners Public Use File and the CMS Program
 Statistics Original Medicare Enrollment tables are publicly available
-from data.cms.gov.
+from data.cms.gov. The ABOG and ABU board-certification rosters used for
+specialty linkage are subject to source-specific permissions and may not
+be redistributable; provenance and derived crosswalk documentation are
+provided in the repository.
 
-**Word count (abstract):** approximately 250. **Manuscript type:**
-Original research.
+**Manuscript type:** Original research.
 
 ------------------------------------------------------------------------
 
@@ -59,7 +62,7 @@ outcome and access studies are needed before drawing credentialing
 implications.
 
 **Keywords:** stress urinary incontinence; sling surgery; urogynecology;
-Medicare; surgical workforce; procedural concentration.
+Medicare; surgical workforce.
 
 ------------------------------------------------------------------------
 
@@ -113,9 +116,10 @@ uncertain. Changes in the specialty mix may also affect training needs
 and patient access.
 
 Three developments make this analysis timely. First, Female Pelvic
-Medicine and Reconstructive Surgery, now Urogynecology and
-Reconstructive Pelvic Surgery (URPS), has expanded since receiving
-American Board of Medical Specialties recognition in 2013.<sup>6</sup>
+Medicine and Reconstructive Surgery, approved as a subspecialty by the
+American Board of Medical Specialties in 2011 with the first
+certificates issued in 2013 and renamed Urogynecology and Reconstructive
+Pelvic Surgery (URPS) in 2024, has expanded rapidly.<sup>6</sup>
 Certification is available through both the American Board of Obstetrics
 and Gynecology (ABOG) and the American Board of Urology (ABU). Second,
 US Food and Drug Administration actions involving urogynecologic mesh
@@ -358,22 +362,22 @@ with the descriptive ordinary least-squares estimate. Because total
 service counts declined, these changes represent redistribution among
 specialties rather than growth in services.
 
-The URPS increase was significant under every classification scenario,
-which differed in the estimated slope (Table 4). Fixed membership gave
-the shallower estimate because it counts physicians as URPS before
-certification: the all-pathway URPS share rose from 55.1% to 68% (+1.12
-percentage points/year), and the OB/GYN-based share from 16.5% to 13.9%
-(+-0.32 percentage points/year). Certification-gated classification gave
-the steeper estimate, from 43.6% to 66.9% (+1.76 percentage
-points/year), because it removes not-yet-certified physicians from the
-early URPS count; the two estimates converged near 66.9% by 2023.
+The increase in all-pathway URPS share remained significant under every
+classification scenario (Table 4). Fixed membership, which counts
+physicians as URPS before certification, produced the shallower change
+from 55.1% in 2013 to 68% in 2023 (+1.12 percentage points/year).
+Certification-gated classification produced the steeper change from
+43.6% to 66.9% (+1.76 percentage points/year). The estimates converged
+by the end of the study period. These are prespecified scenarios
+addressing uncertain pre-certification practice, not statistical
+confidence bounds.
 
 In the Poisson GEE clustered by NPI (reference = OB/GYN-pathway URPS;
 calendar year centered at 2018), adjusted annual volume at mid-study was
 lower than OB/GYN-pathway URPS for every other group, including
 urology-pathway URPS (RR 0.76 (0.68–0.84)), non-URPS urology (RR 0.71
 (0.59–0.85)), other non-URPS OB/GYN (RR 0.63 (0.44–0.90)), and MIGS (RR
-0.81 (0.51–1.29)) (Table 3). Annual volume was approximately 11% lower
+0.81 (0.51–1.29)) (Table 3). Annual volume was approximately 12% lower
 in 2020 (RR 0.88 (0.85–0.91); p &lt; 0.001). The specialty-by-year
 interaction showed that per-physician volume was essentially flat over
 time for the well-populated groups (OB/GYN-pathway URPS RR 0.999
@@ -439,13 +443,14 @@ surgeons (357–559 per year) performed most annual services, while
 surgeons no longer observable ranged from 64 to 212 per year.
 
 Across the study period, URPS accounted for the most newly observable
-episodes (480), followed by urology (165), General OB/GYN (205), and
-MIGS (8); these are episode counts, not unique physicians. The rising
-URPS share coincided with the largest inflow of newly observable
-surgeons together with a relatively stable continuing-URPS base (URPS
-surgeon count 304 to 293; per-physician volume unchanged). Urology
-showed substantial turnover with net decline, and General OB/GYN
-declined in both observable surgeons and market share.
+episodes (480), followed by other non-URPS OB/GYN (205), non-URPS
+urology (165), and MIGS (8); these are episode counts, not unique
+physicians. The rising URPS share coincided with the largest inflow of
+newly observable surgeons together with a relatively stable
+continuing-URPS base (URPS surgeon count 304 to 293; per-physician
+volume unchanged). Urology showed substantial turnover with net decline,
+and General OB/GYN declined in both observable surgeons and market
+share.
 
 Because total service counts declined, the growth in URPS share
 represents a redistribution of a shrinking service pool toward URPS, not
@@ -552,9 +557,10 @@ study, the 2020 decrease (RR 0.88) was consistent with pandemic-related
 deferral of elective surgery, and the principal specialty comparisons
 were similar when 2020 was excluded.
 
-The SUI treatment landscape is also evolving. Urethral bulking is now
-positioned alongside sling surgery as a first-line procedural
-option,<sup>3,20</sup> and continued surveillance will be needed to
+The SUI treatment landscape is also evolving. Urethral bulking is
+increasingly used as a less-invasive procedural alternative for selected
+patients, although efficacy is generally lower and repeat treatment may
+be required,<sup>3,20</sup> and continued surveillance will be needed to
 determine whether changing treatment preferences alter
 specialty-specific sling volume.
 
@@ -583,9 +589,11 @@ plausible scenarios rather than formal bounds.
 
 Approximately 8% of URPS physicians lacked a matched certification year,
 and urology-pathway URPS status remained fixed because a urology
-subspecialty certification date was unavailable. Finally, Tot\_Srvcs may
-include bilateral or modifier-related inflation and should be
-interpreted as reported services rather than unique operations.
+subspecialty certification date was unavailable. Finally, reported
+line-service units (Tot\_Srvcs) may not correspond exactly to unique
+operations because of claim-line, unit-count, and modifier conventions,
+and should be interpreted as reported services rather than unique
+operations.
 
 ### Strengths
 
@@ -974,8 +982,8 @@ because it counts physicians as URPS before certification, and
 certification-gated classification gives the steeper slope because it
 removes not-yet-certified physicians from the early URPS count. The 2023
 levels converge. These are plausible scenarios rather than formal
-statistical bounds. All estimated trends are positive and statistically
-significant.
+statistical bounds. All estimated URPS trends are positive and
+statistically significant.
 
 <table>
 <colgroup>
@@ -996,9 +1004,9 @@ significant.
 <tr>
 <td>Fixed membership: OB/GYN-based share (ABOG-URPS + MIGS + Gen
 OB/GYN)</td>
-<td>16.5% → 13.9%</td>
-<td>-0.32</td>
-<td>0.019</td>
+<td>62.3% → 74.5%</td>
+<td>1.10</td>
+<td>&lt;0.001</td>
 </tr>
 <tr>
 <td>Fixed membership: all-pathway URPS share</td>
@@ -3457,12 +3465,16 @@ the CMS reporting threshold.
 </tbody>
 </table>
 
-**Supplementary Table S8.** Suppression sensitivity. Hypothetical
-suppressed low-volume providers (25% and 50% of the observed count, each
-performing 1–10 services) were added to each group before recomputing
-the Gini coefficient and HHI. Concentration rose only modestly, so the
-low-concentration conclusion is robust to the unobserved low-volume
-tail.
+**Supplementary Table S8.** Suppression illustration (not an empirically
+estimated sensitivity). Hypothetical suppressed low-volume clinicians
+(25% and 50% of the observed count, each performing 1–10 services) were
+added to each group before recomputing the Gini coefficient and HHI.
+Adding these clinicians increased estimated inequality, particularly in
+the 50% scenario, while HHI remained low. Because neither the number nor
+the volume distribution of suppressed clinicians is known, these
+illustrations do not identify full-market concentration; they support
+only the narrower conclusion that observable services were not dominated
+by a handful of surgeons.
 
 <table>
 <colgroup>
@@ -3651,8 +3663,8 @@ crossings, not definitive entry into or exit from practice.
 </tbody>
 </table>
 
-Newly observable episodes by specialty: URPS, 480; urology, 165; other
-OB/GYN, 205; MIGS, 8.
+Newly observable episodes by specialty: URPS, 480; other OB/GYN, 205;
+non-URPS urology, 165; MIGS, 8.
 
 **Supplementary Table S11.** Classification sensitivity for ambiguous
 and facility billers (reviewer concern). The primary analysis excludes
