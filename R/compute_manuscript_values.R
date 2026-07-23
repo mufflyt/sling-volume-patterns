@@ -133,8 +133,10 @@ compute_manuscript_values <- function(
   # Group ordering and labels come from the central taxonomy (specialty_groups.R):
   # order_grp = the inferential groups (Table 2/3), order_grp1 = every group
   # (Table 1). "URPS (OB/GYN)" is the primary/reference URPS group.
-  order_grp  <- sg_codes("inferential")
-  order_grp1 <- sg_codes("distribution")
+  # Restrict to groups actually present (e.g. "exclude" mode drops Other/uncertain).
+  present    <- unique(as.character(pv$specialty_group))
+  order_grp  <- intersect(sg_codes("inferential"),  present)
+  order_grp1 <- intersect(sg_codes("distribution"), present)
   dist <- pv %>% dplyr::group_by(specialty_group) %>%
     dplyr::summarise(
       phys  = dplyr::n_distinct(Rndrng_NPI), pyears = dplyr::n(),
@@ -172,8 +174,23 @@ compute_manuscript_values <- function(
     p = c(fmt_p(d$p), "n/a"),
     check.names = FALSE)
   tab <- list(t1 = t1)
-  # Other/uncertain scalars for prose
+  # Other/uncertain scalars for the classification-flow prose. The primary
+  # cohort excludes these billers (other_handling = "exclude"), so they are
+  # absent from `dist`; we recover the count and observable-service share from a
+  # "separate" run purely to describe how many individuals were set aside for
+  # the sensitivity analysis (Supplementary Table S11).
   ou <- dist[dist$specialty_group == "Other/uncertain", ]
+  if (!nrow(ou)) {
+    rr_sep <- analyze_midurethral_sling_patterns(
+      pc, year_col = year_col, abog_npi_csv = abog_csv, urps_urology_npi_csv = abu_csv,
+      exclude_years = exclude_years, other_handling = "separate", verbose = FALSE)$provider_volume
+    tot_sep <- sum(rr_sep$annual_sling_count)
+    ou_sep <- rr_sep[rr_sep$specialty_group == "Other/uncertain", ]
+    ou <- data.frame(
+      phys  = dplyr::n_distinct(ou_sep$Rndrng_NPI),
+      procs = sum(ou_sep$annual_sling_count),
+      pct   = 100 * sum(ou_sep$annual_sling_count) / tot_sep)
+  }
   v$other_phys <- if (nrow(ou)) ou$phys else 0
   v$other_procs <- if (nrow(ou)) ou$procs else 0
   v$other_pct <- if (nrow(ou)) round(ou$pct, 1) else 0
@@ -194,8 +211,8 @@ compute_manuscript_values <- function(
       check.names = FALSE, row.names = NULL)
   }
   tab$t_classif_sens <- rbind(
-    classif_row("separate", "Separate 'Other/uncertain' group; facilities excluded (primary)"),
-    classif_row("exclude",  "Excluded from the cohort"),
+    classif_row("exclude",  "Excluded from the cohort (primary)"),
+    classif_row("separate", "Retained as a separate 'Other/uncertain' group"),
     classif_row("urology",  "Assigned to urology (legacy)"))
 
   # scalars for prose (per group). v$urps_* = OB/GYN-pathway URPS (primary URPS

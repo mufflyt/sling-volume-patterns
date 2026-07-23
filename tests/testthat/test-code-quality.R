@@ -48,15 +48,20 @@ test_that("every v$ referenced in manuscript.Rmd exists in the value list", {
 test_that("headline manuscript numbers match the expected golden values", {
   v <- mv_once()$v
   # If the analysis intentionally changes, update these expected values.
-  expect_equal(v$analytic_physicians, 1666)
-  expect_equal(v$analytic_procs, 141009)
-  expect_equal(v$urps_pct, 55.0, tolerance = 0.05)      # OB/GYN-pathway URPS
-  expect_equal(v$urpsuro_pct, 8.7, tolerance = 0.05)    # urology-pathway URPS
-  expect_equal(v$urps_combined_pct, 63.7, tolerance = 0.05)
-  expect_equal(v$uro_pct, 14.5, tolerance = 0.05)       # clean non-URPS urology
-  expect_equal(v$gob_pct, 13.0, tolerance = 0.05)
-  expect_equal(v$other_pct, 8.2, tolerance = 0.05)
+  # Primary cohort excludes organizational NPIs (entity type 2) and the
+  # Other/uncertain billers (other_handling = "exclude"): identified physicians
+  # only, with Other/uncertain retained solely as a sensitivity.
+  expect_equal(v$analytic_physicians, 1467)
+  expect_equal(v$analytic_procs, 129517)
+  expect_equal(v$urps_pct, 59.8, tolerance = 0.05)      # OB/GYN-pathway URPS
+  expect_equal(v$urpsuro_pct, 9.5, tolerance = 0.05)    # urology-pathway URPS
+  expect_equal(v$urps_combined_pct, 69.3, tolerance = 0.05)  # primary estimand
+  expect_equal(v$uro_pct, 15.8, tolerance = 0.05)       # non-URPS urology
+  expect_equal(v$gob_pct, 14.2, tolerance = 0.05)       # other non-URPS OB/GYN
   expect_equal(v$mig_pct, 0.7, tolerance = 0.05)
+  # The five analyzed physician groups partition the primary cohort.
+  expect_equal(v$urps_pct + v$urpsuro_pct + v$uro_pct + v$gob_pct + v$mig_pct,
+               100.0, tolerance = 0.1)
   expect_equal(v$class_excluded_facility, 123)          # entity-type-2 orgs
 })
 
@@ -79,6 +84,15 @@ test_that("cached provider_volume grouping matches compute_manuscript_values", {
   # groups the manuscript expects, from the central taxonomy
   old <- setwd(.root); on.exit(setwd(old))
   source(file.path(.root, "R", "specialty_groups.R"))
+  source(file.path(.root, "R", "build_ffs_denominator.R"))
   taxo_groups <- sort(sg_codes("all"))
-  expect_equal(cache_groups, taxo_groups)
+  # Every cached group must be a valid taxonomy code.
+  expect_true(all(cache_groups %in% taxo_groups))
+  # Under the primary "exclude" handling the Other/uncertain group is dropped
+  # from the cohort, so the cache holds the five analyzed groups; under
+  # "separate" it holds all six. Assert the cache matches the configured mode.
+  expected <- if (identical(classification_opts()$other_handling, "exclude")) {
+    setdiff(taxo_groups, "Other/uncertain")
+  } else taxo_groups
+  expect_equal(cache_groups, sort(expected))
 })

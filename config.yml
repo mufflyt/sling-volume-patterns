@@ -112,7 +112,7 @@ default:
   #     legacy "urology").
   #   split_urps_pathway: TRUE splits URPS into OB/GYN-pathway (ABOG) and
   #     urology-pathway (ABU) groups; FALSE keeps a single combined URPS group.
-  other_handling: "separate"
+  other_handling: "exclude"
   split_urps_pathway: yes
 
   # ── Data provenance (Pattern 4: data_raw/ README) ──────────────────────────

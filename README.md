@@ -4,8 +4,8 @@
 
 Authors: Tyler Muffly, MD
 
-Target venue: AUGS (American Urogynecologic Society)
-Status: Submitted April 2026
+Target venue: *Urogynecology* (AUGS, American Urogynecologic Society)
+Status: In preparation
 
 ---
 
@@ -35,34 +35,29 @@ observable fee-for-service workforce, not the entire national sling market.
 
 ![Figure 1](output/figures/figure_1_market_share.png)
 
-The combined gynecologic share (shaded area) increased significantly from 60.3% in 2013 to 69.9% in 2023 (slope = 0.84 percentage points per year; p <0.001). URPS physicians consistently accounted for the largest share, rising from approximately 45% to 58% over the study period. Urology's share declined correspondingly from approximately 40% to 30%. General OB/GYN share decreased modestly from approximately 15% to 11%. MIGS providers contributed less than 1% throughout.
+URPS physicians, identified through either the ABOG (OB/GYN) or ABU (urology) certification pathway, performed the majority of observable services, and their combined share rose over the decade. OB/GYN-pathway URPS was the largest single group and increased the most; urology-pathway URPS changed comparatively little. Non-URPS urology and other non-URPS OB/GYN declined, and MIGS contributed under 1% throughout. Exact shares and trends are in the manuscript (Table 1); they are not duplicated here to avoid drift.
 
 ### Figure 2. Annual Procedure Volume Distribution by Specialty
 
 ![Figure 2](output/figures/figure_2_volume_distribution.png)
 
-Violin plots with embedded box plots and jittered individual observations show the volume distribution on a log scale. URPS providers had the highest median annual volume (19 procedures; IQR 14–29), followed by MIGS (16; IQR 12–23), Urology (16; IQR 13–22), and General OB/GYN (15; IQR 12–22). All groups showed right-skewed distributions with outlier high-volume providers exceeding 100 procedures per year. The minimum observable volume is 11 due to CMS cell suppression.
+Violin plots with embedded box plots and jittered individual observations show the annual volume distribution on a log scale, by specialty group. All groups show right-skewed distributions with outlier high-volume providers, and OB/GYN-pathway URPS carries the highest median. The minimum observable volume is 11 because CMS suppresses records for clinicians treating fewer than 11 beneficiaries. Group-specific medians and interquartile ranges are in the manuscript (Table 1).
 
 ### Figure 3. Lorenz Curves of Procedural Concentration by Specialty
 
 ![Figure 3](output/figures/figure_3_lorenz_curve.png)
 
-The dashed diagonal represents perfect equality, where each provider performs an equal share of procedures. Curves farther from the diagonal indicate greater concentration. URPS providers (Gini = 0.51) show the most equitable distribution of sling volume, with the curve closest to the diagonal. MIGS (Gini = 0.59) shows the highest concentration, with the bottom 50% of MIGS providers performing less than 25% of MIGS slings. Urology (Gini = 0.54) and General OB/GYN (Gini = 0.56) fall between these extremes.
+The dashed diagonal represents perfect equality, where each surgeon performs an equal share of procedures; curves farther from the diagonal indicate greater within-year concentration. Concentration was low and broadly similar across the well-populated specialty groups. Because CMS suppresses low-volume physician-years, these curves describe observable services and do not identify full-market concentration. Gini coefficients and bootstrap intervals are in the manuscript.
 
 ---
 
 ## Key Findings
 
-| Specialty | Providers | Procedures | % Share | Median Vol/yr | Gini |
-|-----------|-----------|-----------|---------|---------------|------|
-| URPS | 609 | 73,751 | 52.7% | 19 (14–29) | 0.51 |
-| Urology | 823 | 47,825 | 34.2% | 16 (13–22) | 0.54 |
-| General OB/GYN | 333 | 17,402 | 12.4% | 15 (12–22) | 0.56 |
-| MIGS | 10 | 877 | 0.6% | 16 (12–23) | 0.59 |
+The primary cohort is identified physicians only: organizational NPIs (NPPES entity type 2) and unclassifiable billers are excluded, and remaining physicians are split into five mutually exclusive groups (URPS OB/GYN pathway, URPS urology pathway, non-URPS urology, other non-URPS OB/GYN, MIGS). The authoritative per-group counts, service totals, shares, medians, and trends live in the manuscript **Table 1** and are computed from the frozen cache by `compute_manuscript_values()`; they are deliberately not duplicated here.
 
-- **78% of OB/GYNs doing slings are URPS-certified subspecialists** (496 of 609 ABOG-matched providers)
-- Gynecologic market share trend is **statistically significant** (p <0.001) with the 11-year time series
-- CMS cell suppression (<11 beneficiaries) means all observable providers bill at least 11 slings — true low-volume providers are invisible
+- **URPS physicians (both certification pathways) performed the majority of observable services**, and their combined share rose across 2013-2023 (significant trend); the increase was driven mainly by the OB/GYN pathway.
+- **The Other/uncertain and facility billers are a sensitivity, not the primary cohort.** Assigning ambiguous billers to urology (the legacy approach) roughly doubles the apparent non-URPS urology share (Supplementary Table S11).
+- CMS cell suppression (<11 beneficiaries) means all observable providers bill at least 11 slings, so true low-volume providers are invisible and full-market concentration is not identified.
 
 ---
 

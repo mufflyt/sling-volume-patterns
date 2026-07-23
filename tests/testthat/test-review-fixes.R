@@ -183,12 +183,16 @@ test_that("quasibinomial share model is available as the headline (reviewer #12)
   expect_true(nzchar(v$share_binom_pp) && nzchar(v$share_binom_or))
 })
 
-test_that("Table 1 shows Other/uncertain and 'Other non-URPS OB/GYN' (reviewer #1/#2)", {
+test_that("Table 1 shows the analyzed groups and excludes Other/uncertain (reviewer #1/#2)", {
   mv <- get_mv()
   labs <- mv$tab$t1$Specialty
-  expect_true("Other/uncertain" %in% labs)
+  # Other/uncertain is set aside from the primary cohort (other_handling =
+  # "exclude"), so it is not a Table 1 row; it appears only in the sensitivity.
+  expect_false("Other/uncertain" %in% labs)
   expect_true("Other non-URPS OB/GYN" %in% labs)
   expect_false("General OB/GYN" %in% labs)              # renamed
+  expect_true(all(c("URPS, OB/GYN pathway", "URPS, urology pathway",
+                    "Urology (non-URPS)") %in% labs))
 })
 
 test_that("clean non-URPS urology share is far below the legacy inflated value (reviewer #1)", {
