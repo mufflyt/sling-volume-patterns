@@ -201,3 +201,24 @@ test_that("classification sensitivity table has all three handlings (reviewer #1
   tab <- get_mv()$tab
   expect_equal(nrow(tab$t_classif_sens), 3)
 })
+
+test_that("URPS is split into OB/GYN and urology certification pathways", {
+  skip_if_not(file.exists(.puf), "puf_classified cache not available")
+  pc <- readRDS(.puf)
+  r <- with_root(analyze_midurethral_sling_patterns(pc, year_col = "puf_year",
+         abog_npi_csv = .abog, urps_urology_npi_csv = .abu,
+         other_handling = "separate", split_urps_pathway = TRUE, verbose = FALSE))
+  g <- unique(r$provider_volume$specialty_group)
+  expect_true("URPS (OB/GYN)" %in% g)
+  expect_true("URPS (urology)" %in% g)
+  expect_false("URPS" %in% g)                      # combined replaced
+  # OB/GYN pathway is the larger URPS group; the two sum to the combined total.
+  n_obg <- dplyr::n_distinct(r$provider_volume$Rndrng_NPI[r$provider_volume$specialty_group == "URPS (OB/GYN)"])
+  n_uro <- dplyr::n_distinct(r$provider_volume$Rndrng_NPI[r$provider_volume$specialty_group == "URPS (urology)"])
+  expect_gt(n_obg, n_uro)
+  # manuscript values and Table 1 carry both pathways
+  v <- get_mv()$v
+  expect_true(v$urpsuro_pct > 0 && v$urps_pct > v$urpsuro_pct)
+  expect_true("URPS, OB/GYN pathway" %in% get_mv()$tab$t1$Specialty)
+  expect_true("URPS, urology pathway" %in% get_mv()$tab$t1$Specialty)
+})

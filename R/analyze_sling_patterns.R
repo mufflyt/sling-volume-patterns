@@ -1008,8 +1008,14 @@ analyze_midurethral_sling_patterns <- function(
     abog_npi_csv           = NULL,
     urps_urology_npi_csv   = NULL,
     exclude_years          = NULL,
-    other_handling         = c("separate", "exclude", "urology")
+    other_handling         = c("separate", "exclude", "urology"),
+    split_urps_pathway     = FALSE
 ) {
+  # When split_urps_pathway is TRUE, the combined all-pathway URPS group is
+  # replaced by two groups reflecting the certification pathway:
+  #   "URPS (OB/GYN)"  - ABOG (OB/GYN residency) pathway
+  #   "URPS (urology)" - ABU (urology residency) pathway
+  # An NPI in both rosters is assigned to the OB/GYN pathway.
   # How to handle billers with a CPT 57288 claim whose CMS provider type is
   # neither OB/GYN nor urology and who are not in the ABOG registry (reviewer:
   # these are mostly facilities and non-physician clinicians, not urologists):
@@ -1170,10 +1176,11 @@ analyze_midurethral_sling_patterns <- function(
       ),
       verbose
     )
+    urps_obg_label <- if (split_urps_pathway) "URPS (OB/GYN)" else "URPS"
     sling_claims <- dplyr::mutate(
       sling_claims,
       specialty_group = dplyr::case_when(
-        specialty_group == "OB/GYN" & Rndrng_NPI %in% fpmrs_npis ~ "URPS",
+        specialty_group == "OB/GYN" & Rndrng_NPI %in% fpmrs_npis ~ urps_obg_label,
         specialty_group == "OB/GYN" & Rndrng_NPI %in% migs_npis  ~ "MIGS",
         specialty_group == "OB/GYN"                               ~ "General OB/GYN",
         TRUE ~ specialty_group
@@ -1197,12 +1204,16 @@ analyze_midurethral_sling_patterns <- function(
       ),
       verbose
     )
+    # Combined mode: all ABU NPIs become "URPS". Split mode: ABU NPIs that are
+    # not already OB/GYN-pathway URPS become "URPS (urology)"; those already in
+    # the OB/GYN pathway (dual-boarded) keep that pathway.
+    urps_uro_target <- if (split_urps_pathway) "URPS (urology)" else "URPS"
     sling_claims <- dplyr::mutate(
       sling_claims,
-      specialty_group = dplyr::if_else(
-        Rndrng_NPI %in% urps_urology_npis,
-        "URPS",
-        specialty_group
+      specialty_group = dplyr::case_when(
+        Rndrng_NPI %in% urps_urology_npis & specialty_group == "URPS (OB/GYN)" ~ "URPS (OB/GYN)",
+        Rndrng_NPI %in% urps_urology_npis ~ urps_uro_target,
+        TRUE ~ specialty_group
       )
     )
   }

@@ -47,11 +47,12 @@ compute_manuscript_values <- function(
   # ── Analyses: full (all years) and analytic (config exclude_years; now none) ─
   res_full <- analyze_midurethral_sling_patterns(
     pc, year_col = year_col, abog_npi_csv = abog_csv,
-    urps_urology_npi_csv = abu_csv, verbose = FALSE
+    urps_urology_npi_csv = abu_csv, split_urps_pathway = TRUE, verbose = FALSE
   )
   res <- analyze_midurethral_sling_patterns(
     pc, year_col = year_col, abog_npi_csv = abog_csv,
-    urps_urology_npi_csv = abu_csv, exclude_years = exclude_years, verbose = FALSE
+    urps_urology_npi_csv = abu_csv, exclude_years = exclude_years,
+    split_urps_pathway = TRUE, verbose = FALSE
   )
   pv   <- res$provider_volume
   pvf  <- res_full$provider_volume
@@ -125,8 +126,10 @@ compute_manuscript_values <- function(
   # model displays. order_grp1 = Table 1 rows, which also show the excluded-from-
   # inference "Other/uncertain" group (reviewer: facilities and non-physician
   # clinicians must not be silently folded into urology).
-  order_grp  <- c("URPS", "Urology", "General OB/GYN", "MIGS")
-  order_grp1 <- c("URPS", "Urology", "General OB/GYN", "Other/uncertain", "MIGS")
+  # Six-group pathway split (combined URPS replaced by its two certification
+  # pathways). "URPS (OB/GYN)" is the primary/reference URPS group.
+  order_grp  <- c("URPS (OB/GYN)", "URPS (urology)", "Urology", "General OB/GYN", "MIGS")
+  order_grp1 <- c("URPS (OB/GYN)", "URPS (urology)", "Urology", "General OB/GYN", "Other/uncertain", "MIGS")
   dist <- pv %>% dplyr::group_by(specialty_group) %>%
     dplyr::summarise(
       phys  = dplyr::n_distinct(Rndrng_NPI), pyears = dplyr::n(),
@@ -151,7 +154,8 @@ compute_manuscript_values <- function(
   disp <- function(x) format(x, big.mark = ",")
   astk <- ifelse(order_grp1 == "MIGS", "*", "")
   t1 <- data.frame(
-    Specialty = c("URPS", "Urology (non-URPS)", "Other non-URPS OB/GYN", "Other/uncertain", "MIGS", "**Total**"),
+    Specialty = c("URPS, OB/GYN pathway", "URPS, urology pathway", "Urology (non-URPS)",
+                  "Other non-URPS OB/GYN", "Other/uncertain", "MIGS", "**Total**"),
     `Unique physicians` = c(disp(d$phys), paste0("**", disp(v$analytic_physicians), "**")),
     `Physician-years`   = c(disp(d$pyears), paste0("**", disp(v$analytic_pyears), "**")),
     `Reported services` = c(disp(d$procs), paste0("**", disp(v$analytic_procs), "**")),
@@ -190,10 +194,15 @@ compute_manuscript_values <- function(
     classif_row("exclude",  "Excluded from the cohort"),
     classif_row("urology",  "Assigned to urology (legacy)"))
 
-  # scalars for prose (per group)
+  # scalars for prose (per group). v$urps_* = OB/GYN-pathway URPS (primary URPS
+  # group and GEE reference); v$urpsuro_* = urology-pathway URPS.
   g <- function(grp, col) d[[col]][d$specialty_group == grp]
-  v$urps_phys <- g("URPS","phys"); v$urps_pyears <- g("URPS","pyears"); v$urps_procs <- g("URPS","procs")
-  v$urps_pct <- round(g("URPS","pct"),1); v$urps_med <- g("URPS","med"); v$urps_p25 <- g("URPS","p25"); v$urps_p75 <- g("URPS","p75")
+  v$urps_phys <- g("URPS (OB/GYN)","phys"); v$urps_pyears <- g("URPS (OB/GYN)","pyears"); v$urps_procs <- g("URPS (OB/GYN)","procs")
+  v$urps_pct <- round(g("URPS (OB/GYN)","pct"),1); v$urps_med <- g("URPS (OB/GYN)","med"); v$urps_p25 <- g("URPS (OB/GYN)","p25"); v$urps_p75 <- g("URPS (OB/GYN)","p75")
+  v$urpsuro_phys <- g("URPS (urology)","phys"); v$urpsuro_procs <- g("URPS (urology)","procs")
+  v$urpsuro_pct <- round(g("URPS (urology)","pct"),1); v$urpsuro_med <- g("URPS (urology)","med")
+  v$urpsuro_p25 <- g("URPS (urology)","p25"); v$urpsuro_p75 <- g("URPS (urology)","p75")
+  v$urps_combined_pct <- round(v$urps_pct + v$urpsuro_pct, 1)
   v$uro_phys <- g("Urology","phys"); v$uro_pyears <- g("Urology","pyears"); v$uro_procs <- g("Urology","procs")
   v$uro_pct <- round(g("Urology","pct"),1); v$uro_med <- g("Urology","med"); v$uro_p25 <- g("Urology","p25"); v$uro_p75 <- g("Urology","p75")
   v$gob_phys <- g("General OB/GYN","phys"); v$gob_pyears <- g("General OB/GYN","pyears"); v$gob_procs <- g("General OB/GYN","procs")
@@ -203,19 +212,16 @@ compute_manuscript_values <- function(
   fs <- function(grp) list(
     s13 = round(g(grp,"s2013"),1), s23 = round(g(grp,"s2023"),1),
     slope = round(g(grp,"slope"),2), lo = round(g(grp,"lo"),2), hi = round(g(grp,"hi"),2), p = fmt_p(g(grp,"p")))
-  v$urps_trend <- fs("URPS"); v$uro_trend <- fs("Urology"); v$gob_trend <- fs("General OB/GYN"); v$mig_trend <- fs("MIGS")
+  v$urps_trend <- fs("URPS (OB/GYN)"); v$urpsuro_trend <- fs("URPS (urology)")
+  v$uro_trend <- fs("Urology"); v$gob_trend <- fs("General OB/GYN"); v$mig_trend <- fs("MIGS")
 
-  # switchers + ABU reassignment
+  # switchers; ABU (urology-pathway) URPS = the "URPS (urology)" group.
   v$switchers <- pv %>% dplyr::group_by(Rndrng_NPI) %>%
     dplyr::summarise(k = dplyr::n_distinct(specialty_group), .groups="drop") %>%
     dplyr::summarise(s = sum(k > 1)) %>% dplyr::pull(s)
   abu <- readr::read_csv(abu_csv, show_col_types = FALSE)$npi
-  res_abogonly <- analyze_midurethral_sling_patterns(
-    pc, year_col = year_col, abog_npi_csv = abog_csv, exclude_years = exclude_years, verbose = FALSE)$provider_volume
-  moved <- setdiff(pv$Rndrng_NPI[pv$specialty_group == "URPS"],
-                   res_abogonly$Rndrng_NPI[res_abogonly$specialty_group == "URPS"])
-  v$abu_moved_phys  <- length(unique(moved))
-  v$abu_moved_procs <- sum(pv$annual_sling_count[pv$Rndrng_NPI %in% moved])
+  v$abu_moved_phys  <- v$urpsuro_phys
+  v$abu_moved_procs <- v$urpsuro_procs
 
   # ── Concentration (Table 2 + prose) ────────────────────────────────────────
   cm2 <- cm[match(order_grp, cm$specialty_group), ]
@@ -225,7 +231,7 @@ compute_manuscript_values <- function(
   vec <- function(grp) npi_tot$vv[npi_tot$specialty_group == grp]
   gini_ci <- function(grp) bootstrap_concentration_ci(vec(grp), compute_gini)
   tab$t2 <- data.frame(
-    Specialty = c("URPS","Urology (non-URPS)","General OB/GYN","MIGS"),
+    Specialty = c("URPS, OB/GYN pathway","URPS, urology pathway","Urology (non-URPS)","Other non-URPS OB/GYN","MIGS"),
     `N providers` = disp(cm2$n_providers),
     Gini = sprintf("%.2f", cm2$gini_coefficient),
     `HHI (0-10,000)` = disp(round(cm2$hhi)),
@@ -240,19 +246,22 @@ compute_manuscript_values <- function(
   cn <- function(grp, col) cm[[col]][cm$specialty_group == grp]
   fmt_gini_ci <- function(grp) { ci <- gini_ci(grp)
     sprintf("%.2f (95%% CI %.2f-%.2f)", cn(grp,"gini_coefficient"), ci[1], ci[2]) }
-  v$urps_gini <- cg("URPS","gini_coefficient"); v$urps_hhi <- round(cm$hhi[cm$specialty_group=="URPS"])
-  v$urps_top10 <- round(cm$pct_by_top_10[cm$specialty_group=="URPS"],1); v$urps_top20 <- round(cm$pct_by_top_20[cm$specialty_group=="URPS"],1)
+  UOBG <- "URPS (OB/GYN)"
+  v$urps_gini <- cg(UOBG,"gini_coefficient"); v$urps_hhi <- round(cm$hhi[cm$specialty_group==UOBG])
+  v$urps_top10 <- round(cm$pct_by_top_10[cm$specialty_group==UOBG],1); v$urps_top20 <- round(cm$pct_by_top_20[cm$specialty_group==UOBG],1)
+  v$urpsuro_gini <- cg("URPS (urology)","gini_coefficient"); v$urpsuro_top20 <- round(cm$pct_by_top_20[cm$specialty_group=="URPS (urology)"],1)
   v$uro_gini <- cg("Urology","gini_coefficient"); v$uro_hhi <- round(cm$hhi[cm$specialty_group=="Urology"]); v$uro_top20 <- round(cm$pct_by_top_20[cm$specialty_group=="Urology"],1)
   v$gob_gini <- cg("General OB/GYN","gini_coefficient"); v$gob_hhi <- round(cm$hhi[cm$specialty_group=="General OB/GYN"]); v$gob_top20 <- round(cm$pct_by_top_20[cm$specialty_group=="General OB/GYN"],1)
   v$mig_gini <- cg("MIGS","gini_coefficient"); v$mig_hhi <- disp(round(cm$hhi[cm$specialty_group=="MIGS"]))
   # Normalized HHI, effective providers, and Gini bootstrap CIs (reviewer #3)
-  v$urps_hhi_norm <- sprintf("%.3f", cn("URPS","hhi_normalized"))
+  v$urps_hhi_norm <- sprintf("%.3f", cn(UOBG,"hhi_normalized"))
   v$uro_hhi_norm  <- sprintf("%.3f", cn("Urology","hhi_normalized"))
   v$gob_hhi_norm  <- sprintf("%.3f", cn("General OB/GYN","hhi_normalized"))
-  v$urps_effn <- round(cn("URPS","effective_providers"))
+  v$urps_effn <- round(cn(UOBG,"effective_providers"))
   v$uro_effn  <- round(cn("Urology","effective_providers"))
   v$gob_effn  <- round(cn("General OB/GYN","effective_providers"))
-  v$urps_gini_ci <- fmt_gini_ci("URPS")
+  v$urps_gini_ci <- fmt_gini_ci(UOBG)
+  v$urpsuro_gini_ci <- fmt_gini_ci("URPS (urology)")
   v$uro_gini_ci  <- fmt_gini_ci("Urology")
   v$gob_gini_ci  <- fmt_gini_ci("General OB/GYN")
 
@@ -268,11 +277,11 @@ compute_manuscript_values <- function(
     c(gini = compute_gini(y), hhi = compute_hhi(y))
   }
   tab$t_suppress <- do.call(rbind, lapply(
-    c("URPS","Urology","General OB/GYN"), function(g) {
+    c("URPS (OB/GYN)","URPS (urology)","Urology","General OB/GYN"), function(g) {
       obs <- c(gini = cn(g,"gini_coefficient"), hhi = cn(g,"hhi"))
       s25 <- supp_sens(g, 0.25); s50 <- supp_sens(g, 0.50)
       data.frame(
-        Specialty = ifelse(g=="Urology","Urology (non-URPS)",g),
+        Specialty = dplyr::case_when(g=="Urology"~"Urology (non-URPS)", g=="General OB/GYN"~"Other non-URPS OB/GYN", TRUE~g),
         `Observed Gini` = sprintf("%.2f", obs["gini"]),
         `Gini +25% suppressed` = sprintf("%.2f", s25["gini"]),
         `Gini +50% suppressed` = sprintf("%.2f", s50["gini"]),
@@ -291,11 +300,11 @@ compute_manuscript_values <- function(
     x <- ac$gini_coefficient[ac$specialty_group == grp]
     if (length(x) == 0) NA_real_ else mean(x, na.rm = TRUE)
   }
-  v$annual_gini_urps <- sprintf("%.2f", ann_gini("URPS"))
+  v$annual_gini_urps <- sprintf("%.2f", ann_gini("URPS (OB/GYN)"))
   v$annual_gini_uro  <- sprintf("%.2f", ann_gini("Urology"))
   v$annual_gini_gob  <- sprintf("%.2f", ann_gini("General OB/GYN"))
-  v$annual_gini_spec_lo <- sprintf("%.2f", min(c(ann_gini("URPS"), ann_gini("Urology"), ann_gini("General OB/GYN"))))
-  v$annual_gini_spec_hi <- sprintf("%.2f", max(c(ann_gini("URPS"), ann_gini("Urology"), ann_gini("General OB/GYN"))))
+  v$annual_gini_spec_lo <- sprintf("%.2f", min(c(ann_gini("URPS (OB/GYN)"), ann_gini("URPS (urology)"), ann_gini("Urology"), ann_gini("General OB/GYN")), na.rm=TRUE))
+  v$annual_gini_spec_hi <- sprintf("%.2f", max(c(ann_gini("URPS (OB/GYN)"), ann_gini("URPS (urology)"), ann_gini("Urology"), ann_gini("General OB/GYN")), na.rm=TRUE))
 
   # Pairwise pooled-Gini difference bootstrap CIs (reviewer #8: overlapping
   # individual CIs are not a test of between-group difference). Also the
@@ -312,11 +321,11 @@ compute_manuscript_values <- function(
   gd <- function(g1, g2) { r <- boot_gini_diff(vec(g1), vec(g2))
     list(txt = sprintf("%+.3f (95%% CI %+.3f to %+.3f)", r[1], r[2], r[3]),
          differs = r[2] * r[3] > 0) }
-  v$ginidiff_urps_gob <- gd("URPS", "General OB/GYN")
-  v$ginidiff_urps_uro <- gd("URPS", "Urology")
+  v$ginidiff_urps_gob <- gd("URPS (OB/GYN)", "General OB/GYN")
+  v$ginidiff_urps_uro <- gd("URPS (OB/GYN)", "Urology")
   v$ginidiff_uro_gob  <- gd("Urology", "General OB/GYN")
   effpct <- function(grp) round(100 * cn(grp, "effective_providers") / cn(grp, "n_providers"))
-  v$urps_effpct <- effpct("URPS"); v$uro_effpct <- effpct("Urology"); v$gob_effpct <- effpct("General OB/GYN")
+  v$urps_effpct <- effpct("URPS (OB/GYN)"); v$uro_effpct <- effpct("Urology"); v$gob_effpct <- effpct("General OB/GYN")
 
   # Denominator-offset utilization model (reviewer #5/#6): annual services with
   # log FFS enrollment as an offset, dispersion-robust. Report the estimate and
@@ -342,34 +351,38 @@ compute_manuscript_values <- function(
   # Poisson GEE clustered by NPI, year centered at 2018 (mid-study): specialty
   # main effects are the rate ratios vs URPS at mid-study; specialty-specific
   # annual slopes are the marginal year contrasts (year_c + specialty:year_c).
-  gee <- fit_volume_gee(pv, year_col = year_col, reference_specialty = "URPS",
+  # Reference = OB/GYN-pathway URPS (largest URPS group).
+  gee <- fit_volume_gee(pv, year_col = year_col, reference_specialty = "URPS (OB/GYN)",
                         center_year = 2018, verbose = FALSE)
   gt <- gee$terms
   pick <- function(term) gt[gt$term == term, ]
+  v$gee_urpsuro <- rr_ci(pick("specialty_groupURPS (urology)")); v$gee_urpsuro_p <- fmt_p(pick("specialty_groupURPS (urology)")$p_value)
   v$gee_urology <- rr_ci(pick("specialty_groupUrology")); v$gee_urology_p <- fmt_p(pick("specialty_groupUrology")$p_value)
   v$gee_gob     <- rr_ci(pick("specialty_groupGeneral OB/GYN")); v$gee_gob_p <- fmt_p(pick("specialty_groupGeneral OB/GYN")$p_value)
   v$gee_migs    <- rr_ci(pick("specialty_groupMIGS")); v$gee_migs_p <- fmt_p(pick("specialty_groupMIGS")$p_value)
   v$gee_covid   <- rr_ci(pick("covid_2020")); v$gee_covid_p <- fmt_p(pick("covid_2020")$p_value)
-  # Specialty-specific annual slopes (marginal contrasts) -> the reference-year
-  # main effect is NOT an "overall" time trend; report each specialty's slope.
-  sl <- specialty_year_slopes(gee$model, reference_specialty = "URPS")
+  # Specialty-specific annual slopes (marginal contrasts).
+  sl <- specialty_year_slopes(gee$model, reference_specialty = "URPS (OB/GYN)")
   slrow <- function(grp) sl[sl$specialty == grp, ]
   slrr  <- function(grp) sprintf("%.3f (%.3f-%.3f)", slrow(grp)$slope_rr, slrow(grp)$ci_low, slrow(grp)$ci_high)
-  v$slope_urps <- slrr("URPS"); v$slope_urps_p <- fmt_p(slrow("URPS")$p_value)
+  v$slope_urps    <- slrr("URPS (OB/GYN)"); v$slope_urps_p <- fmt_p(slrow("URPS (OB/GYN)")$p_value)
+  v$slope_urpsuro <- slrr("URPS (urology)"); v$slope_urpsuro_p <- fmt_p(slrow("URPS (urology)")$p_value)
   v$slope_uro  <- slrr("Urology"); v$slope_uro_p <- fmt_p(slrow("Urology")$p_value)
   v$slope_gob  <- slrr("General OB/GYN"); v$slope_gob_p <- fmt_p(slrow("General OB/GYN")$p_value)
   v$slope_migs <- slrr("MIGS"); v$slope_migs_p <- fmt_p(slrow("MIGS")$p_value)
   tab$t3 <- data.frame(
-    Term = c("Urology vs URPS (at 2018)","General OB/GYN vs URPS (at 2018)","MIGS vs URPS (at 2018)",
+    Term = c("URPS urology vs URPS OB/GYN (at 2018)","Non-URPS urology vs URPS OB/GYN (at 2018)",
+             "Other non-URPS OB/GYN vs URPS OB/GYN (at 2018)","MIGS vs URPS OB/GYN (at 2018)",
              "2020 (COVID) indicator",
-             "Annual trend, URPS","Annual trend, urology","Annual trend, General OB/GYN","Annual trend, MIGS"),
-    `Rate ratio (95% CI)` = c(v$gee_urology, v$gee_gob, v$gee_migs, v$gee_covid,
-                              v$slope_urps, v$slope_uro, v$slope_gob, v$slope_migs),
-    `p-value` = c(v$gee_urology_p, v$gee_gob_p, v$gee_migs_p, v$gee_covid_p,
-                  v$slope_urps_p, v$slope_uro_p, v$slope_gob_p, v$slope_migs_p),
+             "Annual trend, URPS (OB/GYN)","Annual trend, URPS (urology)","Annual trend, non-URPS urology",
+             "Annual trend, other non-URPS OB/GYN","Annual trend, MIGS"),
+    `Rate ratio (95% CI)` = c(v$gee_urpsuro, v$gee_urology, v$gee_gob, v$gee_migs, v$gee_covid,
+                              v$slope_urps, v$slope_urpsuro, v$slope_uro, v$slope_gob, v$slope_migs),
+    `p-value` = c(v$gee_urpsuro_p, v$gee_urology_p, v$gee_gob_p, v$gee_migs_p, v$gee_covid_p,
+                  v$slope_urps_p, v$slope_urpsuro_p, v$slope_uro_p, v$slope_gob_p, v$slope_migs_p),
     check.names = FALSE)
   # Negative-binomial mixed model sensitivity (report numbers, not "concordant")
-  nb <- tryCatch(fit_volume_nb_mixed(pv, year_col = year_col, reference_specialty = "URPS",
+  nb <- tryCatch(fit_volume_nb_mixed(pv, year_col = year_col, reference_specialty = "URPS (OB/GYN)",
                                      center_year = 2018, verbose = FALSE), error = function(e) NULL)
   v$has_nb <- !is.null(nb)
   if (v$has_nb) {
@@ -384,10 +397,10 @@ compute_manuscript_values <- function(
   v$kw_H <- round(kw$statistic, 1); v$kw_df <- kw$df; v$kw_p <- fmt_p(kw$p_value)
 
   # ── Binomial URPS-share model (reviewer #4) ────────────────────────────────
-  # Model URPS services out of all annual services with a quasibinomial GLM on
-  # year, respecting the compositional structure the 11 OLS points ignore.
+  # Model OB/GYN-pathway URPS services out of all annual services (the primary
+  # URPS group) with a quasibinomial GLM on year.
   ash <- pv %>% dplyr::group_by(year = .data[[year_col]]) %>%
-    dplyr::summarise(urps_services = sum(annual_sling_count[specialty_group == "URPS"]),
+    dplyr::summarise(urps_services = sum(annual_sling_count[specialty_group == "URPS (OB/GYN)"]),
                      total_services = sum(annual_sling_count), .groups = "drop")
   bsh <- tryCatch(fit_urps_share_binomial(ash, center_year = 2018), error = function(e) NULL)
   v$has_share_binom <- !is.null(bsh)
@@ -408,8 +421,10 @@ compute_manuscript_values <- function(
     list(s13 = yy$s[which.min(yy[[year_col]])], s23 = yy$s[which.max(yy[[year_col]])],
          slope = stats::coef(mm)[2], p = summary(mm)$coefficients[2,4])
   }
-  is_urps <- function(x) x == "URPS"
-  is_gyn  <- function(x) x %in% c("URPS","MIGS","General OB/GYN")
+  # Classification-scenario sensitivity is inherently about the aggregate URPS
+  # certification-timing question, so it uses combined all-pathway URPS.
+  is_urps <- function(x) grepl("^URPS", x)
+  is_gyn  <- function(x) grepl("^URPS", x) | x %in% c("MIGS","General OB/GYN")
   # fixed combined-URPS + gyn-trained (approx gyn = URPS+MIGS+GenOB under fixed)
   fu <- share_trend(pv, is_urps); fg <- share_trend(pv, is_gyn)
   v$fixed_urps_s13 <- round(fu$s13,1); v$fixed_urps_s23 <- round(fu$s23,1); v$fixed_urps_slope <- round(fu$slope,2)
@@ -463,8 +478,9 @@ compute_manuscript_values <- function(
   wf <- build_workforce_dynamics(pv, year_col)$annual
   ent_spec <- build_workforce_dynamics(pv, year_col)$entrants_by_specialty %>%
     dplyr::group_by(specialty_group) %>% dplyr::summarise(n = sum(n_entrant), .groups="drop")
-  es <- function(grp) ent_spec$n[ent_spec$specialty_group == grp]
-  v$ent_urps <- es("URPS"); v$ent_uro <- es("Urology"); v$ent_gob <- es("General OB/GYN"); v$ent_migs <- es("MIGS")
+  es <- function(grp) { x <- ent_spec$n[ent_spec$specialty_group == grp]; if (length(x)==0) 0L else sum(x) }
+  esU <- function() sum(ent_spec$n[grepl("^URPS", ent_spec$specialty_group)])
+  v$ent_urps <- esU(); v$ent_uro <- es("Urology"); v$ent_gob <- es("General OB/GYN"); v$ent_migs <- es("MIGS")
   v$ent_min <- min(wf$n_entrant, na.rm=TRUE); v$ent_max <- max(wf$n_entrant, na.rm=TRUE)
   v$entpct_min <- sprintf("%.1f", min(wf$pct_vol_entrant, na.rm=TRUE)); v$entpct_max <- sprintf("%.1f", max(wf$pct_vol_entrant, na.rm=TRUE))
   v$cont_min <- min(wf$n_continuing, na.rm=TRUE); v$cont_max <- max(wf$n_continuing, na.rm=TRUE)
@@ -473,7 +489,7 @@ compute_manuscript_values <- function(
   v$ent_2020 <- wf$n_entrant[wf[[year_col]]==2020]; v$entpct_2020 <- sprintf("%.1f", wf$pct_vol_entrant[wf[[year_col]]==2020])
   v$ent_2022 <- wf$n_entrant[wf[[year_col]]==2022]; v$entpct_2022 <- sprintf("%.1f", wf$pct_vol_entrant[wf[[year_col]]==2022])
   v$urps_surg_2013 <- allc$n_surgeons[1]  # placeholder overwritten below
-  urps_ac <- ac[ac$specialty_group == "URPS", ]
+  urps_ac <- ac[ac$specialty_group == "URPS (OB/GYN)", ]
   v$urps_surg_2013 <- urps_ac$n_surgeons[which.min(urps_ac[[year_col]])]
   v$urps_surg_2023 <- urps_ac$n_surgeons[which.max(urps_ac[[year_col]])]
   nn <- function(x) ifelse(is.na(x), "n/a", disp(x))
@@ -492,8 +508,8 @@ compute_manuscript_values <- function(
     dplyr::count(Rndrng_NPI, state) %>% dplyr::group_by(Rndrng_NPI) %>%
     dplyr::slice_max(n, n = 1, with_ties = FALSE) %>% dplyr::ungroup() %>% dplyr::select(Rndrng_NPI, state)
   geo <- spec %>% dplyr::left_join(npi_state, by = "Rndrng_NPI") %>% dplyr::filter(!is.na(state)) %>%
-    dplyr::group_by(state) %>% dplyr::summarise(n = dplyr::n(), urps = sum(specialty_group == "URPS"),
-      share = 100 * sum(specialty_group == "URPS") / dplyr::n(), .groups="drop")
+    dplyr::group_by(state) %>% dplyr::summarise(n = dplyr::n(), urps = sum(grepl("^URPS", specialty_group)),
+      share = 100 * sum(grepl("^URPS", specialty_group)) / dplyr::n(), .groups="drop")
   v$n_states <- nrow(geo)
   state_name <- c(AK="Alaska", ND="North Dakota", PR="Puerto Rico", WY="Wyoming",
                   HI="Hawaii", MN="Minnesota", DC="the District of Columbia",
