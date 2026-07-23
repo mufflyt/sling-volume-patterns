@@ -27,40 +27,36 @@ Original research.
 
 ## Abstract
 
-**Objectives:** To describe the specialty distribution, surgeon volume,
-and concentration of clinicians performing sling surgery for stress
-urinary incontinence (CPT 57288) in fee-for-service Medicare, 2013
+**Objectives:** To describe the specialty distribution, annual clinician
+volume, and surgeon-level concentration of sling surgery for stress
+urinary incontinence (CPT 57288) in fee-for-service Medicare from 2013
 through 2023.
 
-**Methods:** Using the CMS Medicare Physician and Other Practitioners
-Public Use File (all 11 years), we classified clinicians billing CPT
-57288 as Urogynecology and Reconstructive Pelvic Surgery (URPS, both
-certification pathways), Minimally Invasive Gynecologic Surgery, other
-non-URPS OB/GYN, or non-URPS urology; facilities and unclassifiable
-billers formed a separate group. Utilization was modeled with a
-denominator offset (female Part B fee-for-service enrollment), annual
-volume with a Poisson generalized estimating equation clustered by NPI,
-and the URPS share with a quasibinomial model; concentration used the
-Gini coefficient with bootstrap confidence intervals.
+**Methods:** We analyzed all 11 annual CMS Medicare Physician and Other
+Practitioners Public Use Files. Individual clinicians were classified by
+CMS provider type and ABOG and ABU roster linkage. We modeled
+utilization with female Part B fee-for-service enrollment as an offset,
+annual volume with a Poisson generalized estimating equation clustered
+by NPI, and URPS share with a quasibinomial model. Annual Gini
+coefficients measured concentration.
 
-**Results:** 1,666 clinicians performed 141,009 observable services.
-OB/GYN-pathway URPS was the largest group (55%), with urology-pathway
-URPS a further 8.7% (together 63.7%), followed by non-URPS urology
-(14.5%) and other non-URPS OB/GYN (13%). Raw services fell -27.7%, but
-in a denominator-offset model the observable utilization rate declined
--1.9% per year (about -17.3% over the decade; p = 0.119), a meaningful
-but not statistically robust decline. Adjusted volume was higher for
-OB/GYN-pathway URPS than for the other groups. Within-year concentration
-was low and stable (annual Gini 0.22–0.28). In a quasibinomial model the
-OB/GYN-pathway URPS share rose 1.44 percentage points/year (48.3% to
-62.6%; p &lt; 0.001); the urology pathway was roughly stable.
+**Results:** Among 1,666 clinicians, 141,009 services were observable.
+OB/GYN-pathway URPS accounted for 55% of services and urology-pathway
+URPS for 8.7%, for a combined URPS share of 63.7%. Reported services
+declined 27.7%; after enrollment adjustment, the estimated utilization
+rate declined 1.9% per year (rate ratio 0.981, 95% CI 0.961-1.002; p =
+0.119). OB/GYN-pathway URPS had the highest adjusted annual volume.
+Within-year concentration remained stable. The fitted OB/GYN-pathway
+URPS share increased from 48.3% to 62.6% (+1.44 percentage points/year;
+p &lt; 0.001), whereas the urology-pathway share changed comparatively
+little.
 
-**Conclusions:** In observable fee-for-service Medicare, all-pathway
-URPS physicians performed most sling surgery for stress urinary
-incontinence, and their share rose as non-URPS participation declined,
-not through rising concentration. These findings describe observable
-Medicare service patterns, not the national surgical workforce; outcome
-and access studies are needed before credentialing implications.
+**Conclusions:** In observable fee-for-service Medicare, URPS physicians
+performed most sling services, and their share increased without greater
+surgeon concentration. These findings describe claims-visible service
+patterns, not the complete national surgical workforce; all-payer
+outcome and access studies are needed before drawing credentialing
+implications.
 
 **Keywords:** stress urinary incontinence; sling surgery; urogynecology;
 Medicare; surgical workforce; procedural concentration.
@@ -69,38 +65,30 @@ Medicare; surgical workforce; procedural concentration.
 
 ## Simply Stated
 
-Sling surgery is a common operation for stress urinary incontinence, a
-condition that causes urine leakage with coughing, laughing, or
-exercise. Several kinds of doctors perform this surgery, including
-urogynecologists (subspecialists in pelvic floor surgery), general
-obstetrician-gynecologists, and urologists. Using national Medicare
-billing records from 2013 to 2023, we looked at who performs these
-operations and how the work is spread among surgeons. Urogynecologists
-performed most of the operations, and their share grew over the decade.
-The total number of billed operations fell, but much of that drop
-reflects that fewer older adults are now in traditional Medicare; after
-accounting for that shrinking population, a smaller real decline may
-remain, though the data cannot pin it down precisely. No small group of
-very high-volume surgeons dominated the work. These findings describe
-the traditional Medicare workforce and cannot, by themselves, tell us
-who should be allowed to perform the surgery.
+Sling surgery treats stress urinary incontinence, which causes urine
+leakage with coughing, laughing, or exercise. We studied traditional
+Medicare billing records from 2013 through 2023 to learn which doctors
+performed these operations and how the work was shared. Urogynecologists
+performed most of the reported surgeries, and their share increased over
+time. The total number of reported surgeries fell. Some of that decline
+occurred because fewer people were enrolled in traditional Medicare,
+although a smaller true decline may remain. The work stayed spread
+across many surgeons rather than becoming centered in a small group.
+These data cannot show which specialty has the best outcomes or who
+should be allowed to perform the operation.
 
 ## Why This Matters
 
-The mix of specialties performing stress-incontinence surgery bears on
-training, credentialing, and patient access, yet national Medicare data
-on it are limited. This study adds two things. First, it identifies
-urogynecologists through both the obstetrics-gynecology and urology
-certification pathways, which avoids undercounting the subspecialty.
-Second, it shows that raw fee-for-service counts can be misleading:
-after accounting for the shrinking traditional-Medicare population, the
-apparent decline in sling surgery largely disappears, and within-year
-concentration among surgeons stayed low and stable. For clinicians and
-policymakers, the practical message is that observed shifts reflect
-changing workforce composition, not consolidation of care into a few
-hands, and that claims databases must be paired with enrollment
-denominators and outcome data before they can support credentialing or
-access decisions.
+National data on who performs sling surgery are limited. This study
+improves classification by identifying urogynecologists through both the
+obstetrics-gynecology and urology certification pathways, avoiding the
+misclassification of urology-trained urogynecologists as general
+urologists. It also pairs claims with fee-for-service enrollment,
+showing that raw service counts overstate the decline in utilization.
+The main finding is a growing URPS share without increasing within-year
+surgeon concentration. These results support workforce surveillance, but
+claims data alone cannot establish quality, access, or credentialing
+standards.
 
 ------------------------------------------------------------------------
 
@@ -476,7 +464,7 @@ had the highest median annual volume and upper quartile (median 19; p75
 29). MIGS was excluded from these comparisons because only 10 physicians
 were identified (1–4 per year); its estimates are exploratory.
 
-### Workforce Entry and Exit
+### Observable Participation Over Time
 
 Using the two-year washout (Supplementary Table S9), 46–150 surgeons
 became newly observable each year and performed 7.4%–21.7% of annual
@@ -526,7 +514,7 @@ practice rather than intensification of individual practice or
 concentration of care; they are best read as a practice-pattern study,
 not a study of entry into or exit from the clinical workforce.
 
-### Specialty Distribution and the Historical Reversal
+### Specialty Distribution in Context
 
 The two URPS pathways together performed approximately three-fifths of
 observable fee-for-service Medicare slings (63.7%; OB/GYN pathway 55%,
@@ -593,7 +581,7 @@ the CMS suppression threshold; total surgeon experience is therefore
 higher than the observed Medicare median, and Medicare PUF volume is an
 incomplete proxy for it.
 
-### Temporal Trends, Workforce Dynamics, and the Evolving SUI Landscape
+### Temporal Trends and the Evolving SUI Landscape
 
 The repeated-measures model and turnover analysis clarify why the URPS
 share increased. Individual physician volume did not change over time,
@@ -662,19 +650,18 @@ reproducible analytic pipeline.
 
 ## Conclusions
 
-Among observable fee-for-service Medicare claims, the proportion of
-sling services for stress urinary incontinence performed by all-pathway
-URPS physicians increased between 2013 and 2023, while observable
-participation by non-URPS physicians declined. Within-year surgeon-level
-concentration remained low and stable and did not differ meaningfully
-across the well-populated specialties. Because the data exclude
-low-volume physician-years and Medicare Advantage claims and do not
-distinguish synthetic midurethral from fascial sling procedures, these
-findings describe changes in the observable fee-for-service workforce
-rather than the entire national sling market. They may inform workforce
-surveillance and fellowship planning; studies linking all-payer volume,
-geographic access, and patient outcomes are needed before drawing
-credentialing implications.
+Among physician-years observable in fee-for-service Medicare, URPS
+physicians performed most reported sling services for stress urinary
+incontinence, and their share increased from 2013 through 2023. The
+increase was driven primarily by the OB/GYN pathway and declining
+observable participation among non-URPS clinicians, not by increasing
+surgeon-level concentration. Because the PUF excludes low-volume
+physician-years and Medicare Advantage claims and does not distinguish
+synthetic midurethral from fascial sling procedures, these results
+describe observable Medicare service patterns rather than the complete
+national sling market or clinical workforce. All-payer studies linking
+volume, outcomes, and geographic access are needed before drawing
+credentialing conclusions.
 
 ## References
 
