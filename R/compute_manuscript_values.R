@@ -41,6 +41,8 @@ compute_manuscript_values <- function(
   source(file.path(r_dir, "workforce_dynamics.R"),      local = TRUE)
   source(file.path(r_dir, "volume_models.R"),           local = TRUE)
   source(file.path(r_dir, "build_ffs_denominator.R"),   local = TRUE)
+  source(file.path(r_dir, "specialty_groups.R"),        local = TRUE)
+  source(file.path(r_dir, "manuscript_sections.R"),     local = TRUE)
 
   pc <- readRDS(puf_classified_path)
 
@@ -128,10 +130,11 @@ compute_manuscript_values <- function(
   # model displays. order_grp1 = Table 1 rows, which also show the excluded-from-
   # inference "Other/uncertain" group (reviewer: facilities and non-physician
   # clinicians must not be silently folded into urology).
-  # Six-group pathway split (combined URPS replaced by its two certification
-  # pathways). "URPS (OB/GYN)" is the primary/reference URPS group.
-  order_grp  <- c("URPS (OB/GYN)", "URPS (urology)", "Urology", "General OB/GYN", "MIGS")
-  order_grp1 <- c("URPS (OB/GYN)", "URPS (urology)", "Urology", "General OB/GYN", "Other/uncertain", "MIGS")
+  # Group ordering and labels come from the central taxonomy (specialty_groups.R):
+  # order_grp = the inferential groups (Table 2/3), order_grp1 = every group
+  # (Table 1). "URPS (OB/GYN)" is the primary/reference URPS group.
+  order_grp  <- sg_codes("inferential")
+  order_grp1 <- sg_codes("distribution")
   dist <- pv %>% dplyr::group_by(specialty_group) %>%
     dplyr::summarise(
       phys  = dplyr::n_distinct(Rndrng_NPI), pyears = dplyr::n(),
@@ -156,8 +159,7 @@ compute_manuscript_values <- function(
   disp <- function(x) format(x, big.mark = ",")
   astk <- ifelse(order_grp1 == "MIGS", "*", "")
   t1 <- data.frame(
-    Specialty = c("URPS, OB/GYN pathway", "URPS, urology pathway", "Urology (non-URPS)",
-                  "Other non-URPS OB/GYN", "Other/uncertain", "MIGS", "**Total**"),
+    Specialty = c(sg_display(order_grp1), "**Total**"),
     `Unique physicians` = c(disp(d$phys), paste0("**", disp(v$analytic_physicians), "**")),
     `Physician-years`   = c(disp(d$pyears), paste0("**", disp(v$analytic_pyears), "**")),
     `Reported services` = c(disp(d$procs), paste0("**", disp(v$analytic_procs), "**")),
@@ -233,7 +235,7 @@ compute_manuscript_values <- function(
   vec <- function(grp) npi_tot$vv[npi_tot$specialty_group == grp]
   gini_ci <- function(grp) bootstrap_concentration_ci(vec(grp), compute_gini)
   tab$t2 <- data.frame(
-    Specialty = c("URPS, OB/GYN pathway","URPS, urology pathway","Urology (non-URPS)","Other non-URPS OB/GYN","MIGS"),
+    Specialty = sg_display(order_grp),
     `N providers` = disp(cm2$n_providers),
     Gini = sprintf("%.2f", cm2$gini_coefficient),
     `HHI (0-10,000)` = disp(round(cm2$hhi)),
@@ -425,8 +427,8 @@ compute_manuscript_values <- function(
   }
   # Classification-scenario sensitivity is inherently about the aggregate URPS
   # certification-timing question, so it uses combined all-pathway URPS.
-  is_urps <- function(x) grepl("^URPS", x)
-  is_gyn  <- function(x) grepl("^URPS", x) | x %in% c("MIGS","General OB/GYN")
+  is_urps <- sg_is_urps
+  is_gyn  <- function(x) sg_is_urps(x) | x %in% c("MIGS","General OB/GYN")
   # fixed combined-URPS + gyn-trained (approx gyn = URPS+MIGS+GenOB under fixed)
   fu <- share_trend(pv, is_urps); fg <- share_trend(pv, is_gyn)
   v$fixed_urps_s13 <- round(fu$s13,1); v$fixed_urps_s23 <- round(fu$s23,1); v$fixed_urps_slope <- round(fu$slope,2)
@@ -486,52 +488,10 @@ compute_manuscript_values <- function(
                   bold_p(v$ct_urps_p), v$ct_gyn_p),
     check.names = FALSE)
 
-  # ── Workforce (Table 5 + prose) ────────────────────────────────────────────
-  wf <- build_workforce_dynamics(pv, year_col)$annual
-  ent_spec <- build_workforce_dynamics(pv, year_col)$entrants_by_specialty %>%
-    dplyr::group_by(specialty_group) %>% dplyr::summarise(n = sum(n_entrant), .groups="drop")
-  es <- function(grp) { x <- ent_spec$n[ent_spec$specialty_group == grp]; if (length(x)==0) 0L else sum(x) }
-  esU <- function() sum(ent_spec$n[grepl("^URPS", ent_spec$specialty_group)])
-  v$ent_urps <- esU(); v$ent_uro <- es("Urology"); v$ent_gob <- es("General OB/GYN"); v$ent_migs <- es("MIGS")
-  v$ent_min <- min(wf$n_entrant, na.rm=TRUE); v$ent_max <- max(wf$n_entrant, na.rm=TRUE)
-  v$entpct_min <- sprintf("%.1f", min(wf$pct_vol_entrant, na.rm=TRUE)); v$entpct_max <- sprintf("%.1f", max(wf$pct_vol_entrant, na.rm=TRUE))
-  v$cont_min <- min(wf$n_continuing, na.rm=TRUE); v$cont_max <- max(wf$n_continuing, na.rm=TRUE)
-  v$exit_min <- min(wf$n_exiting, na.rm=TRUE); v$exit_max <- max(wf$n_exiting, na.rm=TRUE)
-  v$ent_med  <- round(stats::median(wf$median_entrant_vol, na.rm=TRUE))
-  v$ent_2020 <- wf$n_entrant[wf[[year_col]]==2020]; v$entpct_2020 <- sprintf("%.1f", wf$pct_vol_entrant[wf[[year_col]]==2020])
-  v$ent_2022 <- wf$n_entrant[wf[[year_col]]==2022]; v$entpct_2022 <- sprintf("%.1f", wf$pct_vol_entrant[wf[[year_col]]==2022])
-  v$urps_surg_2013 <- allc$n_surgeons[1]  # placeholder overwritten below
-  urps_ac <- ac[ac$specialty_group == "URPS (OB/GYN)", ]
-  v$urps_surg_2013 <- urps_ac$n_surgeons[which.min(urps_ac[[year_col]])]
-  v$urps_surg_2023 <- urps_ac$n_surgeons[which.max(urps_ac[[year_col]])]
-  nn <- function(x) ifelse(is.na(x), "n/a", disp(x))
-  pp5 <- function(x) ifelse(is.na(x), "n/a", sprintf("%.1f%%", x))
-  tab$t5 <- data.frame(
-    Year = wf[[year_col]], Observable = disp(wf$n_observable),
-    Entrants = nn(wf$n_entrant), Continuing = nn(wf$n_continuing), Exiting = nn(wf$n_exiting),
-    `% volume by entrants` = pp5(wf$pct_vol_entrant),
-    `Median entrant volume` = nn(round(wf$median_entrant_vol)),
-    check.names = FALSE)
-
-  # ── Geography ──────────────────────────────────────────────────────────────
-  spec <- pv %>% dplyr::distinct(Rndrng_NPI, specialty_group)
-  npi_state <- pc %>% dplyr::filter(HCPCS_Cd == "57288", .data[[year_col]] != 2017) %>%
-    dplyr::transmute(Rndrng_NPI = as.character(Rndrng_NPI), state = Rndrng_Prvdr_State_Abrvtn) %>%
-    dplyr::count(Rndrng_NPI, state) %>% dplyr::group_by(Rndrng_NPI) %>%
-    dplyr::slice_max(n, n = 1, with_ties = FALSE) %>% dplyr::ungroup() %>% dplyr::select(Rndrng_NPI, state)
-  geo <- spec %>% dplyr::left_join(npi_state, by = "Rndrng_NPI") %>% dplyr::filter(!is.na(state)) %>%
-    dplyr::group_by(state) %>% dplyr::summarise(n = dplyr::n(), urps = sum(grepl("^URPS", specialty_group)),
-      share = 100 * sum(grepl("^URPS", specialty_group)) / dplyr::n(), .groups="drop")
-  v$n_states <- nrow(geo)
-  state_name <- c(AK="Alaska", ND="North Dakota", PR="Puerto Rico", WY="Wyoming",
-                  HI="Hawaii", MN="Minnesota", DC="the District of Columbia",
-                  CT="Connecticut", NE="Nebraska")
-  no_urps <- sort(geo$state[geo$urps == 0])
-  full <- ifelse(no_urps %in% names(state_name), state_name[no_urps], no_urps)
-  v$no_urps_states <- if (length(full) > 1) {
-    paste0(paste(full[-length(full)], collapse = ", "), ", and ", full[length(full)])
-  } else full
-  v$no_urps_states <- sub("^the ", "The ", v$no_urps_states)  # sentence start
+  # ── Workforce (Table 5) and Geography — extracted sections (#5) ─────────────
+  wfv <- compute_workforce_values(pv, ac, year_col)
+  v <- utils::modifyList(v, wfv$v); tab$t5 <- wfv$t5
+  v <- utils::modifyList(v, compute_geography_values(pv, pc, year_col))
 
   list(v = v, tab = tab, meta = list(
     generated_from = basename(puf_classified_path),
