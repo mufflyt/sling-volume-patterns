@@ -182,7 +182,8 @@ matched the ABU roster. We therefore did not assign them to urology.
 Facility NPIs (123 NPIs) were excluded because they cannot be given a
 physician specialty, and the remaining 200 non-physician or
 unclassifiable clinicians were placed in a distinct “Other/uncertain”
-group (8.2% of observable services). We report the specialty
+group (8.2% of observable services). The full classification flow, with
+counts at each step, is shown in Figure 3. We report the specialty
 distribution under three handlings of these billers, as a sensitivity
 analysis (Supplementary Table S11): the primary “Other/uncertain”
 grouping, exclusion, and the legacy assignment to urology; the latter
@@ -518,20 +519,26 @@ exit from the clinical workforce.
 ### Specialty Distribution and the Historical Reversal
 
 All-pathway URPS physicians performed approximately three-fifths of
-fee-for-service Medicare slings, and OB/GYN-trained physicians
-collectively performed the majority. Because the all-pathway URPS group
-also includes urology-trained subspecialists, the URPS share is not
-equivalent to a gynecologist share. This finding is consistent with
-contemporary practice-pattern data but reverses earlier
-Medicare-specific patterns. In ACS-NSQIP data from 2006 through 2013,
-James et al. reported that gynecologists performed 74.2% of sling
-procedures and urologists performed 25.8%.<sup>9</sup> Cantrell et
-al. found that urogynecologists performed 54% of stress-incontinence
-procedures at academic centers from 2009 through 2014.<sup>10</sup> In
-Medicare data from 2002 through 2007, however, Rogo-Gupta et al. found
-that urologists performed most sling operations.<sup>11</sup> Our
-2013–2023 findings indicate that this historical pattern has reversed,
-with URPS now the largest single specialty group.
+observable fee-for-service Medicare slings (63.7%), and non-URPS
+urologists a much smaller share (14.5%). Because the all-pathway URPS
+group also includes urology-trained subspecialists, the URPS share is
+not equivalent to a gynecologist share. The apparent non-URPS urology
+share is sensitive to classification: a naive provider-type approach
+that assigns ambulatory surgical centers and non-physician billers to
+urology roughly doubles it (Supplementary Table S11), which likely
+explains why some earlier analyses reported a larger urology share.
+Direct comparison with prior studies is limited because they used
+different datasets, specialty definitions, and care settings. In
+ACS-NSQIP data from 2006 through 2013, James et al. reported that
+gynecologists performed 74.2% of sling procedures and urologists
+25.8%;<sup>9</sup> Cantrell et al. found urogynecologists performed 54%
+of stress-incontinence procedures at academic centers from 2009 through
+2014;<sup>10</sup> and in Medicare data from 2002 through 2007,
+Rogo-Gupta et al. found urologists performed most sling
+operations.<sup>11</sup> Rather than asserting a single historical
+reversal across these heterogeneous sources, we conclude more cautiously
+that URPS was the largest contemporary fee-for-service Medicare group
+performing this procedure.
 
 Including both certification pathways was essential to this result.
 Cross-referencing the ABU roster reassigned 151 urology-typed
@@ -1058,16 +1065,32 @@ fee-for-service population contracted by -14.7%; the linear trend in the
 rate was not significant (p = 0.098).
 
 <img
-src="/Users/tylermuffly/sling-volume-patterns/output/figures/figure_1_market_share.png"
+src="/Users/tylermuffly/sling-volume-patterns/output/figures/figure_market_share.png"
 style="width:6.5in" />
 
 **Figure 2.** Market share of sling operations for stress urinary
 incontinence (CPT 57288) by specialty, fee-for-service Medicare PUF
-2013–2023. The URPS share increased under every classification scenario.
-Fixed membership (all-pathway URPS share 55.1% to 68%; +1.12 percentage
-points/year) and certification-gated classification (URPS share 43.6% to
-66.9%; +1.76 percentage points/year) differ in the estimated rate of
-increase and converge by 2023.
+2013–2023. Stacked areas are the fixed-membership specialty shares; the
+two black lines are the URPS share under fixed-membership (solid) and
+certification-gated (dashed) classification. Fixed membership
+(all-pathway URPS share 55.1% to 68%; +1.12 percentage points/year) and
+certification-gated classification (43.6% to 66.9%; +1.76 percentage
+points/year) differ in the estimated rate of increase and converge by
+2023.
+
+<img
+src="/Users/tylermuffly/sling-volume-patterns/output/figures/figure_classification_flow.png"
+style="width:6.5in" />
+
+**Figure 3.** Provider-classification flow for CPT 57288. Billers are
+assigned to specialty groups by CMS provider type cross-referenced with
+the ABOG and ABU rosters. Billers with neither an OB/GYN nor urology CMS
+type and no ABOG match (323 NPIs) are predominantly facilities
+(ambulatory surgical centers) and non-physician clinicians; facility
+NPIs (123) are excluded and the remainder (200) form an Other/uncertain
+group, rather than being counted as urologists. Specialty-specific
+counts exceed the analytic cohort because some physicians changed groups
+across years.
 
 ------------------------------------------------------------------------
 
