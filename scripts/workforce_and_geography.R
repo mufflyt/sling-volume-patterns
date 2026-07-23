@@ -27,6 +27,8 @@ res <- analyze_midurethral_sling_patterns(
   abog_npi_csv = "data/canonical_abog/canonical_abog_npi_LATEST.csv",
   urps_urology_npi_csv = "data/abu_urology/abu_urps_npi_LATEST.csv",
   exclude_years = tryCatch(config::get("exclude_years"), error = function(e) NULL),
+  other_handling = "separate",
+  split_urps_pathway = TRUE,
   verbose = FALSE
 )
 pv <- res$provider_volume
@@ -67,9 +69,9 @@ geo <- spec |> left_join(npi_state, by = "Rndrng_NPI") |> filter(!is.na(state)) 
   group_by(state) |>
   summarise(
     n_observable_surgeons = n(),
-    n_urps                = sum(specialty_group == "URPS"),
-    urps_share_pct        = round(100 * sum(specialty_group == "URPS") / n(), 1),
-    has_observable_urps   = sum(specialty_group == "URPS") > 0,
+    n_urps                = sum(grepl("^URPS", specialty_group)),
+    urps_share_pct        = round(100 * sum(grepl("^URPS", specialty_group)) / n(), 1),
+    has_observable_urps   = sum(grepl("^URPS", specialty_group)) > 0,
     .groups = "drop"
   ) |> arrange(desc(n_observable_surgeons))
 readr::write_csv(geo, "output/tables/table_13_geography_by_state.csv")

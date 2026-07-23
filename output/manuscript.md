@@ -1159,7 +1159,7 @@ concentration was low and stable across the study period.
 <table>
 <colgroup>
 <col style="width: 5%" />
-<col style="width: 14%" />
+<col style="width: 15%" />
 <col style="width: 10%" />
 <col style="width: 12%" />
 <col style="width: 16%" />
@@ -1187,26 +1187,14 @@ concentration was low and stable across the study period.
 <tr>
 <td>2013</td>
 <td>All</td>
-<td>812</td>
-<td>16399</td>
+<td>779</td>
+<td>15872</td>
 <td>16 (13–23)</td>
-<td>0.272</td>
-<td>16.6</td>
-<td>24.5%</td>
-<td>39.2%</td>
-<td>31.7%</td>
-</tr>
-<tr>
-<td>2013</td>
-<td>URPS</td>
-<td>385</td>
-<td>8749</td>
-<td>19 (14–27)</td>
-<td>0.283</td>
-<td>34.8</td>
-<td>24.1%</td>
-<td>39.1%</td>
-<td>30.6%</td>
+<td>0.275</td>
+<td>17.3</td>
+<td>24.4%</td>
+<td>39.3%</td>
+<td>31.5%</td>
 </tr>
 <tr>
 <td>2013</td>
@@ -1235,38 +1223,62 @@ concentration was low and stable across the study period.
 <tr>
 <td>2013</td>
 <td>Urology</td>
-<td>282</td>
-<td>5035</td>
+<td>211</td>
+<td>3563</td>
 <td>15 (12–19)</td>
-<td>0.235</td>
-<td>46.1</td>
-<td>24.0%</td>
-<td>36.8%</td>
-<td>34.6%</td>
+<td>0.198</td>
+<td>55.9</td>
+<td>20.8%</td>
+<td>33.7%</td>
+<td>36.3%</td>
+</tr>
+<tr>
+<td>2013</td>
+<td>Other/uncertain</td>
+<td>38</td>
+<td>945</td>
+<td>15 (12–35)</td>
+<td>0.363</td>
+<td>408.8</td>
+<td>28.5%</td>
+<td>47.4%</td>
+<td>25.4%</td>
+</tr>
+<tr>
+<td>2013</td>
+<td>URPS (OB/GYN)</td>
+<td>304</td>
+<td>7266</td>
+<td>19 (14–29)</td>
+<td>0.294</td>
+<td>44.3</td>
+<td>24.2%</td>
+<td>39.4%</td>
+<td>29.8%</td>
+</tr>
+<tr>
+<td>2013</td>
+<td>URPS (urology)</td>
+<td>81</td>
+<td>1483</td>
+<td>16 (14–20)</td>
+<td>0.199</td>
+<td>146.1</td>
+<td>22.0%</td>
+<td>34.3%</td>
+<td>36.2%</td>
 </tr>
 <tr>
 <td>2014</td>
 <td>All</td>
-<td>685</td>
-<td>14248</td>
+<td>656</td>
+<td>13725</td>
 <td>17 (13–24)</td>
-<td>0.267</td>
-<td>19.0</td>
+<td>0.269</td>
+<td>19.9</td>
 <td>23.2%</td>
-<td>38.2%</td>
+<td>38.5%</td>
 <td>31.6%</td>
-</tr>
-<tr>
-<td>2014</td>
-<td>URPS</td>
-<td>356</td>
-<td>8269</td>
-<td>19 (14–28)</td>
-<td>0.274</td>
-<td>36.4</td>
-<td>22.9%</td>
-<td>38.2%</td>
-<td>31.0%</td>
 </tr>
 <tr>
 <td>2014</td>
@@ -1295,38 +1307,62 @@ concentration was low and stable across the study period.
 <tr>
 <td>2014</td>
 <td>Urology</td>
-<td>212</td>
-<td>3862</td>
-<td>15 (12–20)</td>
-<td>0.238</td>
-<td>60.3</td>
-<td>23.3%</td>
-<td>36.8%</td>
-<td>34.0%</td>
+<td>152</td>
+<td>2577</td>
+<td>15 (12–19)</td>
+<td>0.198</td>
+<td>77.1</td>
+<td>21.0%</td>
+<td>33.6%</td>
+<td>36.6%</td>
+</tr>
+<tr>
+<td>2014</td>
+<td>Other/uncertain</td>
+<td>31</td>
+<td>762</td>
+<td>19 (12–32)</td>
+<td>0.341</td>
+<td>479.1</td>
+<td>30.7%</td>
+<td>45.9%</td>
+<td>24.4%</td>
+</tr>
+<tr>
+<td>2014</td>
+<td>URPS (OB/GYN)</td>
+<td>290</td>
+<td>6952</td>
+<td>20 (15–30)</td>
+<td>0.275</td>
+<td>44.8</td>
+<td>22.7%</td>
+<td>37.8%</td>
+<td>30.9%</td>
+</tr>
+<tr>
+<td>2014</td>
+<td>URPS (urology)</td>
+<td>66</td>
+<td>1317</td>
+<td>16 (13–23)</td>
+<td>0.250</td>
+<td>188.7</td>
+<td>22.9%</td>
+<td>38.6%</td>
+<td>32.5%</td>
 </tr>
 <tr>
 <td>2015</td>
 <td>All</td>
-<td>655</td>
-<td>13380</td>
+<td>627</td>
+<td>12846</td>
 <td>16 (13–24)</td>
-<td>0.268</td>
-<td>20.1</td>
-<td>23.5%</td>
-<td>38.2%</td>
-<td>31.7%</td>
-</tr>
-<tr>
-<td>2015</td>
-<td>URPS</td>
-<td>357</td>
-<td>7918</td>
-<td>18 (14–27)</td>
-<td>0.275</td>
-<td>36.7</td>
-<td>23.2%</td>
-<td>38.3%</td>
-<td>30.8%</td>
+<td>0.269</td>
+<td>21.1</td>
+<td>23.4%</td>
+<td>38.4%</td>
+<td>31.6%</td>
 </tr>
 <tr>
 <td>2015</td>
@@ -1355,38 +1391,62 @@ concentration was low and stable across the study period.
 <tr>
 <td>2015</td>
 <td>Urology</td>
-<td>198</td>
-<td>3622</td>
-<td>15 (12–20)</td>
-<td>0.244</td>
-<td>66.1</td>
-<td>23.2%</td>
-<td>37.2%</td>
-<td>33.7%</td>
+<td>129</td>
+<td>2109</td>
+<td>14 (12–18)</td>
+<td>0.196</td>
+<td>92.2</td>
+<td>20.2%</td>
+<td>33.6%</td>
+<td>36.5%</td>
+</tr>
+<tr>
+<td>2015</td>
+<td>Other/uncertain</td>
+<td>41</td>
+<td>979</td>
+<td>19 (13–31)</td>
+<td>0.309</td>
+<td>343.6</td>
+<td>27.9%</td>
+<td>42.7%</td>
+<td>27.6%</td>
+</tr>
+<tr>
+<td>2015</td>
+<td>URPS (OB/GYN)</td>
+<td>290</td>
+<td>6678</td>
+<td>19 (14–27)</td>
+<td>0.278</td>
+<td>45.2</td>
+<td>22.9%</td>
+<td>38.3%</td>
+<td>30.8%</td>
+</tr>
+<tr>
+<td>2015</td>
+<td>URPS (urology)</td>
+<td>67</td>
+<td>1240</td>
+<td>15 (12–24)</td>
+<td>0.236</td>
+<td>185.7</td>
+<td>21.5%</td>
+<td>36.5%</td>
+<td>33.1%</td>
 </tr>
 <tr>
 <td>2016</td>
 <td>All</td>
-<td>701</td>
-<td>14935</td>
+<td>665</td>
+<td>14322</td>
 <td>18 (13–25)</td>
-<td>0.268</td>
-<td>18.8</td>
-<td>23.7%</td>
+<td>0.270</td>
+<td>19.9</td>
+<td>23.8%</td>
 <td>38.0%</td>
-<td>31.7%</td>
-</tr>
-<tr>
-<td>2016</td>
-<td>URPS</td>
-<td>386</td>
-<td>9105</td>
-<td>19 (14–28)</td>
-<td>0.279</td>
-<td>34.1</td>
-<td>23.5%</td>
-<td>38.6%</td>
-<td>30.8%</td>
+<td>31.5%</td>
 </tr>
 <tr>
 <td>2016</td>
@@ -1415,38 +1475,62 @@ concentration was low and stable across the study period.
 <tr>
 <td>2016</td>
 <td>Urology</td>
-<td>214</td>
-<td>3910</td>
-<td>16 (13–21)</td>
-<td>0.222</td>
-<td>58.5</td>
-<td>21.7%</td>
-<td>34.5%</td>
-<td>34.9%</td>
+<td>129</td>
+<td>2225</td>
+<td>15 (13–20)</td>
+<td>0.199</td>
+<td>94.9</td>
+<td>20.3%</td>
+<td>33.3%</td>
+<td>36.3%</td>
+</tr>
+<tr>
+<td>2016</td>
+<td>Other/uncertain</td>
+<td>49</td>
+<td>1072</td>
+<td>19 (13–26)</td>
+<td>0.269</td>
+<td>268.9</td>
+<td>22.8%</td>
+<td>37.9%</td>
+<td>30.4%</td>
+</tr>
+<tr>
+<td>2016</td>
+<td>URPS (OB/GYN)</td>
+<td>314</td>
+<td>7675</td>
+<td>20 (14–29)</td>
+<td>0.281</td>
+<td>41.7</td>
+<td>23.4%</td>
+<td>38.3%</td>
+<td>30.5%</td>
+</tr>
+<tr>
+<td>2016</td>
+<td>URPS (urology)</td>
+<td>72</td>
+<td>1430</td>
+<td>16 (14–23)</td>
+<td>0.241</td>
+<td>181.3</td>
+<td>24.3%</td>
+<td>37.1%</td>
+<td>33.8%</td>
 </tr>
 <tr>
 <td>2017</td>
 <td>All</td>
-<td>735</td>
-<td>15995</td>
-<td>18 (13–25)</td>
-<td>0.278</td>
-<td>18.1</td>
-<td>23.8%</td>
-<td>38.7%</td>
-<td>31.0%</td>
-</tr>
-<tr>
-<td>2017</td>
-<td>URPS</td>
-<td>415</td>
-<td>9740</td>
-<td>19 (14–29)</td>
+<td>694</td>
+<td>15274</td>
+<td>18 (13–26)</td>
 <td>0.281</td>
-<td>31.4</td>
-<td>22.9%</td>
-<td>38.3%</td>
-<td>30.3%</td>
+<td>19.2</td>
+<td>23.8%</td>
+<td>38.9%</td>
+<td>30.7%</td>
 </tr>
 <tr>
 <td>2017</td>
@@ -1475,38 +1559,62 @@ concentration was low and stable across the study period.
 <tr>
 <td>2017</td>
 <td>Urology</td>
-<td>222</td>
-<td>4251</td>
-<td>16 (12–21)</td>
-<td>0.250</td>
-<td>60.1</td>
-<td>23.9%</td>
-<td>37.5%</td>
+<td>126</td>
+<td>2341</td>
+<td>15 (12–21)</td>
+<td>0.249</td>
+<td>109.3</td>
+<td>24.0%</td>
+<td>37.7%</td>
 <td>33.3%</td>
+</tr>
+<tr>
+<td>2017</td>
+<td>Other/uncertain</td>
+<td>55</td>
+<td>1189</td>
+<td>16 (13–26)</td>
+<td>0.286</td>
+<td>243.2</td>
+<td>25.5%</td>
+<td>39.1%</td>
+<td>29.4%</td>
+</tr>
+<tr>
+<td>2017</td>
+<td>URPS (OB/GYN)</td>
+<td>341</td>
+<td>8217</td>
+<td>20 (14–30)</td>
+<td>0.285</td>
+<td>38.4</td>
+<td>23.0%</td>
+<td>38.7%</td>
+<td>30.0%</td>
+</tr>
+<tr>
+<td>2017</td>
+<td>URPS (urology)</td>
+<td>74</td>
+<td>1523</td>
+<td>17 (14–24)</td>
+<td>0.246</td>
+<td>169.4</td>
+<td>22.9%</td>
+<td>36.0%</td>
+<td>32.9%</td>
 </tr>
 <tr>
 <td>2018</td>
 <td>All</td>
-<td>672</td>
-<td>15002</td>
-<td>18 (14–27)</td>
-<td>0.274</td>
-<td>19.4</td>
-<td>23.1%</td>
-<td>38.1%</td>
-<td>31.2%</td>
-</tr>
-<tr>
-<td>2018</td>
-<td>URPS</td>
-<td>387</td>
-<td>9239</td>
-<td>20 (15–30)</td>
-<td>0.277</td>
-<td>33.4</td>
-<td>22.4%</td>
-<td>37.6%</td>
-<td>30.5%</td>
+<td>640</td>
+<td>14455</td>
+<td>19 (14–27)</td>
+<td>0.275</td>
+<td>20.4</td>
+<td>22.9%</td>
+<td>37.9%</td>
+<td>31.0%</td>
 </tr>
 <tr>
 <td>2018</td>
@@ -1535,38 +1643,62 @@ concentration was low and stable across the study period.
 <tr>
 <td>2018</td>
 <td>Urology</td>
-<td>199</td>
-<td>4026</td>
-<td>16 (13–23)</td>
-<td>0.260</td>
-<td>65.5</td>
-<td>23.4%</td>
+<td>112</td>
+<td>2195</td>
+<td>16 (13–24)</td>
+<td>0.257</td>
+<td>117.5</td>
+<td>23.6%</td>
 <td>37.7%</td>
-<td>32.2%</td>
+<td>32.3%</td>
+</tr>
+<tr>
+<td>2018</td>
+<td>Other/uncertain</td>
+<td>55</td>
+<td>1284</td>
+<td>19 (14–26)</td>
+<td>0.275</td>
+<td>234.2</td>
+<td>24.0%</td>
+<td>39.2%</td>
+<td>30.5%</td>
+</tr>
+<tr>
+<td>2018</td>
+<td>URPS (OB/GYN)</td>
+<td>327</td>
+<td>8069</td>
+<td>21 (15–32)</td>
+<td>0.280</td>
+<td>39.6</td>
+<td>22.3%</td>
+<td>37.6%</td>
+<td>30.1%</td>
+</tr>
+<tr>
+<td>2018</td>
+<td>URPS (urology)</td>
+<td>60</td>
+<td>1170</td>
+<td>16 (14–24)</td>
+<td>0.224</td>
+<td>202.3</td>
+<td>20.1%</td>
+<td>34.1%</td>
+<td>34.4%</td>
 </tr>
 <tr>
 <td>2019</td>
 <td>All</td>
-<td>650</td>
-<td>14618</td>
-<td>18 (14–27)</td>
-<td>0.274</td>
-<td>20.1</td>
+<td>610</td>
+<td>13875</td>
+<td>19 (14–27)</td>
+<td>0.275</td>
+<td>21.4</td>
 <td>23.4%</td>
 <td>38.0%</td>
-<td>31.2%</td>
-</tr>
-<tr>
-<td>2019</td>
-<td>URPS</td>
-<td>386</td>
-<td>9174</td>
-<td>20 (15–28)</td>
-<td>0.275</td>
-<td>33.5</td>
-<td>23.1%</td>
-<td>38.2%</td>
-<td>31.2%</td>
+<td>31.1%</td>
 </tr>
 <tr>
 <td>2019</td>
@@ -1595,38 +1727,62 @@ concentration was low and stable across the study period.
 <tr>
 <td>2019</td>
 <td>Urology</td>
-<td>174</td>
-<td>3519</td>
+<td>82</td>
+<td>1621</td>
 <td>16 (13–24)</td>
-<td>0.251</td>
-<td>73.4</td>
-<td>23.0%</td>
-<td>36.6%</td>
-<td>32.7%</td>
+<td>0.239</td>
+<td>152.7</td>
+<td>22.9%</td>
+<td>36.4%</td>
+<td>33.5%</td>
+</tr>
+<tr>
+<td>2019</td>
+<td>Other/uncertain</td>
+<td>52</td>
+<td>1155</td>
+<td>18 (14–27)</td>
+<td>0.271</td>
+<td>249.7</td>
+<td>25.7%</td>
+<td>39.0%</td>
+<td>31.2%</td>
+</tr>
+<tr>
+<td>2019</td>
+<td>URPS (OB/GYN)</td>
+<td>328</td>
+<td>8059</td>
+<td>20 (15–29)</td>
+<td>0.277</td>
+<td>39.4</td>
+<td>22.7%</td>
+<td>38.2%</td>
+<td>31.0%</td>
+</tr>
+<tr>
+<td>2019</td>
+<td>URPS (urology)</td>
+<td>58</td>
+<td>1115</td>
+<td>16 (13–24)</td>
+<td>0.225</td>
+<td>215.0</td>
+<td>21.3%</td>
+<td>35.3%</td>
+<td>34.6%</td>
 </tr>
 <tr>
 <td>2020</td>
 <td>All</td>
-<td>445</td>
-<td>9228</td>
+<td>423</td>
+<td>8783</td>
 <td>17 (13–24)</td>
-<td>0.256</td>
-<td>28.7</td>
+<td>0.257</td>
+<td>30.1</td>
 <td>22.9%</td>
-<td>37.0%</td>
-<td>32.5%</td>
-</tr>
-<tr>
-<td>2020</td>
-<td>URPS</td>
-<td>280</td>
-<td>6051</td>
-<td>18 (14–25)</td>
-<td>0.262</td>
-<td>45.7</td>
-<td>22.7%</td>
-<td>37.4%</td>
-<td>32.1%</td>
+<td>37.1%</td>
+<td>32.4%</td>
 </tr>
 <tr>
 <td>2020</td>
@@ -1655,38 +1811,62 @@ concentration was low and stable across the study period.
 <tr>
 <td>2020</td>
 <td>Urology</td>
-<td>117</td>
-<td>2155</td>
-<td>15 (13–21)</td>
-<td>0.225</td>
-<td>105.6</td>
-<td>21.4%</td>
-<td>36.0%</td>
+<td>57</td>
+<td>940</td>
+<td>14 (12–19)</td>
+<td>0.192</td>
+<td>204.4</td>
+<td>20.2%</td>
+<td>34.0%</td>
+<td>36.3%</td>
+</tr>
+<tr>
+<td>2020</td>
+<td>Other/uncertain</td>
+<td>38</td>
+<td>770</td>
+<td>16 (13–25)</td>
+<td>0.234</td>
+<td>325.5</td>
+<td>21.3%</td>
+<td>35.8%</td>
+<td>33.5%</td>
+</tr>
+<tr>
+<td>2020</td>
+<td>URPS (OB/GYN)</td>
+<td>243</td>
+<td>5379</td>
+<td>19 (14–26)</td>
+<td>0.265</td>
+<td>52.6</td>
+<td>23.1%</td>
+<td>37.7%</td>
+<td>31.6%</td>
+</tr>
+<tr>
+<td>2020</td>
+<td>URPS (urology)</td>
+<td>37</td>
+<td>672</td>
+<td>17 (12–19)</td>
+<td>0.216</td>
+<td>331.5</td>
+<td>22.6%</td>
+<td>36.2%</td>
 <td>34.4%</td>
 </tr>
 <tr>
 <td>2021</td>
 <td>All</td>
-<td>458</td>
-<td>9551</td>
+<td>429</td>
+<td>9020</td>
 <td>17 (13–24)</td>
-<td>0.265</td>
-<td>28.1</td>
-<td>22.9%</td>
-<td>38.0%</td>
-<td>31.9%</td>
-</tr>
-<tr>
-<td>2021</td>
-<td>URPS</td>
-<td>282</td>
-<td>6114</td>
-<td>18 (13–25)</td>
-<td>0.270</td>
-<td>45.6</td>
-<td>23.3%</td>
-<td>38.3%</td>
-<td>31.5%</td>
+<td>0.266</td>
+<td>30.0</td>
+<td>22.8%</td>
+<td>37.9%</td>
+<td>31.6%</td>
 </tr>
 <tr>
 <td>2021</td>
@@ -1715,38 +1895,62 @@ concentration was low and stable across the study period.
 <tr>
 <td>2021</td>
 <td>Urology</td>
-<td>115</td>
-<td>2264</td>
-<td>17 (13–24)</td>
-<td>0.232</td>
-<td>104.8</td>
-<td>21.1%</td>
-<td>34.9%</td>
-<td>33.6%</td>
+<td>42</td>
+<td>764</td>
+<td>16 (13–23)</td>
+<td>0.207</td>
+<td>274.6</td>
+<td>21.9%</td>
+<td>34.8%</td>
+<td>35.5%</td>
+</tr>
+<tr>
+<td>2021</td>
+<td>Other/uncertain</td>
+<td>44</td>
+<td>969</td>
+<td>18 (14–28)</td>
+<td>0.237</td>
+<td>269.5</td>
+<td>20.9%</td>
+<td>35.2%</td>
+<td>32.9%</td>
+</tr>
+<tr>
+<td>2021</td>
+<td>URPS (OB/GYN)</td>
+<td>250</td>
+<td>5523</td>
+<td>18 (14–27)</td>
+<td>0.271</td>
+<td>51.3</td>
+<td>22.6%</td>
+<td>38.0%</td>
+<td>31.3%</td>
+</tr>
+<tr>
+<td>2021</td>
+<td>URPS (urology)</td>
+<td>32</td>
+<td>591</td>
+<td>16 (12–20)</td>
+<td>0.234</td>
+<td>397.4</td>
+<td>26.1%</td>
+<td>38.1%</td>
+<td>33.8%</td>
 </tr>
 <tr>
 <td>2022</td>
 <td>All</td>
-<td>562</td>
-<td>12053</td>
-<td>17 (13–25)</td>
+<td>524</td>
+<td>11367</td>
+<td>17 (14–26)</td>
 <td>0.275</td>
-<td>23.6</td>
-<td>24.2%</td>
-<td>39.1%</td>
-<td>31.4%</td>
-</tr>
-<tr>
-<td>2022</td>
-<td>URPS</td>
-<td>341</td>
-<td>7612</td>
-<td>18 (14–26)</td>
-<td>0.280</td>
-<td>38.9</td>
-<td>24.3%</td>
-<td>39.4%</td>
-<td>30.9%</td>
+<td>25.2</td>
+<td>24.0%</td>
+<td>38.9%</td>
+<td>31.3%</td>
 </tr>
 <tr>
 <td>2022</td>
@@ -1775,38 +1979,62 @@ concentration was low and stable across the study period.
 <tr>
 <td>2022</td>
 <td>Urology</td>
-<td>155</td>
-<td>3136</td>
-<td>16 (13–24)</td>
-<td>0.261</td>
-<td>83.9</td>
-<td>23.7%</td>
-<td>37.9%</td>
-<td>32.2%</td>
+<td>62</td>
+<td>1192</td>
+<td>17 (13–22)</td>
+<td>0.223</td>
+<td>195.4</td>
+<td>22.1%</td>
+<td>35.8%</td>
+<td>34.9%</td>
+</tr>
+<tr>
+<td>2022</td>
+<td>Other/uncertain</td>
+<td>55</td>
+<td>1258</td>
+<td>17 (14–32)</td>
+<td>0.282</td>
+<td>235.3</td>
+<td>23.9%</td>
+<td>38.3%</td>
+<td>29.3%</td>
+</tr>
+<tr>
+<td>2022</td>
+<td>URPS (OB/GYN)</td>
+<td>292</td>
+<td>6734</td>
+<td>19 (14–27)</td>
+<td>0.287</td>
+<td>45.7</td>
+<td>24.2%</td>
+<td>39.7%</td>
+<td>30.4%</td>
+</tr>
+<tr>
+<td>2022</td>
+<td>URPS (urology)</td>
+<td>49</td>
+<td>878</td>
+<td>16 (13–20)</td>
+<td>0.194</td>
+<td>239.3</td>
+<td>20.0%</td>
+<td>33.1%</td>
+<td>36.3%</td>
 </tr>
 <tr>
 <td>2023</td>
 <td>All</td>
-<td>562</td>
-<td>12223</td>
-<td>18 (13–25)</td>
-<td>0.268</td>
-<td>23.1</td>
-<td>23.2%</td>
-<td>37.9%</td>
+<td>522</td>
+<td>11470</td>
+<td>18 (14–26)</td>
+<td>0.267</td>
+<td>24.6</td>
+<td>22.9%</td>
+<td>37.8%</td>
 <td>31.6%</td>
-</tr>
-<tr>
-<td>2023</td>
-<td>URPS</td>
-<td>338</td>
-<td>7802</td>
-<td>19 (14–27)</td>
-<td>0.272</td>
-<td>38.3</td>
-<td>22.8%</td>
-<td>38.2%</td>
-<td>31.4%</td>
 </tr>
 <tr>
 <td>2023</td>
@@ -1835,14 +2063,50 @@ concentration was low and stable across the study period.
 <tr>
 <td>2023</td>
 <td>Urology</td>
-<td>144</td>
-<td>2822</td>
-<td>16 (13–23)</td>
-<td>0.248</td>
-<td>88.7</td>
-<td>22.7%</td>
-<td>36.2%</td>
-<td>32.9%</td>
+<td>48</td>
+<td>948</td>
+<td>17 (13–23)</td>
+<td>0.236</td>
+<td>253.9</td>
+<td>20.9%</td>
+<td>35.9%</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td>2023</td>
+<td>Other/uncertain</td>
+<td>56</td>
+<td>1121</td>
+<td>16 (13–25)</td>
+<td>0.242</td>
+<td>218.0</td>
+<td>21.6%</td>
+<td>36.6%</td>
+<td>32.3%</td>
+</tr>
+<tr>
+<td>2023</td>
+<td>URPS (OB/GYN)</td>
+<td>293</td>
+<td>6949</td>
+<td>20 (15–28)</td>
+<td>0.275</td>
+<td>44.2</td>
+<td>23.1%</td>
+<td>38.4%</td>
+<td>31.0%</td>
+</tr>
+<tr>
+<td>2023</td>
+<td>URPS (urology)</td>
+<td>45</td>
+<td>853</td>
+<td>16 (12–23)</td>
+<td>0.227</td>
+<td>264.9</td>
+<td>21.7%</td>
+<td>34.2%</td>
+<td>33.1%</td>
 </tr>
 </tbody>
 </table>
@@ -1854,7 +2118,7 @@ least squares).
 <table>
 <colgroup>
 <col style="width: 25%" />
-<col style="width: 16%" />
+<col style="width: 17%" />
 <col style="width: 11%" />
 <col style="width: 11%" />
 <col style="width: 14%" />
@@ -1876,10 +2140,10 @@ least squares).
 <tr>
 <td>Total procedures</td>
 <td>All</td>
-<td>16399.000</td>
-<td>12223.000</td>
-<td>-490.345</td>
-<td>0.454</td>
+<td>15872.000</td>
+<td>11470.000</td>
+<td>-503.609</td>
+<td>0.491</td>
 <td>0.020</td>
 </tr>
 <tr>
@@ -1902,30 +2166,48 @@ least squares).
 </tr>
 <tr>
 <td>Total procedures</td>
-<td>URPS</td>
-<td>8749.000</td>
-<td>7802.000</td>
-<td>-176.809</td>
-<td>0.228</td>
-<td>0.140</td>
+<td>Other/uncertain</td>
+<td>945.000</td>
+<td>1121.000</td>
+<td>19.964</td>
+<td>0.138</td>
+<td>0.260</td>
+</tr>
+<tr>
+<td>Total procedures</td>
+<td>URPS (OB/GYN)</td>
+<td>7266.000</td>
+<td>6949.000</td>
+<td>-97.018</td>
+<td>0.112</td>
+<td>0.310</td>
+</tr>
+<tr>
+<td>Total procedures</td>
+<td>URPS (urology)</td>
+<td>1483.000</td>
+<td>853.000</td>
+<td>-79.791</td>
+<td>0.663</td>
+<td>0.002</td>
 </tr>
 <tr>
 <td>Total procedures</td>
 <td>Urology</td>
-<td>5035.000</td>
-<td>2822.000</td>
-<td>-202.591</td>
-<td>0.607</td>
-<td>0.005</td>
+<td>3563.000</td>
+<td>948.000</td>
+<td>-235.818</td>
+<td>0.834</td>
+<td>n/a</td>
 </tr>
 <tr>
 <td>Observable surgeons</td>
 <td>All</td>
-<td>812.000</td>
-<td>562.000</td>
-<td>-26.636</td>
-<td>0.609</td>
-<td>0.005</td>
+<td>779.000</td>
+<td>522.000</td>
+<td>-27.045</td>
+<td>0.654</td>
+<td>0.003</td>
 </tr>
 <tr>
 <td>Observable surgeons</td>
@@ -1947,20 +2229,38 @@ least squares).
 </tr>
 <tr>
 <td>Observable surgeons</td>
-<td>URPS</td>
-<td>385.000</td>
-<td>338.000</td>
-<td>-6.918</td>
-<td>0.279</td>
+<td>Other/uncertain</td>
+<td>38.000</td>
+<td>56.000</td>
+<td>1.545</td>
+<td>0.344</td>
+<td>0.060</td>
+</tr>
+<tr>
+<td>Observable surgeons</td>
+<td>URPS (OB/GYN)</td>
+<td>304.000</td>
+<td>293.000</td>
+<td>-2.927</td>
 <td>0.100</td>
+<td>0.340</td>
+</tr>
+<tr>
+<td>Observable surgeons</td>
+<td>URPS (urology)</td>
+<td>81.000</td>
+<td>45.000</td>
+<td>-3.991</td>
+<td>0.702</td>
+<td>0.001</td>
 </tr>
 <tr>
 <td>Observable surgeons</td>
 <td>Urology</td>
-<td>282.000</td>
-<td>144.000</td>
-<td>-12.809</td>
-<td>0.724</td>
+<td>211.000</td>
+<td>48.000</td>
+<td>-14.764</td>
+<td>0.889</td>
 <td>n/a</td>
 </tr>
 <tr>
@@ -1968,9 +2268,9 @@ least squares).
 <td>All</td>
 <td>16.000</td>
 <td>18.000</td>
-<td>0.105</td>
-<td>0.168</td>
-<td>0.210</td>
+<td>0.109</td>
+<td>0.122</td>
+<td>0.290</td>
 </tr>
 <tr>
 <td>Median annual volume</td>
@@ -1992,30 +2292,48 @@ least squares).
 </tr>
 <tr>
 <td>Median annual volume</td>
-<td>URPS</td>
+<td>Other/uncertain</td>
+<td>15.000</td>
+<td>16.000</td>
+<td>-0.064</td>
+<td>0.019</td>
+<td>0.680</td>
+</tr>
+<tr>
+<td>Median annual volume</td>
+<td>URPS (OB/GYN)</td>
 <td>19.000</td>
-<td>19.000</td>
-<td>-0.045</td>
-<td>0.040</td>
-<td>0.550</td>
+<td>20.000</td>
+<td>-0.036</td>
+<td>0.022</td>
+<td>0.670</td>
+</tr>
+<tr>
+<td>Median annual volume</td>
+<td>URPS (urology)</td>
+<td>16.000</td>
+<td>16.000</td>
+<td>0.036</td>
+<td>0.036</td>
+<td>0.580</td>
 </tr>
 <tr>
 <td>Median annual volume</td>
 <td>Urology</td>
 <td>15.000</td>
-<td>16.000</td>
-<td>0.123</td>
-<td>0.354</td>
-<td>0.050</td>
+<td>17.000</td>
+<td>0.209</td>
+<td>0.462</td>
+<td>0.020</td>
 </tr>
 <tr>
 <td>Gini coefficient</td>
 <td>All</td>
-<td>0.272</td>
-<td>0.268</td>
+<td>0.275</td>
+<td>0.267</td>
 <td>0.000</td>
-<td>0.014</td>
-<td>0.730</td>
+<td>0.064</td>
+<td>0.450</td>
 </tr>
 <tr>
 <td>Gini coefficient</td>
@@ -2037,30 +2355,48 @@ least squares).
 </tr>
 <tr>
 <td>Gini coefficient</td>
-<td>URPS</td>
-<td>0.283</td>
-<td>0.272</td>
+<td>Other/uncertain</td>
+<td>0.363</td>
+<td>0.242</td>
+<td>-0.010</td>
+<td>0.700</td>
+<td>0.001</td>
+</tr>
+<tr>
+<td>Gini coefficient</td>
+<td>URPS (OB/GYN)</td>
+<td>0.294</td>
+<td>0.275</td>
 <td>-0.001</td>
-<td>0.201</td>
-<td>0.170</td>
+<td>0.177</td>
+<td>0.200</td>
+</tr>
+<tr>
+<td>Gini coefficient</td>
+<td>URPS (urology)</td>
+<td>0.199</td>
+<td>0.227</td>
+<td>-0.001</td>
+<td>0.070</td>
+<td>0.430</td>
 </tr>
 <tr>
 <td>Gini coefficient</td>
 <td>Urology</td>
-<td>0.235</td>
-<td>0.248</td>
-<td>0.001</td>
-<td>0.081</td>
-<td>0.400</td>
+<td>0.198</td>
+<td>0.236</td>
+<td>0.003</td>
+<td>0.139</td>
+<td>0.260</td>
 </tr>
 <tr>
 <td>HHI (0–10,000)</td>
 <td>All</td>
-<td>16.564</td>
-<td>23.057</td>
-<td>0.876</td>
-<td>0.530</td>
-<td>0.010</td>
+<td>17.307</td>
+<td>24.632</td>
+<td>0.973</td>
+<td>0.564</td>
+<td>0.008</td>
 </tr>
 <tr>
 <td>HHI (0–10,000)</td>
@@ -2082,30 +2418,48 @@ least squares).
 </tr>
 <tr>
 <td>HHI (0–10,000)</td>
-<td>URPS</td>
-<td>34.768</td>
-<td>38.253</td>
-<td>0.722</td>
-<td>0.257</td>
-<td>0.110</td>
+<td>Other/uncertain</td>
+<td>408.846</td>
+<td>217.954</td>
+<td>-18.475</td>
+<td>0.542</td>
+<td>0.010</td>
+</tr>
+<tr>
+<td>HHI (0–10,000)</td>
+<td>URPS (OB/GYN)</td>
+<td>44.322</td>
+<td>44.229</td>
+<td>0.404</td>
+<td>0.085</td>
+<td>0.380</td>
+</tr>
+<tr>
+<td>HHI (0–10,000)</td>
+<td>URPS (urology)</td>
+<td>146.115</td>
+<td>264.909</td>
+<td>16.159</td>
+<td>0.501</td>
+<td>0.010</td>
 </tr>
 <tr>
 <td>HHI (0–10,000)</td>
 <td>Urology</td>
-<td>46.113</td>
-<td>88.690</td>
-<td>4.821</td>
-<td>0.676</td>
-<td>0.002</td>
+<td>55.876</td>
+<td>253.877</td>
+<td>20.658</td>
+<td>0.861</td>
+<td>n/a</td>
 </tr>
 <tr>
 <td>Share by top 10% (%)</td>
 <td>All</td>
-<td>24.538</td>
-<td>23.202</td>
-<td>-0.056</td>
-<td>0.123</td>
-<td>0.290</td>
+<td>24.427</td>
+<td>22.903</td>
+<td>-0.080</td>
+<td>0.247</td>
+<td>0.120</td>
 </tr>
 <tr>
 <td>Share by top 10% (%)</td>
@@ -2127,30 +2481,48 @@ least squares).
 </tr>
 <tr>
 <td>Share by top 10% (%)</td>
-<td>URPS</td>
-<td>24.117</td>
-<td>22.776</td>
-<td>-0.018</td>
-<td>0.011</td>
-<td>0.760</td>
+<td>Other/uncertain</td>
+<td>28.466</td>
+<td>21.588</td>
+<td>-0.773</td>
+<td>0.643</td>
+<td>0.003</td>
+</tr>
+<tr>
+<td>Share by top 10% (%)</td>
+<td>URPS (OB/GYN)</td>
+<td>24.250</td>
+<td>23.097</td>
+<td>-0.016</td>
+<td>0.007</td>
+<td>0.800</td>
+</tr>
+<tr>
+<td>Share by top 10% (%)</td>
+<td>URPS (urology)</td>
+<td>21.982</td>
+<td>21.688</td>
+<td>-0.036</td>
+<td>0.005</td>
+<td>0.840</td>
 </tr>
 <tr>
 <td>Share by top 10% (%)</td>
 <td>Urology</td>
-<td>23.952</td>
-<td>22.679</td>
-<td>-0.114</td>
-<td>0.142</td>
-<td>0.250</td>
+<td>20.797</td>
+<td>20.886</td>
+<td>0.082</td>
+<td>0.039</td>
+<td>0.560</td>
 </tr>
 <tr>
 <td>Share by top 20% (%)</td>
 <td>All</td>
-<td>39.210</td>
-<td>37.945</td>
-<td>-0.055</td>
-<td>0.092</td>
-<td>0.370</td>
+<td>39.308</td>
+<td>37.751</td>
+<td>-0.092</td>
+<td>0.246</td>
+<td>0.120</td>
 </tr>
 <tr>
 <td>Share by top 20% (%)</td>
@@ -2172,30 +2544,48 @@ least squares).
 </tr>
 <tr>
 <td>Share by top 20% (%)</td>
-<td>URPS</td>
-<td>39.102</td>
-<td>38.170</td>
-<td>-0.020</td>
-<td>0.014</td>
-<td>0.730</td>
+<td>Other/uncertain</td>
+<td>47.407</td>
+<td>36.574</td>
+<td>-1.012</td>
+<td>0.710</td>
+<td>0.001</td>
+</tr>
+<tr>
+<td>Share by top 20% (%)</td>
+<td>URPS (OB/GYN)</td>
+<td>39.403</td>
+<td>38.365</td>
+<td>-0.004</td>
+<td>0.000</td>
+<td>0.950</td>
+</tr>
+<tr>
+<td>Share by top 20% (%)</td>
+<td>URPS (urology)</td>
+<td>34.322</td>
+<td>34.232</td>
+<td>-0.185</td>
+<td>0.123</td>
+<td>0.290</td>
 </tr>
 <tr>
 <td>Share by top 20% (%)</td>
 <td>Urology</td>
-<td>36.822</td>
-<td>36.180</td>
-<td>-0.032</td>
-<td>0.010</td>
-<td>0.770</td>
+<td>33.679</td>
+<td>35.865</td>
+<td>0.215</td>
+<td>0.189</td>
+<td>0.180</td>
 </tr>
 <tr>
 <td>Share by bottom 50% (%)</td>
 <td>All</td>
-<td>31.734</td>
-<td>31.604</td>
-<td>0.007</td>
-<td>0.003</td>
-<td>0.870</td>
+<td>31.496</td>
+<td>31.569</td>
+<td>0.015</td>
+<td>0.013</td>
+<td>0.740</td>
 </tr>
 <tr>
 <td>Share by bottom 50% (%)</td>
@@ -2217,21 +2607,39 @@ least squares).
 </tr>
 <tr>
 <td>Share by bottom 50% (%)</td>
-<td>URPS</td>
-<td>30.552</td>
-<td>31.364</td>
-<td>0.085</td>
-<td>0.308</td>
-<td>0.080</td>
+<td>Other/uncertain</td>
+<td>25.397</td>
+<td>32.293</td>
+<td>0.710</td>
+<td>0.644</td>
+<td>0.003</td>
+</tr>
+<tr>
+<td>Share by bottom 50% (%)</td>
+<td>URPS (OB/GYN)</td>
+<td>29.769</td>
+<td>31.026</td>
+<td>0.084</td>
+<td>0.233</td>
+<td>0.130</td>
+</tr>
+<tr>
+<td>Share by bottom 50% (%)</td>
+<td>URPS (urology)</td>
+<td>36.210</td>
+<td>33.060</td>
+<td>0.043</td>
+<td>0.012</td>
+<td>0.740</td>
 </tr>
 <tr>
 <td>Share by bottom 50% (%)</td>
 <td>Urology</td>
-<td>34.598</td>
-<td>32.884</td>
-<td>-0.161</td>
-<td>0.324</td>
-<td>0.070</td>
+<td>36.290</td>
+<td>33.333</td>
+<td>-0.220</td>
+<td>0.216</td>
+<td>0.150</td>
 </tr>
 </tbody>
 </table>
@@ -2242,9 +2650,9 @@ year separately (fixed-membership classification).
 
 <table>
 <colgroup>
-<col style="width: 22%" />
-<col style="width: 22%" />
-<col style="width: 22%" />
+<col style="width: 23%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
 <col style="width: 20%" />
 <col style="width: 12%" />
 </colgroup>
@@ -2260,31 +2668,45 @@ year separately (fixed-membership classification).
 <tbody>
 <tr>
 <td>General OB/GYN</td>
-<td>15.7</td>
-<td>12.3</td>
-<td>-0.421</td>
-<td>0.006</td>
+<td>16.3</td>
+<td>13.1</td>
+<td>-0.397</td>
+<td>0.008</td>
 </tr>
 <tr>
 <td>MIGS</td>
 <td>0.2</td>
-<td>0.8</td>
-<td>0.071</td>
-<td>0.008</td>
+<td>0.9</td>
+<td>0.077</td>
+<td>0.004</td>
 </tr>
 <tr>
-<td>URPS</td>
-<td>53.4</td>
-<td>63.8</td>
-<td>0.901</td>
+<td>Other/uncertain</td>
+<td>6.0</td>
+<td>9.8</td>
+<td>0.488</td>
 <td>&lt;0.001</td>
 </tr>
 <tr>
+<td>URPS (OB/GYN)</td>
+<td>45.8</td>
+<td>60.6</td>
+<td>1.416</td>
+<td>&lt;0.001</td>
+</tr>
+<tr>
+<td>URPS (urology)</td>
+<td>9.3</td>
+<td>7.4</td>
+<td>-0.299</td>
+<td>0.001</td>
+</tr>
+<tr>
 <td>Urology</td>
-<td>30.7</td>
-<td>23.1</td>
-<td>-0.550</td>
-<td>0.004</td>
+<td>22.4</td>
+<td>8.3</td>
+<td>-1.284</td>
+<td>&lt;0.001</td>
 </tr>
 </tbody>
 </table>
@@ -2304,43 +2726,63 @@ from a Poisson GEE clustered by NPI, excluding calendar year 2020
 <tbody>
 <tr>
 <td>(Intercept)</td>
-<td>21.23 (19.63-22.97)</td>
+<td>21.79 (20.23-23.48)</td>
 <td>n/a</td>
 </tr>
 <tr>
 <td>Specialty: General OB/GYN</td>
-<td>0.69 (0.53-0.89)</td>
-<td>0.004</td>
+<td>0.64 (0.46-0.90)</td>
+<td>0.010</td>
 </tr>
 <tr>
 <td>Specialty: MIGS</td>
-<td>0.60 (0.44-0.83)</td>
-<td>0.002</td>
+<td>0.88 (0.58-1.34)</td>
+<td>0.540</td>
+</tr>
+<tr>
+<td>Specialty: Other/uncertain</td>
+<td>0.89 (0.80-0.98)</td>
+<td>0.020</td>
 </tr>
 <tr>
 <td>Specialty: Urology</td>
-<td>0.81 (0.69-0.94)</td>
-<td>0.007</td>
+<td>0.69 (0.57-0.83)</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>Specialty: URPS (urology)</td>
+<td>0.75 (0.68-0.83)</td>
+<td>n/a</td>
 </tr>
 <tr>
 <td>year_c</td>
 <td>1.00 (0.99-1.01)</td>
-<td>0.620</td>
+<td>0.850</td>
 </tr>
 <tr>
 <td>Specialty: General OB/GYN:year_c</td>
 <td>1.00 (0.97-1.02)</td>
-<td>0.840</td>
+<td>0.900</td>
 </tr>
 <tr>
 <td>Specialty: MIGS:year_c</td>
-<td>1.08 (1.02-1.15)</td>
-<td>0.010</td>
+<td>1.08 (1.02-1.14)</td>
+<td>0.006</td>
+</tr>
+<tr>
+<td>Specialty: Other/uncertain:year_c</td>
+<td>0.99 (0.95-1.03)</td>
+<td>0.550</td>
 </tr>
 <tr>
 <td>Specialty: Urology:year_c</td>
 <td>0.99 (0.97-1.01)</td>
-<td>0.220</td>
+<td>0.230</td>
+</tr>
+<tr>
+<td>Specialty: URPS (urology):year_c</td>
+<td>0.99 (0.97-1.01)</td>
+<td>0.210</td>
 </tr>
 </tbody>
 </table>
@@ -2351,10 +2793,10 @@ Bonferroni correction.
 
 <table>
 <colgroup>
-<col style="width: 73%" />
-<col style="width: 12%" />
+<col style="width: 75%" />
+<col style="width: 11%" />
 <col style="width: 4%" />
-<col style="width: 10%" />
+<col style="width: 9%" />
 </colgroup>
 <thead>
 <tr>
@@ -2367,8 +2809,8 @@ Bonferroni correction.
 <tbody>
 <tr>
 <td>Kruskal-Wallis: per-physician median volume across specialties</td>
-<td>66.10</td>
-<td>3</td>
+<td>97.35</td>
+<td>5</td>
 <td>&lt;0.001</td>
 </tr>
 <tr>
@@ -2378,10 +2820,23 @@ Bonferroni correction.
 <td>1.00</td>
 </tr>
 <tr>
+<td>Wilcoxon (per-physician, bonferroni): Other/uncertain vs General
+OB/GYN</td>
+<td>n/a</td>
+<td>NA</td>
+<td>0.002</td>
+</tr>
+<tr>
+<td>Wilcoxon (per-physician, bonferroni): Other/uncertain vs MIGS</td>
+<td>n/a</td>
+<td>NA</td>
+<td>1.00</td>
+</tr>
+<tr>
 <td>Wilcoxon (per-physician, bonferroni): Urology vs General OB/GYN</td>
 <td>n/a</td>
 <td>NA</td>
-<td>0.82</td>
+<td>1.00</td>
 </tr>
 <tr>
 <td>Wilcoxon (per-physician, bonferroni): Urology vs MIGS</td>
@@ -2390,19 +2845,67 @@ Bonferroni correction.
 <td>1.00</td>
 </tr>
 <tr>
-<td>Wilcoxon (per-physician, bonferroni): URPS vs General OB/GYN</td>
+<td>Wilcoxon (per-physician, bonferroni): Urology vs
+Other/uncertain</td>
 <td>n/a</td>
 <td>NA</td>
 <td>&lt;0.001</td>
 </tr>
 <tr>
-<td>Wilcoxon (per-physician, bonferroni): URPS vs MIGS</td>
+<td>Wilcoxon (per-physician, bonferroni): URPS (OB/GYN) vs General
+OB/GYN</td>
+<td>n/a</td>
+<td>NA</td>
+<td>&lt;0.001</td>
+</tr>
+<tr>
+<td>Wilcoxon (per-physician, bonferroni): URPS (OB/GYN) vs MIGS</td>
 <td>n/a</td>
 <td>NA</td>
 <td>1.00</td>
 </tr>
 <tr>
-<td>Wilcoxon (per-physician, bonferroni): URPS vs Urology</td>
+<td>Wilcoxon (per-physician, bonferroni): URPS (OB/GYN) vs
+Other/uncertain</td>
+<td>n/a</td>
+<td>NA</td>
+<td>1.00</td>
+</tr>
+<tr>
+<td>Wilcoxon (per-physician, bonferroni): URPS (OB/GYN) vs Urology</td>
+<td>n/a</td>
+<td>NA</td>
+<td>&lt;0.001</td>
+</tr>
+<tr>
+<td>Wilcoxon (per-physician, bonferroni): URPS (urology) vs General
+OB/GYN</td>
+<td>n/a</td>
+<td>NA</td>
+<td>1.00</td>
+</tr>
+<tr>
+<td>Wilcoxon (per-physician, bonferroni): URPS (urology) vs MIGS</td>
+<td>n/a</td>
+<td>NA</td>
+<td>1.00</td>
+</tr>
+<tr>
+<td>Wilcoxon (per-physician, bonferroni): URPS (urology) vs
+Other/uncertain</td>
+<td>n/a</td>
+<td>NA</td>
+<td>0.76</td>
+</tr>
+<tr>
+<td>Wilcoxon (per-physician, bonferroni): URPS (urology) vs Urology</td>
+<td>n/a</td>
+<td>NA</td>
+<td>0.86</td>
+</tr>
+<tr>
+<td>Wilcoxon (per-physician, bonferroni): URPS (urology) vs URPS
+(OB/GYN)</td>
 <td>n/a</td>
 <td>NA</td>
 <td>&lt;0.001</td>
@@ -2414,10 +2917,10 @@ Bonferroni correction.
 classification schemes (time-varying, modal, ever-URPS/MIGS,
 certification-gated).
 
-<table style="width:100%;">
+<table>
 <colgroup>
-<col style="width: 47%" />
-<col style="width: 16%" />
+<col style="width: 46%" />
+<col style="width: 17%" />
 <col style="width: 13%" />
 <col style="width: 12%" />
 <col style="width: 10%" />
@@ -2435,114 +2938,142 @@ certification-gated).
 <tr>
 <td>Time-varying (per physician-year)</td>
 <td>General OB/GYN</td>
-<td>330</td>
-<td>16391</td>
-<td>12.5%</td>
+<td>336</td>
+<td>18316</td>
+<td>13.0%</td>
 </tr>
 <tr>
 <td>Time-varying (per physician-year)</td>
 <td>MIGS</td>
 <td>10</td>
-<td>862</td>
+<td>941</td>
 <td>0.7%</td>
 </tr>
 <tr>
 <td>Time-varying (per physician-year)</td>
+<td>Other/uncertain</td>
+<td>200</td>
+<td>11504</td>
+<td>8.2%</td>
+</tr>
+<tr>
+<td>Time-varying (per physician-year)</td>
 <td>URPS</td>
-<td>753</td>
-<td>80033</td>
-<td>60.8%</td>
+<td>767</td>
+<td>89773</td>
+<td>63.7%</td>
 </tr>
 <tr>
 <td>Time-varying (per physician-year)</td>
 <td>Urology</td>
-<td>665</td>
-<td>34351</td>
-<td>26.1%</td>
+<td>366</td>
+<td>20475</td>
+<td>14.5%</td>
 </tr>
 <tr>
 <td>Modal (single most-frequent specialty)</td>
 <td>General OB/GYN</td>
-<td>326</td>
-<td>16362</td>
-<td>12.4%</td>
+<td>332</td>
+<td>18287</td>
+<td>13.0%</td>
 </tr>
 <tr>
 <td>Modal (single most-frequent specialty)</td>
 <td>MIGS</td>
 <td>10</td>
-<td>862</td>
+<td>941</td>
 <td>0.7%</td>
 </tr>
 <tr>
 <td>Modal (single most-frequent specialty)</td>
+<td>Other/uncertain</td>
+<td>200</td>
+<td>11504</td>
+<td>8.2%</td>
+</tr>
+<tr>
+<td>Modal (single most-frequent specialty)</td>
 <td>URPS</td>
-<td>752</td>
-<td>80312</td>
-<td>61.0%</td>
+<td>766</td>
+<td>90107</td>
+<td>63.9%</td>
 </tr>
 <tr>
 <td>Modal (single most-frequent specialty)</td>
 <td>Urology</td>
-<td>657</td>
-<td>34101</td>
-<td>25.9%</td>
+<td>358</td>
+<td>20170</td>
+<td>14.3%</td>
 </tr>
 <tr>
 <td>Ever URPS/MIGS</td>
 <td>General OB/GYN</td>
-<td>326</td>
-<td>16362</td>
-<td>12.4%</td>
+<td>332</td>
+<td>18287</td>
+<td>13.0%</td>
 </tr>
 <tr>
 <td>Ever URPS/MIGS</td>
 <td>MIGS</td>
 <td>10</td>
-<td>862</td>
+<td>941</td>
 <td>0.7%</td>
 </tr>
 <tr>
 <td>Ever URPS/MIGS</td>
+<td>Other/uncertain</td>
+<td>200</td>
+<td>11504</td>
+<td>8.2%</td>
+</tr>
+<tr>
+<td>Ever URPS/MIGS</td>
 <td>URPS</td>
-<td>753</td>
-<td>80803</td>
-<td>61.4%</td>
+<td>767</td>
+<td>90686</td>
+<td>64.3%</td>
 </tr>
 <tr>
 <td>Ever URPS/MIGS</td>
 <td>Urology</td>
-<td>656</td>
-<td>33610</td>
-<td>25.5%</td>
+<td>357</td>
+<td>19591</td>
+<td>13.9%</td>
 </tr>
 <tr>
 <td>Time-varying cert-gated (ABOG sub1startdate)</td>
 <td>General OB/GYN</td>
-<td>520</td>
-<td>24505</td>
-<td>18.6%</td>
+<td>533</td>
+<td>27453</td>
+<td>19.5%</td>
 </tr>
 <tr>
 <td>Time-varying cert-gated (ABOG sub1startdate)</td>
 <td>MIGS</td>
 <td>5</td>
 <td>201</td>
-<td>0.2%</td>
+<td>0.1%</td>
+</tr>
+<tr>
+<td>Time-varying cert-gated (ABOG sub1startdate)</td>
+<td>Other/uncertain</td>
+<td>200</td>
+<td>11492</td>
+<td>8.1%</td>
 </tr>
 <tr>
 <td>Time-varying cert-gated (ABOG sub1startdate)</td>
 <td>URPS</td>
-<td>706</td>
-<td>74238</td>
-<td>56.4%</td>
+<td>716</td>
+<td>83348</td>
+<td>59.1%</td>
 </tr>
 <tr>
 <td>Time-varying cert-gated (ABOG sub1startdate)</td>
 <td>Urology</td>
-<td>651</td>
-<td>32693</td>
-<td>24.8%</td>
+<td>353</td>
+<td>18515</td>
+<td>13.1%</td>
 </tr>
 </tbody>
 </table>
@@ -2551,12 +3082,12 @@ certification-gated).
 market-share trends under each classification scheme. The URPS increase
 remains positive and significant in every scheme.
 
-<table>
+<table style="width:100%;">
 <colgroup>
-<col style="width: 46%" />
-<col style="width: 20%" />
-<col style="width: 8%" />
+<col style="width: 45%" />
 <col style="width: 19%" />
+<col style="width: 7%" />
+<col style="width: 18%" />
 <col style="width: 7%" />
 </colgroup>
 <thead>
@@ -2571,31 +3102,31 @@ remains positive and significant in every scheme.
 <tbody>
 <tr>
 <td>Time-varying (per physician-year)</td>
-<td>0.901</td>
+<td>1.116</td>
 <td>&lt;0.001</td>
-<td>0.550</td>
-<td>0.004</td>
+<td>0.796</td>
+<td>&lt;0.001</td>
 </tr>
 <tr>
 <td>Modal (single most-frequent specialty)</td>
-<td>0.982</td>
+<td>1.200</td>
 <td>&lt;0.001</td>
-<td>0.657</td>
-<td>0.002</td>
+<td>0.906</td>
+<td>&lt;0.001</td>
 </tr>
 <tr>
 <td>Ever URPS/MIGS</td>
-<td>0.958</td>
-<td>0.001</td>
-<td>0.633</td>
-<td>0.002</td>
+<td>1.174</td>
+<td>&lt;0.001</td>
+<td>0.881</td>
+<td>&lt;0.001</td>
 </tr>
 <tr>
 <td>Time-varying cert-gated (ABOG sub1startdate)</td>
-<td>1.539</td>
+<td>1.762</td>
 <td>&lt;0.001</td>
-<td>0.550</td>
-<td>0.009</td>
+<td>0.792</td>
+<td>&lt;0.001</td>
 </tr>
 </tbody>
 </table>
@@ -2625,23 +3156,23 @@ the CMS reporting threshold.
 <tbody>
 <tr>
 <td>CA</td>
-<td>150</td>
+<td>138</td>
 <td>50</td>
-<td>33.3%</td>
+<td>36.2%</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>TX</td>
-<td>144</td>
+<td>133</td>
 <td>47</td>
-<td>32.6%</td>
+<td>35.3%</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>FL</td>
-<td>139</td>
+<td>127</td>
 <td>49</td>
-<td>35.3%</td>
+<td>38.6%</td>
 <td>Yes</td>
 </tr>
 <tr>
@@ -2653,58 +3184,51 @@ the CMS reporting threshold.
 </tr>
 <tr>
 <td>IL</td>
-<td>64</td>
+<td>62</td>
 <td>39</td>
-<td>60.9%</td>
+<td>62.9%</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>OH</td>
-<td>61</td>
+<td>59</td>
 <td>44</td>
-<td>72.1%</td>
+<td>74.6%</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>PA</td>
-<td>61</td>
+<td>57</td>
 <td>33</td>
-<td>54.1%</td>
+<td>57.9%</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>AZ</td>
-<td>59</td>
+<td>55</td>
 <td>19</td>
-<td>32.2%</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>NJ</td>
-<td>57</td>
-<td>28</td>
-<td>49.1%</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>TN</td>
-<td>57</td>
-<td>20</td>
-<td>35.1%</td>
+<td>34.5%</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>MI</td>
-<td>56</td>
+<td>52</td>
 <td>22</td>
-<td>39.3%</td>
+<td>42.3%</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>NC</td>
-<td>54</td>
+<td>52</td>
 <td>35</td>
-<td>64.8%</td>
+<td>67.3%</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NJ</td>
+<td>52</td>
+<td>28</td>
+<td>53.8%</td>
 <td>Yes</td>
 </tr>
 <tr>
@@ -2715,94 +3239,94 @@ the CMS reporting threshold.
 <td>Yes</td>
 </tr>
 <tr>
+<td>TN</td>
+<td>48</td>
+<td>20</td>
+<td>41.7%</td>
+<td>Yes</td>
+</tr>
+<tr>
 <td>WA</td>
-<td>45</td>
-<td>19</td>
-<td>42.2%</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>IN</td>
 <td>44</td>
-<td>13</td>
-<td>29.5%</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>VA</td>
-<td>43</td>
-<td>27</td>
-<td>62.8%</td>
+<td>19</td>
+<td>43.2%</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>GA</td>
-<td>42</td>
+<td>39</td>
 <td>17</td>
-<td>40.5%</td>
+<td>43.6%</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>MO</td>
-<td>42</td>
+<td>39</td>
 <td>16</td>
-<td>38.1%</td>
+<td>41.0%</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>VA</td>
+<td>39</td>
+<td>27</td>
+<td>69.2%</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>IN</td>
+<td>37</td>
+<td>13</td>
+<td>35.1%</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>AL</td>
-<td>36</td>
+<td>35</td>
 <td>12</td>
-<td>33.3%</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>MD</td>
-<td>34</td>
-<td>14</td>
-<td>41.2%</td>
+<td>34.3%</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>SC</td>
-<td>34</td>
+<td>31</td>
 <td>11</td>
-<td>32.4%</td>
+<td>35.5%</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>MD</td>
+<td>29</td>
+<td>14</td>
+<td>48.3%</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>KY</td>
-<td>30</td>
+<td>28</td>
 <td>10</td>
-<td>33.3%</td>
+<td>35.7%</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>OK</td>
-<td>29</td>
+<td>28</td>
 <td>10</td>
-<td>34.5%</td>
+<td>35.7%</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>LA</td>
-<td>28</td>
+<td>26</td>
 <td>6</td>
-<td>21.4%</td>
+<td>23.1%</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>NE</td>
-<td>26</td>
-<td>4</td>
-<td>15.4%</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>CO</td>
 <td>25</td>
-<td>14</td>
-<td>56.0%</td>
+<td>4</td>
+<td>16.0%</td>
 <td>Yes</td>
 </tr>
 <tr>
@@ -2813,10 +3337,10 @@ the CMS reporting threshold.
 <td>Yes</td>
 </tr>
 <tr>
-<td>KS</td>
-<td>21</td>
-<td>4</td>
-<td>19.0%</td>
+<td>CO</td>
+<td>24</td>
+<td>14</td>
+<td>58.3%</td>
 <td>Yes</td>
 </tr>
 <tr>
@@ -2827,13 +3351,6 @@ the CMS reporting threshold.
 <td>Yes</td>
 </tr>
 <tr>
-<td>AR</td>
-<td>20</td>
-<td>3</td>
-<td>15.0%</td>
-<td>Yes</td>
-</tr>
-<tr>
 <td>WI</td>
 <td>20</td>
 <td>12</td>
@@ -2841,10 +3358,17 @@ the CMS reporting threshold.
 <td>Yes</td>
 </tr>
 <tr>
-<td>IA</td>
+<td>AR</td>
+<td>19</td>
+<td>3</td>
+<td>15.8%</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>KS</td>
 <td>18</td>
-<td>7</td>
-<td>38.9%</td>
+<td>4</td>
+<td>22.2%</td>
 <td>Yes</td>
 </tr>
 <tr>
@@ -2852,6 +3376,13 @@ the CMS reporting threshold.
 <td>17</td>
 <td>14</td>
 <td>82.4%</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>IA</td>
+<td>15</td>
+<td>7</td>
+<td>46.7%</td>
 <td>Yes</td>
 </tr>
 <tr>
@@ -2870,9 +3401,9 @@ the CMS reporting threshold.
 </tr>
 <tr>
 <td>MS</td>
-<td>13</td>
+<td>11</td>
 <td>3</td>
-<td>23.1%</td>
+<td>27.3%</td>
 <td>Yes</td>
 </tr>
 <tr>
@@ -2911,13 +3442,6 @@ the CMS reporting threshold.
 <td>Yes</td>
 </tr>
 <tr>
-<td>DE</td>
-<td>7</td>
-<td>4</td>
-<td>57.1%</td>
-<td>Yes</td>
-</tr>
-<tr>
 <td>RI</td>
 <td>7</td>
 <td>5</td>
@@ -2932,10 +3456,10 @@ the CMS reporting threshold.
 <td>Yes</td>
 </tr>
 <tr>
-<td>ID</td>
+<td>DE</td>
 <td>6</td>
-<td>3</td>
-<td>50.0%</td>
+<td>4</td>
+<td>66.7%</td>
 <td>Yes</td>
 </tr>
 <tr>
@@ -2946,8 +3470,15 @@ the CMS reporting threshold.
 <td>Yes</td>
 </tr>
 <tr>
+<td>ID</td>
+<td>5</td>
+<td>3</td>
+<td>60.0%</td>
+<td>Yes</td>
+</tr>
+<tr>
 <td>ND</td>
-<td>6</td>
+<td>5</td>
 <td>0</td>
 <td>0.0%</td>
 <td>No</td>
@@ -2967,15 +3498,15 @@ the CMS reporting threshold.
 <td>Yes</td>
 </tr>
 <tr>
-<td>AK</td>
+<td>PR</td>
 <td>2</td>
 <td>0</td>
 <td>0.0%</td>
 <td>No</td>
 </tr>
 <tr>
-<td>PR</td>
-<td>2</td>
+<td>AK</td>
+<td>1</td>
 <td>0</td>
 <td>0.0%</td>
 <td>No</td>
