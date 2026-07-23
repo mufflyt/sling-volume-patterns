@@ -28,37 +28,39 @@ Original research.
 ## Abstract
 
 **Objectives:** To describe the specialty distribution, surgeon volume,
-and surgeon-level concentration of physicians performing sling surgery
-for stress urinary incontinence (CPT 57288) in fee-for-service Medicare,
-2013 through 2023.
+and concentration of clinicians performing sling surgery for stress
+urinary incontinence (CPT 57288) in fee-for-service Medicare, 2013
+through 2023.
 
 **Methods:** Using the CMS Medicare Physician and Other Practitioners
-Public Use File (all 11 years), we classified physicians billing CPT
-57288 as Urogynecology and Reconstructive Pelvic Surgery (URPS),
-Minimally Invasive Gynecologic Surgery (MIGS), General OB/GYN, or
-non-URPS urology by combining CMS provider type with the ABOG and ABU
-rosters. Utilization was expressed per 100,000 female Part B
-fee-for-service beneficiaries. Annual volume was modeled with a Poisson
-generalized estimating equation clustered by NPI, and the URPS share
-trend with a quasibinomial model; concentration used the Gini
-coefficient and HHI with bootstrap confidence intervals.
+Public Use File (all 11 years), we classified clinicians billing CPT
+57288 as Urogynecology and Reconstructive Pelvic Surgery (URPS, both
+certification pathways), Minimally Invasive Gynecologic Surgery, other
+non-URPS OB/GYN, or non-URPS urology; facilities and unclassifiable
+billers formed a separate group. Utilization was modeled with a
+denominator offset (female Part B fee-for-service enrollment), annual
+volume with a Poisson generalized estimating equation clustered by NPI,
+and the URPS share with a quasibinomial model; concentration used the
+Gini coefficient with bootstrap confidence intervals.
 
-**Results:** 1,789 physicians performed 147,632 services; URPS was the
-largest group (60.8%; median 19/year). Reported services fell -25.5%,
-but after adjusting for a -14.7% contraction of the fee-for-service
-population the rate declined only -12.6% (trend not significant, p =
-0.139). Adjusted per-physician volume was highest for URPS and flat over
-time. Within-year concentration was low, stable, and similar across
-specialties (overlapping Gini confidence intervals, 0.52–0.56). The
-all-pathway URPS share rose from 53.4% to 63.8% (+0.90 pp/year; p &lt;
-0.001), significant in every classification scenario.
+**Results:** 1,666 clinicians performed 141,009 observable services;
+URPS was the largest group (63.7%), followed by non-URPS urology (14.5%)
+and other non-URPS OB/GYN (13%). Raw services fell -27.7%, but in a
+denominator-offset model the observable utilization rate declined -1.9%
+per year (about -17.3% over the decade; p = 0.119), a meaningful but not
+statistically robust decline. Observed volume was higher for URPS than
+urology and other OB/GYN. Within-year concentration was low and stable
+(annual Gini 0.22–0.28); URPS and urology did not differ, and URPS was
+modestly less concentrated than other OB/GYN. In a quasibinomial model
+the all-pathway URPS share rose 1.15 percentage points/year (58.3% to
+69.7%; p &lt; 0.001), significant in every classification scenario.
 
 **Conclusions:** In observable fee-for-service Medicare, all-pathway
-URPS physicians perform most sling surgery for stress urinary
-incontinence, and the URPS share rose, driven by declining participation
-of non-URPS physicians rather than rising concentration. These findings
-describe the observable fee-for-service workforce; outcome and access
-studies are needed before credentialing implications.
+URPS physicians performed most sling surgery for stress urinary
+incontinence, and their share rose as non-URPS participation declined,
+not through rising concentration. These findings describe observable
+Medicare service patterns, not the national surgical workforce; outcome
+and access studies are needed before credentialing implications.
 
 **Keywords:** stress urinary incontinence; sling surgery; urogynecology;
 Medicare; surgical workforce; procedural concentration.
@@ -75,12 +77,13 @@ obstetrician-gynecologists, and urologists. Using national Medicare
 billing records from 2013 to 2023, we looked at who performs these
 operations and how the work is spread among surgeons. Urogynecologists
 performed most of the operations, and their share grew over the decade.
-The total number of billed operations fell, but much of that drop simply
-reflects that fewer older adults are in traditional Medicare rather than
-a real decline in the surgery. No small group of very high-volume
-surgeons dominated the work. These findings describe the traditional
-Medicare workforce and cannot, by themselves, tell us who should be
-allowed to perform the surgery.
+The total number of billed operations fell, but much of that drop
+reflects that fewer older adults are now in traditional Medicare; after
+accounting for that shrinking population, a smaller real decline may
+remain, though the data cannot pin it down precisely. No small group of
+very high-volume surgeons dominated the work. These findings describe
+the traditional Medicare workforce and cannot, by themselves, tell us
+who should be allowed to perform the surgery.
 
 ## Why This Matters
 
@@ -168,18 +171,25 @@ subspecialty registry (a snapshot of ABOG-certified diplomates linked to
 NPIs primarily by exact NPI match and, when needed, by full name and
 practice state) identified “Female Pelvic Medicine and Reconstructive
 Surgery” as URPS and “MIG” as MIGS; all other OB/GYN physicians were
-classified as General OB/GYN. This yielded 1789-cohort assignments of
+classified as General OB/GYN. This yielded 1666-cohort assignments of
 URPS, MIGS, and General OB/GYN through the OB/GYN pathway.
 
-Providers billing CPT 57288 who had neither an OB/GYN nor urology CMS
-type and were not in the ABOG registry (323 physicians, mostly with
-adjacent surgical provider types) were grouped with urology, on the
-rationale that non-gynecologic sling surgeons in Medicare are
-predominantly urologists; because they represent a small fraction of the
-cohort, this choice has limited influence on the specialty distribution.
-A further 84 records from heterogeneous non-OB/GYN, non-urology provider
-types (for example general surgery and osteopathic manipulative
-medicine) were excluded.
+Billers of CPT 57288 who had neither an OB/GYN nor urology CMS provider
+type and were not in the ABOG registry (323 NPIs) were predominantly
+facilities (ambulatory surgical centers) and non-physician clinicians
+(physician assistants, nurse practitioners), not urologists; none
+matched the ABU roster. We therefore did not assign them to urology.
+Facility NPIs (123 NPIs) were excluded because they cannot be given a
+physician specialty, and the remaining 200 non-physician or
+unclassifiable clinicians were placed in a distinct “Other/uncertain”
+group (8.2% of observable services). We report the specialty
+distribution under three handlings of these billers, as a sensitivity
+analysis (Supplementary Table S11): the primary “Other/uncertain”
+grouping, exclusion, and the legacy assignment to urology; the latter
+inflates the apparent non-URPS urology share roughly two-fold and is not
+used. A further small number of provider-year records from
+ABOG-registered NPIs with a miscellaneous CMS type remained “Other” and
+were excluded.
 
 We then cross-referenced the American Board of Urology roster (355
 urology-pathway urogynecologist NPIs) to identify urology-pathway
@@ -330,37 +340,40 @@ renv. The complete analytic pipeline is available at
 
 ### Cohort and Annual Volume
 
-Across the full 11-year window, 1,789 physicians billed CPT 57288,
-accounting for 147,632 observed services in 6,937 physician-year
-observations. Participation was intermittent: 560 physicians (31%)
-appeared in one year, 756 (42%) in 2–5 years, 365 (20%) in 6–10 years,
-and 108 (6%) in all 11 years. Thus, only a small proportion maintained
+Across the full 11-year window, 1,666 physicians billed CPT 57288,
+accounting for 141,009 observed services in 6,569 physician-year
+observations. Participation was intermittent: 505 physicians (30%)
+appeared in one year, 707 (42%) in 2–5 years, 349 (21%) in 6–10 years,
+and 105 (6%) in all 11 years. Thus, only a small proportion maintained
 an observable Medicare sling practice throughout the study window.
 
-The observed count of reported services fell from 16,399 in 2013 to
-12,223 in 2023 (-25.5%). Over the same period, however, the female Part
-B fee-for-service population contracted from 18.35 million to 15.65
-million beneficiaries (-14.7%), reflecting migration into Medicare
-Advantage. After denominator adjustment, the utilization rate declined
-more modestly, from 89.4 to 78.1 services per 100,000 female Part B
-fee-for-service beneficiaries (-12.6%), and the linear trend in the rate
-was not statistically significant (-1.65 per 100,000 per year; p =
-0.139). The rate reached a low of 52.4 per 100,000 in 2020, consistent
-with pandemic-related deferral of elective surgery, then partially
-recovered. The number of observable surgeons also fell, from 812 to 562.
-Thus, much of the apparent decline in service counts reflected the
-shrinking fee-for-service denominator rather than a clear fall in
-age-eligible utilization.
+The observed count of reported services fell from 15,872 in 2013 to
+11,470 in 2023 (-27.7%). Over the same period the female Part B
+fee-for-service population contracted from 18.35 million to 15.65
+million beneficiaries (-14.7%). In a Poisson model of the annual service
+count with log fee-for-service enrollment as an offset and a 2020
+indicator, the observable utilization rate declined -1.9% per year (rate
+ratio 0.981, 95% CI 0.961-1.002; about -17.3% over the decade), but with
+only 11 annual observations and the pandemic interruption this trend was
+not statistically robust (dispersion-adjusted p = 0.119). The rate
+reached a low of 49.8 per 100,000 in 2020, consistent with
+pandemic-related deferral of elective surgery, then partially recovered.
+The number of observable surgeons also fell, from 779 to 522. A
+clinically meaningful decline in observable utilization thus remains
+possible, but the raw service-count drop overstates it because much of
+that drop reflects the shrinking fee-for-service denominator; because
+CMS suppresses low-volume physician-years, this is an
+observable-services rate, not the total national fee-for-service rate.
 
 ### Specialty Distribution and Trends
 
 URPS was the largest group: 767 physicians contributed 3,913
-physician-years and 89,773 procedures (60.8%), with a median annual
-volume of 19 (p25–p75, 14–28). Non-URPS urology included 689 physicians,
-2,032 physician-years, and 38,602 procedures (26.1%; median 16, 13–22).
+physician-years and 89,773 procedures (63.7%), with a median annual
+volume of 19 (p25–p75, 14–28). Non-URPS urology included 366 physicians,
+1,150 physician-years, and 20,475 procedures (14.5%; median 15, 12–20).
 General OB/GYN included 336 physicians, 953 physician-years, and 18,316
-procedures (12.4%; median 15, 12–22). MIGS included 10 physicians, 39
-physician-years, and 941 procedures (0.6%; median 16, 12–24) (Table 1).
+procedures (13%; median 15, 12–22). MIGS included 10 physicians, 39
+physician-years, and 941 procedures (0.7%; median 16, 12–24) (Table 1).
 
 Because 13 physicians changed specialty groups across years,
 specialty-specific physician counts exceed the unique cohort total.
@@ -369,17 +382,17 @@ Including urology-pathway urogynecologists reassigned 151 physicians and
 classification.
 
 Annual market shares moved in different directions (Table 1). URPS
-increased from 53.4% in 2013 to 63.8% in 2023 (+0.90 percentage
-points/year; 95% CI 0.51 to 1.28; p &lt; 0.001). Urology decreased from
-30.7% to 23.1% (-0.55 percentage points/year; 95% CI -0.84 to -0.26; p =
-0.002), and General OB/GYN decreased from 15.7% to 12.3% (-0.41
-percentage points/year; 95% CI -0.66 to -0.17; p = 0.004). MIGS
-increased descriptively from 0.2% to 0.8% (+0.07 percentage
+increased from 55.1% in 2013 to 68% in 2023 (+1.12 percentage
+points/year; 95% CI 0.73 to 1.50; p &lt; 0.001). Urology decreased from
+22.4% to 8.3% (-1.28 percentage points/year; 95% CI -1.57 to -0.99; p
+&lt; 0.001), and General OB/GYN decreased from 16.3% to 13.1% (-0.40
+percentage points/year; 95% CI -0.66 to -0.13; p = 0.008). MIGS
+increased descriptively from 0.2% to 0.9% (+0.08 percentage
 points/year), but this estimate is based on only 10 physicians. In the
 quasibinomial model of URPS services out of all annual services, which
 respects the compositional structure, the URPS share rose from a fitted
-56.5% in 2013 to 65.7% in 2023 (odds ratio 1.040 (95% CI 1.025-1.054)
-per year; 0.92 percentage points per year; p &lt; 0.001), consistent
+58.3% in 2013 to 69.7% in 2023 (odds ratio 1.051 (95% CI 1.036-1.066)
+per year; 1.15 percentage points per year; p &lt; 0.001), consistent
 with the descriptive ordinary least-squares estimate. Because total
 service counts declined, these changes represent redistribution among
 specialties rather than growth in services.
@@ -387,74 +400,88 @@ specialties rather than growth in services.
 The URPS increase was significant under every classification scenario,
 which differed in the estimated slope (Table 4). Fixed membership gave
 the shallower estimate because it counts physicians as URPS before
-certification: the all-pathway URPS share rose from 53.4% to 63.8%
-(+0.90 percentage points/year), and the OB/GYN-based share from 60.8% to
-70.1% (+0.85 percentage points/year). Certification-gated classification
-gave the steeper estimate, from 42.2% to 62.8% (+1.52 percentage
+certification: the all-pathway URPS share rose from 55.1% to 68% (+1.12
+percentage points/year), and the OB/GYN-based share from 62.8% to 74.7%
+(+1.08 percentage points/year). Certification-gated classification gave
+the steeper estimate, from 43.6% to 66.9% (+1.76 percentage
 points/year), because it removes not-yet-certified physicians from the
-early URPS count; the two estimates converged near 62.8% by 2023.
+early URPS count; the two estimates converged near 66.9% by 2023.
 
 In the Poisson GEE clustered by NPI (calendar year centered at 2018),
 adjusted annual volume at mid-study was lower than URPS for every other
-group: urology RR 0.76 (0.67–0.87), General OB/GYN RR 0.68 (0.51–0.91),
-and MIGS RR 0.85 (0.55–1.32) (Table 3). Annual volume was approximately
-11% lower in 2020 (RR 0.88 (0.85–0.92); p &lt; 0.001). The
+group: urology RR 0.72 (0.60–0.87), General OB/GYN RR 0.64 (0.44–0.93),
+and MIGS RR 0.84 (0.52–1.34) (Table 3). Annual volume was approximately
+11% lower in 2020 (RR 0.88 (0.84–0.91); p &lt; 0.001). The
 specialty-by-year interaction showed that per-physician volume did not
 change over time for the well-populated groups: the annual trend was
-flat for URPS (RR 0.997 (0.990-1.005); p = 0.516), urology (RR 0.987
-(0.973-1.002); p = 0.091), and General OB/GYN (RR 0.997 (0.974-1.019); p
-= 0.761), and increased only for the 10-physician MIGS group (RR 1.084
-(1.030-1.141); p = 0.002) (Table 3). A negative-binomial mixed model
-with a random intercept per NPI gave the same pattern of specialty
-differences (urology RR 0.86 (0.82–0.89), General OB/GYN RR 0.84
-(0.80–0.88), 2020 RR 0.90 (0.88–0.93)). The
+flat for URPS (RR 0.997 (0.990-1.005); p = 0.523), urology (RR 0.986
+(0.967-1.004); p = 0.135), and General OB/GYN (RR 0.996 (0.973-1.021); p
+= 0.760), and increased only for the 10-physician MIGS group (RR 1.085
+(1.031-1.142); p = 0.002) (Table 3). A negative-binomial mixed model
+with a random intercept per NPI reproduced the direction but with
+attenuated magnitude (urology RR 0.80 (0.77–0.84), General OB/GYN RR
+0.84 (0.79–0.88), 2020 RR 0.90 (0.87–0.93)); the attenuation is expected
+because the GEE estimates a population-averaged (marginal) rate ratio
+whereas the mixed model estimates a physician-conditional one. The
 one-observation-per-physician secondary analysis agreed (Kruskal-Wallis
-H = 66.6, df = 3, p &lt; 0.001); URPS volume exceeded both urology and
-General OB/GYN in pairwise comparisons (p &lt; 0.001).
+H = 80.5, df = 4, p &lt; 0.001); URPS volume exceeded urology and other
+OB/GYN in pairwise comparisons (p &lt; 0.001), with no significant
+URPS-MIGS difference. Because these models condition on the
+physician-year being observable above the CMS reporting threshold, the
+estimand is annual service volume among observable physician-years, not
+full-workforce practice volume; if non-URPS physicians more often fall
+below the threshold, the URPS volume advantage may be overstated.
 
 ### Surgeon Volume and Concentration
 
 The primary concentration analysis was within-year. Within-year
 concentration was low and stable across the study period: the annual
-Gini ranged from 0.26 to 0.28, with no temporal trend (p = 0.733), and
+Gini ranged from 0.26 to 0.28, with no temporal trend (p = 0.451), and
 the annual top 20% performed approximately 38% of cases. No
 specialty-specific annual Gini changed significantly (all p &gt; 0.15).
 Thus, care did not become concentrated among a smaller group of
 high-volume surgeons as the observable surgeon pool contracted.
 
-Pooled multi-year concentration was similar across the three
-well-populated groups, with overlapping confidence intervals: URPS Gini
-0.52 (95% CI 0.50-0.54), urology Gini 0.53 (95% CI 0.51-0.55), and
-General OB/GYN Gini 0.56 (95% CI 0.52-0.60) (Table 2). The size-adjusted
-normalized HHI was near zero for every group (URPS 0.001, urology 0.002,
-General OB/GYN 0.006 on a 0–1 scale), and the effective number of
-providers was large (URPS 368, urology 282, General OB/GYN 112),
-indicating that sling volume was distributed across many surgeons rather
-than dominated by a few. Because the specialties differ several-fold in
+Pooled multi-year concentration was modest for every group: URPS Gini
+0.52 (95% CI 0.50-0.54), urology Gini 0.52 (95% CI 0.49-0.55), and other
+non-URPS OB/GYN Gini 0.56 (95% CI 0.52-0.60) (Table 2). Because
+overlapping individual confidence intervals are not a test of
+between-group difference, we bootstrapped the pairwise differences: URPS
+and urology did not differ (Gini difference -0.006 (95% CI -0.039 to
++0.030)), whereas URPS was modestly less concentrated than other OB/GYN
+(-0.046 (95% CI -0.086 to -0.002), confidence interval excluding zero).
+The size-adjusted normalized HHI was near zero for every group (URPS
+0.001, urology 0.004, other OB/GYN 0.006 on a 0–1 scale). The effective
+number of providers, expressed as a fraction of the actual provider
+count, showed a gradient (URPS 368 of 767, 48%; urology 42%; other
+OB/GYN 33%), indicating that sling volume was distributed across many
+surgeons rather than dominated by a few, though somewhat less evenly in
+the smaller groups. Because the specialties differ several-fold in
 provider count, raw HHI is not directly comparable across them (Table
 2). Adding hypothetical suppressed low-volume providers raised the Gini
-only modestly (Supplementary Table S8), so the low-concentration
-conclusion is robust to the unobserved tail. URPS had the highest median
-annual volume and upper quartile (median 19; p75 28). MIGS was excluded
-from these comparisons because only 10 physicians were identified (1–4
-per year); its nominal Gini of 0.61 and HHI of 3,036 are not stable
-specialty-wide estimates.
+(Supplementary Table S8): under the 50% scenario the URPS Gini rose from
+0.52 toward the mid-0.6 range, so the sensitivity supports only the
+narrower claim that observed services were not dominated by a handful of
+surgeons, not a precise estimate of the full-market distribution. URPS
+had the highest median annual volume and upper quartile (median 19; p75
+28). MIGS was excluded from these comparisons because only 10 physicians
+were identified (1–4 per year); its estimates are exploratory.
 
 ### Workforce Entry and Exit
 
-Using the two-year washout (Supplementary Table S9), 48–168 surgeons
-became newly observable each year and performed 7.4%–22.5% of annual
+Using the two-year washout (Supplementary Table S9), 46–150 surgeons
+became newly observable each year and performed 7.4%–21.7% of annual
 volume. Their median volume was low, at approximately 13 services,
 consistent with surgeons appearing just above the CMS suppression
-threshold. Newly observable counts fell to 48 surgeons (7.4% of volume)
-in 2020, then rebounded to 168 (22.5%) in 2022; the 2022 rebound may
+threshold. Newly observable counts fell to 46 surgeons (7.4% of volume)
+in 2020, then rebounded to 150 (21.7%) in 2022; the 2022 rebound may
 partly reflect re-observation of surgeons who fell below the threshold
 during the pandemic rather than genuinely new surgeons. Continuing
-surgeons (381–584 per year) performed most annual services, while
-surgeons no longer observable ranged from 66 to 230 per year.
+surgeons (357–559 per year) performed most annual services, while
+surgeons no longer observable ranged from 64 to 212 per year.
 
 Across the study period, URPS accounted for the most newly observable
-episodes (480), followed by urology (421), General OB/GYN (205), and
+episodes (480), followed by urology (165), General OB/GYN (205), and
 MIGS (8); these are episode counts, not unique physicians. The rising
 URPS share coincided with the largest inflow of newly observable
 surgeons together with a relatively stable continuing-URPS base (URPS
@@ -477,13 +504,16 @@ reserved for a separate access-focused study.
 ## Discussion
 
 This national Medicare analysis produced three main findings. First,
-URPS physicians performed most sling operations for SUI (60.8%) and had
+URPS physicians performed most sling operations for SUI (63.7%) and had
 the highest adjusted per-physician volume. Second, the URPS share
-increased over the decade as URPS surgeons entered the observable
-workforce and non-URPS surgeons left. Third, surgeon-level concentration
-remained low and stable despite a shrinking surgeon pool. Together,
-these findings indicate a change in workforce composition rather than
-intensification of individual practice or concentration of care.
+increased over the decade, coinciding with more URPS surgeons becoming
+observable and fewer non-URPS surgeons remaining observable. Third,
+surgeon-level concentration remained low and stable despite a shrinking
+observable surgeon pool. Together, these findings indicate a change in
+the composition of observable fee-for-service practice rather than
+intensification of individual practice or concentration of care; they
+are best read as a practice-pattern study, not a study of entry into or
+exit from the clinical workforce.
 
 ### Specialty Distribution and the Historical Reversal
 
@@ -505,7 +535,7 @@ with URPS now the largest single specialty group.
 
 Including both certification pathways was essential to this result.
 Cross-referencing the ABU roster reassigned 151 urology-typed
-physicians, representing 8.3% of all sling procedures, to URPS. The
+physicians, representing 8.7% of all sling procedures, to URPS. The
 concentration estimate was robust: the pooled URPS Gini changed only
 from 0.52 to 0.52. A pathway-neutral definition also reflects
 differences in operative case volume between urology- and
@@ -604,12 +634,14 @@ bilateral or modifier-inflated services.
 
 ### Strengths
 
-Strengths include a national, complete sample of fee-for-service
-Medicare claims; identification of urogynecologists through both
-certification pathways; complementary surgeon-level concentration
-measures calculated both overall and by year; a model that accounts for
-repeated observations within physicians; and a fully reproducible
-analytic pipeline.
+Strengths include a national sample of all publicly reported,
+nonsuppressed fee-for-service provider-service records; identification
+of urogynecologists through both certification pathways; complementary
+surgeon-level concentration measures with bootstrap confidence
+intervals, calculated both overall and by year; models that account for
+repeated observations within physicians; transparent handling of
+ambiguous and facility billers with sensitivity analyses; and a fully
+reproducible analytic pipeline.
 
 ## Conclusions
 
@@ -706,28 +738,28 @@ credentialing implications.
 physicians billing CPT 57288, Medicare PUF 2013–2023 (combined URPS). Δ
 share is the annual percentage-point change from ordinary least-squares
 regression on calendar year. Specialty-specific physician counts exceed
-1,789 because 13 physicians changed groups across years. \*MIGS
+1,666 because 13 physicians changed groups across years. \*MIGS
 estimates are descriptive because only 10 physicians were identified.
 
 <table>
 <colgroup>
-<col style="width: 12%" />
-<col style="width: 12%" />
+<col style="width: 13%" />
+<col style="width: 11%" />
 <col style="width: 10%" />
-<col style="width: 8%" />
-<col style="width: 6%" />
+<col style="width: 11%" />
+<col style="width: 5%" />
 <col style="width: 13%" />
 <col style="width: 7%" />
 <col style="width: 7%" />
-<col style="width: 15%" />
-<col style="width: 5%" />
+<col style="width: 14%" />
+<col style="width: 4%" />
 </colgroup>
 <thead>
 <tr>
 <th>Specialty</th>
 <th>Unique physicians</th>
 <th>Physician-years</th>
-<th>Procedures</th>
+<th>Reported services</th>
 <th>% of all</th>
 <th>Median vol (p25-p75)</th>
 <th>2013 share</th>
@@ -742,54 +774,66 @@ estimates are descriptive because only 10 physicians were identified.
 <td>767</td>
 <td>3,913</td>
 <td>89,773</td>
-<td>60.8%</td>
+<td>63.7%</td>
 <td>19 (14–28)</td>
-<td>53.4%</td>
-<td>63.8%</td>
-<td>+0.90 (0.51 to 1.28)</td>
+<td>55.1%</td>
+<td>68.0%</td>
+<td>+1.12 (0.73 to 1.50)</td>
 <td>&lt;0.001</td>
 </tr>
 <tr>
 <td>Urology (non-URPS)</td>
-<td>689</td>
-<td>2,032</td>
-<td>38,602</td>
-<td>26.1%</td>
-<td>16 (13–22)</td>
-<td>30.7%</td>
-<td>23.1%</td>
-<td>-0.55 (-0.84 to -0.26)</td>
-<td>0.002</td>
+<td>366</td>
+<td>1,150</td>
+<td>20,475</td>
+<td>14.5%</td>
+<td>15 (12–20)</td>
+<td>22.4%</td>
+<td>8.3%</td>
+<td>-1.28 (-1.57 to -0.99)</td>
+<td>&lt;0.001</td>
 </tr>
 <tr>
-<td>General OB/GYN</td>
+<td>Other non-URPS OB/GYN</td>
 <td>336</td>
 <td>953</td>
 <td>18,316</td>
-<td>12.4%</td>
+<td>13.0%</td>
 <td>15 (12–22)</td>
-<td>15.7%</td>
-<td>12.3%</td>
-<td>-0.41 (-0.66 to -0.17)</td>
-<td>0.004</td>
+<td>16.3%</td>
+<td>13.1%</td>
+<td>-0.40 (-0.66 to -0.13)</td>
+<td>0.008</td>
+</tr>
+<tr>
+<td>Other/uncertain</td>
+<td>200</td>
+<td>514</td>
+<td>11,504</td>
+<td>8.2%</td>
+<td>18 (13–27)</td>
+<td>6.0%</td>
+<td>9.8%</td>
+<td>+0.49 (0.33 to 0.64)</td>
+<td>&lt;0.001</td>
 </tr>
 <tr>
 <td>MIGS</td>
 <td>10</td>
 <td>39</td>
 <td>941</td>
-<td>0.6%</td>
+<td>0.7%</td>
 <td>16 (12–24)</td>
 <td>0.2%</td>
-<td>0.8%</td>
-<td>+0.07 (0.03 to 0.11)*</td>
-<td>0.005</td>
+<td>0.9%</td>
+<td>+0.08 (0.03 to 0.12)*</td>
+<td>0.004</td>
 </tr>
 <tr>
 <td><strong>Total</strong></td>
-<td><strong>1,789</strong></td>
-<td><strong>6,937</strong></td>
-<td><strong>147,632</strong></td>
+<td><strong>1,666</strong></td>
+<td><strong>6,569</strong></td>
+<td><strong>141,009</strong></td>
 <td><strong>100%</strong></td>
 <td>n/a</td>
 <td>n/a</td>
@@ -841,13 +885,13 @@ providers are size-adjusted companions.
 </tr>
 <tr>
 <td>Urology (non-URPS)</td>
-<td>689</td>
-<td>0.53</td>
-<td>35</td>
-<td>0.002</td>
-<td>282</td>
-<td>39.5%</td>
-<td>58.7%</td>
+<td>366</td>
+<td>0.52</td>
+<td>65</td>
+<td>0.004</td>
+<td>155</td>
+<td>38.6%</td>
+<td>58.1%</td>
 </tr>
 <tr>
 <td>General OB/GYN</td>
@@ -890,42 +934,42 @@ year term plus its specialty-by-year interaction).
 <tbody>
 <tr>
 <td>Urology vs URPS (at 2018)</td>
-<td>0.76 (0.67–0.87)</td>
+<td>0.72 (0.60–0.87)</td>
 <td>&lt;0.001</td>
 </tr>
 <tr>
 <td>General OB/GYN vs URPS (at 2018)</td>
-<td>0.68 (0.51–0.91)</td>
-<td>0.009</td>
+<td>0.64 (0.44–0.93)</td>
+<td>0.021</td>
 </tr>
 <tr>
 <td>MIGS vs URPS (at 2018)</td>
-<td>0.85 (0.55–1.32)</td>
-<td>0.466</td>
+<td>0.84 (0.52–1.34)</td>
+<td>0.461</td>
 </tr>
 <tr>
 <td>2020 (COVID) indicator</td>
-<td>0.88 (0.85–0.92)</td>
+<td>0.88 (0.84–0.91)</td>
 <td>&lt;0.001</td>
 </tr>
 <tr>
 <td>Annual trend, URPS</td>
 <td>0.997 (0.990-1.005)</td>
-<td>0.516</td>
+<td>0.523</td>
 </tr>
 <tr>
 <td>Annual trend, urology</td>
-<td>0.987 (0.973-1.002)</td>
-<td>0.091</td>
+<td>0.986 (0.967-1.004)</td>
+<td>0.135</td>
 </tr>
 <tr>
 <td>Annual trend, General OB/GYN</td>
-<td>0.997 (0.974-1.019)</td>
-<td>0.761</td>
+<td>0.996 (0.973-1.021)</td>
+<td>0.760</td>
 </tr>
 <tr>
 <td>Annual trend, MIGS</td>
-<td>1.084 (1.030-1.141)</td>
+<td>1.085 (1.031-1.142)</td>
 <td>0.002</td>
 </tr>
 </tbody>
@@ -960,38 +1004,38 @@ significant.
 <tr>
 <td>Fixed membership: OB/GYN-based share (ABOG-URPS + MIGS + Gen
 OB/GYN)</td>
-<td>60.8% → 70.1%</td>
-<td>0.85</td>
+<td>62.8% → 74.7%</td>
+<td>1.08</td>
 <td>&lt;0.001</td>
 </tr>
 <tr>
 <td>Fixed membership: all-pathway URPS share</td>
-<td>53.4% → 63.8%</td>
-<td>0.90</td>
+<td>55.1% → 68.0%</td>
+<td>1.12</td>
 <td>&lt;0.001</td>
 </tr>
 <tr>
 <td>Modal: URPS share</td>
 <td>n/a</td>
-<td>0.97</td>
+<td>1.20</td>
 <td>&lt;0.001</td>
 </tr>
 <tr>
 <td>Ever-URPS/MIGS: URPS share</td>
 <td>n/a</td>
-<td>0.95</td>
+<td>1.17</td>
 <td>0.001</td>
 </tr>
 <tr>
 <td><strong>Certification-gated: URPS share (time-varying)</strong></td>
-<td><strong>42.2% → 62.8%</strong></td>
-<td><strong>1.52</strong></td>
+<td><strong>43.6% → 66.9%</strong></td>
+<td><strong>1.76</strong></td>
 <td><strong>&lt;0.001</strong></td>
 </tr>
 <tr>
 <td>Certification-gated: OB/GYN-based share (time-varying)</td>
 <td>n/a</td>
-<td>0.54</td>
+<td>0.79</td>
 <td>&lt;0.001</td>
 </tr>
 </tbody>
@@ -1009,9 +1053,9 @@ style="width:6.5in" />
 incontinence (CPT 57288) in fee-for-service Medicare, 2013–2023. Bars
 show reported services; the line shows the denominator-adjusted rate per
 100,000 female Part B fee-for-service beneficiaries. The rate declined
-less than the raw count (-12.6% versus -25.5%) because the
+less than the raw count (-15.3% versus -27.7%) because the
 fee-for-service population contracted by -14.7%; the linear trend in the
-rate was not significant (p = 0.139).
+rate was not significant (p = 0.098).
 
 <img
 src="/Users/tylermuffly/sling-volume-patterns/output/figures/figure_1_market_share.png"
@@ -1020,10 +1064,10 @@ style="width:6.5in" />
 **Figure 2.** Market share of sling operations for stress urinary
 incontinence (CPT 57288) by specialty, fee-for-service Medicare PUF
 2013–2023. The URPS share increased under every classification scenario.
-Fixed membership (all-pathway URPS share 53.4% to 63.8%; +0.90
-percentage points/year) and certification-gated classification (URPS
-share 42.2% to 62.8%; +1.52 percentage points/year) differ in the
-estimated rate of increase and converge by 2023.
+Fixed membership (all-pathway URPS share 55.1% to 68%; +1.12 percentage
+points/year) and certification-gated classification (URPS share 43.6% to
+66.9%; +1.76 percentage points/year) differ in the estimated rate of
+increase and converge by 2023.
 
 ------------------------------------------------------------------------
 
@@ -2910,11 +2954,11 @@ tail.
 </tr>
 <tr>
 <td>Urology (non-URPS)</td>
-<td>0.53</td>
+<td>0.52</td>
 <td>0.59</td>
-<td>0.63</td>
-<td>35</td>
-<td>32</td>
+<td>0.62</td>
+<td>65</td>
+<td>59</td>
 </tr>
 <tr>
 <td>General OB/GYN</td>
@@ -2959,108 +3003,153 @@ crossings, not definitive entry into or exit from practice.
 <tbody>
 <tr>
 <td>2013</td>
-<td>812</td>
+<td>779</td>
 <td>n/a</td>
 <td>n/a</td>
-<td>214</td>
+<td>204</td>
 <td>n/a</td>
 <td>n/a</td>
 </tr>
 <tr>
 <td>2014</td>
-<td>685</td>
+<td>656</td>
 <td>n/a</td>
 <td>n/a</td>
-<td>164</td>
+<td>156</td>
 <td>n/a</td>
 <td>n/a</td>
 </tr>
 <tr>
 <td>2015</td>
-<td>655</td>
-<td>127</td>
-<td>528</td>
-<td>129</td>
-<td>14.2%</td>
+<td>627</td>
+<td>120</td>
+<td>507</td>
+<td>123</td>
+<td>13.8%</td>
 <td>13</td>
 </tr>
 <tr>
 <td>2016</td>
-<td>701</td>
-<td>158</td>
-<td>543</td>
-<td>126</td>
-<td>15.3%</td>
+<td>665</td>
+<td>143</td>
+<td>522</td>
+<td>118</td>
+<td>14.5%</td>
 <td>13</td>
 </tr>
 <tr>
 <td>2017</td>
-<td>735</td>
-<td>151</td>
-<td>584</td>
-<td>204</td>
-<td>13.9%</td>
-<td>14</td>
+<td>694</td>
+<td>135</td>
+<td>559</td>
+<td>189</td>
+<td>13.0%</td>
+<td>13</td>
 </tr>
 <tr>
 <td>2018</td>
-<td>672</td>
-<td>134</td>
-<td>538</td>
-<td>154</td>
-<td>13.7%</td>
+<td>640</td>
+<td>130</td>
+<td>510</td>
+<td>146</td>
+<td>13.8%</td>
 <td>14</td>
 </tr>
 <tr>
 <td>2019</td>
-<td>650</td>
-<td>125</td>
-<td>525</td>
-<td>230</td>
-<td>12.7%</td>
+<td>610</td>
+<td>111</td>
+<td>499</td>
+<td>212</td>
+<td>11.7%</td>
 <td>13</td>
 </tr>
 <tr>
 <td>2020</td>
-<td>445</td>
-<td>48</td>
-<td>397</td>
-<td>66</td>
+<td>423</td>
+<td>46</td>
+<td>377</td>
+<td>64</td>
 <td>7.4%</td>
 <td>13</td>
 </tr>
 <tr>
 <td>2021</td>
-<td>458</td>
-<td>77</td>
-<td>381</td>
-<td>81</td>
+<td>429</td>
+<td>72</td>
+<td>357</td>
+<td>75</td>
 <td>12.1%</td>
 <td>13</td>
 </tr>
 <tr>
 <td>2022</td>
-<td>562</td>
-<td>168</td>
-<td>394</td>
+<td>524</td>
+<td>150</td>
+<td>374</td>
 <td>n/a</td>
-<td>22.5%</td>
+<td>21.7%</td>
 <td>14</td>
 </tr>
 <tr>
 <td>2023</td>
-<td>562</td>
-<td>126</td>
-<td>436</td>
+<td>522</td>
+<td>112</td>
+<td>410</td>
 <td>n/a</td>
-<td>15.7%</td>
+<td>14.9%</td>
 <td>13</td>
 </tr>
 </tbody>
 </table>
 
-Newly observable episodes by specialty: URPS, 480; urology, 421; General
+Newly observable episodes by specialty: URPS, 480; urology, 165; other
 OB/GYN, 205; MIGS, 8.
+
+**Supplementary Table S11.** Classification sensitivity for ambiguous
+and facility billers (reviewer concern). The primary analysis excludes
+facility NPIs and places remaining non-physician or unclassifiable
+clinicians in an “Other/uncertain” group. Assigning them to urology (the
+legacy approach) roughly doubles the apparent non-URPS urology share;
+excluding them entirely changes the shares little for the well-populated
+groups. The URPS increase is significant under all three.
+
+<table style="width:100%;">
+<colgroup>
+<col style="width: 57%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr>
+<th>Handling of ambiguous billers</th>
+<th>Physicians</th>
+<th>URPS share</th>
+<th>Non-URPS urology share</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Separate ‘Other/uncertain’ group; facilities excluded (primary)</td>
+<td>1,666</td>
+<td>63.7%</td>
+<td>14.5%</td>
+</tr>
+<tr>
+<td>Excluded from the cohort</td>
+<td>1,467</td>
+<td>69.3%</td>
+<td>15.8%</td>
+</tr>
+<tr>
+<td>Assigned to urology (legacy)</td>
+<td>1,789</td>
+<td>60.8%</td>
+<td>26.1%</td>
+</tr>
+</tbody>
+</table>
 
 ------------------------------------------------------------------------
 

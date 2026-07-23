@@ -440,7 +440,7 @@ test_that("main function: returns a list with the expected named elements", {
   expect_named(
     result_list,
     c("provider_volume", "specialty_summary", "concentration_metrics",
-      "time_trends", "annual_concentration")
+      "time_trends", "annual_concentration", "classification_audit")
   )
 })
 

@@ -65,9 +65,10 @@ compute_manuscript_values <- function(
   yr_val <- function(df, y, col) df[[col]][df[[year_col]] == y]
 
   v <- list()
-  v$class_reclass_urology <- ca$reclassified_other_to_urology
-  v$class_abu_pathway     <- ca$urps_via_abu_pathway
-  v$class_excluded_other  <- ca$excluded_other_records
+  v$class_reclass_urology   <- ca$reclassified_other_to_urology
+  v$class_abu_pathway       <- ca$urps_via_abu_pathway
+  v$class_excluded_other    <- ca$excluded_other_records
+  v$class_excluded_facility <- ca$excluded_facility_npis
 
   # ── Cohort and annual volume ───────────────────────────────────────────────
   v$full_physicians <- dplyr::n_distinct(pvf$Rndrng_NPI)
@@ -120,7 +121,12 @@ compute_manuscript_values <- function(
   }
 
   # ── Specialty distribution + per-specialty share trends (Table 1) ──────────
-  order_grp <- c("URPS", "Urology", "General OB/GYN", "MIGS")
+  # order_grp = the well-populated specialty groups used for concentration and
+  # model displays. order_grp1 = Table 1 rows, which also show the excluded-from-
+  # inference "Other/uncertain" group (reviewer: facilities and non-physician
+  # clinicians must not be silently folded into urology).
+  order_grp  <- c("URPS", "Urology", "General OB/GYN", "MIGS")
+  order_grp1 <- c("URPS", "Urology", "General OB/GYN", "Other/uncertain", "MIGS")
   dist <- pv %>% dplyr::group_by(specialty_group) %>%
     dplyr::summarise(
       phys  = dplyr::n_distinct(Rndrng_NPI), pyears = dplyr::n(),
@@ -140,23 +146,49 @@ compute_manuscript_values <- function(
         p = summary(mm)$coefficients[2, 4])
     }) %>% dplyr::ungroup()
   d <- dplyr::left_join(dist, shr, by = "specialty_group")
-  d <- d[match(order_grp, d$specialty_group), ]
+  d <- d[match(order_grp1, d$specialty_group), ]
 
   disp <- function(x) format(x, big.mark = ",")
+  astk <- ifelse(order_grp1 == "MIGS", "*", "")
   t1 <- data.frame(
-    Specialty = c("URPS", "Urology (non-URPS)", "General OB/GYN", "MIGS", "**Total**"),
+    Specialty = c("URPS", "Urology (non-URPS)", "Other non-URPS OB/GYN", "Other/uncertain", "MIGS", "**Total**"),
     `Unique physicians` = c(disp(d$phys), paste0("**", disp(v$analytic_physicians), "**")),
     `Physician-years`   = c(disp(d$pyears), paste0("**", disp(v$analytic_pyears), "**")),
-    Procedures          = c(disp(d$procs), paste0("**", disp(v$analytic_procs), "**")),
+    `Reported services` = c(disp(d$procs), paste0("**", disp(v$analytic_procs), "**")),
     `% of all`          = c(sprintf("%.1f%%", d$pct), "**100%**"),
     `Median vol (p25-p75)` = c(sprintf("%g (%g–%g)", d$med, d$p25, d$p75), "n/a"),
     `2013 share` = c(sprintf("%.1f%%", d$s2013), "n/a"),
     `2023 share` = c(sprintf("%.1f%%", d$s2023), "n/a"),
     `Delta share/yr (95% CI)` = c(
-      sprintf("%+.2f (%.2f to %.2f)%s", d$slope, d$lo, d$hi, c("", "", "", "*")), "n/a"),
+      sprintf("%+.2f (%.2f to %.2f)%s", d$slope, d$lo, d$hi, astk), "n/a"),
     p = c(fmt_p(d$p), "n/a"),
     check.names = FALSE)
   tab <- list(t1 = t1)
+  # Other/uncertain scalars for prose
+  ou <- dist[dist$specialty_group == "Other/uncertain", ]
+  v$other_phys <- if (nrow(ou)) ou$phys else 0
+  v$other_procs <- if (nrow(ou)) ou$procs else 0
+  v$other_pct <- if (nrow(ou)) round(ou$pct, 1) else 0
+
+  # Classification sensitivity (reviewer #1): how the URPS and urology shares
+  # move across the three ways of handling the ambiguous/facility billers.
+  classif_row <- function(mode, label) {
+    rr <- analyze_midurethral_sling_patterns(
+      pc, year_col = year_col, abog_npi_csv = abog_csv, urps_urology_npi_csv = abu_csv,
+      exclude_years = exclude_years, other_handling = mode, verbose = FALSE)$provider_volume
+    tot <- sum(rr$annual_sling_count)
+    sh <- function(g) 100 * sum(rr$annual_sling_count[rr$specialty_group == g]) / tot
+    data.frame(
+      `Handling of ambiguous billers` = label,
+      `Physicians` = disp(dplyr::n_distinct(rr$Rndrng_NPI)),
+      `URPS share` = sprintf("%.1f%%", sh("URPS")),
+      `Non-URPS urology share` = sprintf("%.1f%%", sh("Urology")),
+      check.names = FALSE, row.names = NULL)
+  }
+  tab$t_classif_sens <- rbind(
+    classif_row("separate", "Separate 'Other/uncertain' group; facilities excluded (primary)"),
+    classif_row("exclude",  "Excluded from the cohort"),
+    classif_row("urology",  "Assigned to urology (legacy)"))
 
   # scalars for prose (per group)
   g <- function(grp, col) d[[col]][d$specialty_group == grp]
@@ -252,6 +284,59 @@ compute_manuscript_values <- function(
   v$annual_gini_lo <- sprintf("%.2f", min(allc$gini_coefficient)); v$annual_gini_hi <- sprintf("%.2f", max(allc$gini_coefficient))
   mg <- stats::lm(allc$gini_coefficient ~ allc[[year_col]]); v$annual_gini_p <- fmt_p(summary(mg)$coefficients[2,4])
   v$annual_top20 <- round(mean(allc$pct_by_top_20))
+  # Within-year (annual) Gini per specialty (reviewer #7: the abstract must
+  # report the annual, not pooled, Gini when it calls within-year concentration
+  # the primary measure). These are ~0.24-0.28, not the pooled 0.52-0.56.
+  ann_gini <- function(grp) {
+    x <- ac$gini_coefficient[ac$specialty_group == grp]
+    if (length(x) == 0) NA_real_ else mean(x, na.rm = TRUE)
+  }
+  v$annual_gini_urps <- sprintf("%.2f", ann_gini("URPS"))
+  v$annual_gini_uro  <- sprintf("%.2f", ann_gini("Urology"))
+  v$annual_gini_gob  <- sprintf("%.2f", ann_gini("General OB/GYN"))
+  v$annual_gini_spec_lo <- sprintf("%.2f", min(c(ann_gini("URPS"), ann_gini("Urology"), ann_gini("General OB/GYN"))))
+  v$annual_gini_spec_hi <- sprintf("%.2f", max(c(ann_gini("URPS"), ann_gini("Urology"), ann_gini("General OB/GYN"))))
+
+  # Pairwise pooled-Gini difference bootstrap CIs (reviewer #8: overlapping
+  # individual CIs are not a test of between-group difference). Also the
+  # effective-provider fraction (effective N / actual N).
+  boot_gini_diff <- function(a, b, R = 2000L, seed = 7L) {
+    a <- a[!is.na(a)]; b <- b[!is.na(b)]
+    old <- if (exists(".Random.seed", envir = .GlobalEnv)) get(".Random.seed", envir = .GlobalEnv) else NULL
+    set.seed(seed); on.exit(if (!is.null(old)) assign(".Random.seed", old, envir = .GlobalEnv))
+    dd <- vapply(seq_len(R), function(i)
+      compute_gini(a[sample.int(length(a), length(a), TRUE)]) -
+      compute_gini(b[sample.int(length(b), length(b), TRUE)]), numeric(1))
+    c(est = compute_gini(a) - compute_gini(b), unname(stats::quantile(dd, c(.025, .975), na.rm = TRUE)))
+  }
+  gd <- function(g1, g2) { r <- boot_gini_diff(vec(g1), vec(g2))
+    list(txt = sprintf("%+.3f (95%% CI %+.3f to %+.3f)", r[1], r[2], r[3]),
+         differs = r[2] * r[3] > 0) }
+  v$ginidiff_urps_gob <- gd("URPS", "General OB/GYN")
+  v$ginidiff_urps_uro <- gd("URPS", "Urology")
+  v$ginidiff_uro_gob  <- gd("Urology", "General OB/GYN")
+  effpct <- function(grp) round(100 * cn(grp, "effective_providers") / cn(grp, "n_providers"))
+  v$urps_effpct <- effpct("URPS"); v$uro_effpct <- effpct("Urology"); v$gob_effpct <- effpct("General OB/GYN")
+
+  # Denominator-offset utilization model (reviewer #5/#6): annual services with
+  # log FFS enrollment as an offset, dispersion-robust. Report the estimate and
+  # CI, not just whether p<0.05; the point estimate is a meaningful decline.
+  if (isTRUE(v$has_denominator)) {
+    denom_tbl <- read_ffs_denominator(denom_csv)
+    off <- pv %>% dplyr::group_by(year = .data[[year_col]]) %>%
+      dplyr::summarise(services = sum(annual_sling_count), .groups = "drop") %>%
+      dplyr::left_join(denom_tbl, by = "year") %>%
+      dplyr::mutate(year_c = year - 2018, covid = as.integer(year == 2020))
+    mo <- stats::glm(services ~ year_c + covid, family = stats::quasipoisson(),
+                     offset = log(denominator), data = off)
+    coo <- summary(mo)$coefficients
+    b <- coo["year_c", "Estimate"]; se <- coo["year_c", "Std. Error"]
+    v$rate_offset_rr    <- sprintf("%.3f", exp(b))
+    v$rate_offset_ci    <- sprintf("%.3f-%.3f", exp(b - 1.96 * se), exp(b + 1.96 * se))
+    v$rate_offset_pctyr <- sprintf("%.1f", 100 * (exp(b) - 1))
+    v$rate_offset_decade<- sprintf("%.1f", 100 * (exp(b * 10) - 1))
+    v$rate_offset_p     <- fmt_p(coo["year_c", "Pr(>|t|)"])
+  }
 
   # ── GEE + per-physician (Table 3 + prose) ──────────────────────────────────
   # Poisson GEE clustered by NPI, year centered at 2018 (mid-study): specialty

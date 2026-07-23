@@ -1007,8 +1007,19 @@ analyze_midurethral_sling_patterns <- function(
     verbose                = TRUE,
     abog_npi_csv           = NULL,
     urps_urology_npi_csv   = NULL,
-    exclude_years          = NULL
+    exclude_years          = NULL,
+    other_handling         = c("separate", "exclude", "urology")
 ) {
+  # How to handle billers with a CPT 57288 claim whose CMS provider type is
+  # neither OB/GYN nor urology and who are not in the ABOG registry (reviewer:
+  # these are mostly facilities and non-physician clinicians, not urologists):
+  #   "separate" (default) - drop facility NPIs (ambulatory surgical centers,
+  #                          laboratories) and place the remaining clinicians in
+  #                          a distinct "Other/uncertain" group.
+  #   "exclude"            - drop facilities and all such clinicians.
+  #   "urology"            - legacy behavior (assign them to urology), for
+  #                          sensitivity comparison only.
+  other_handling <- match.arg(other_handling)
   # ── 0. Input validation ────────────────────────────────────────────────────
   assertthat::assert_that(
     is.logical(verbose) && length(verbose) == 1L,
@@ -1082,29 +1093,53 @@ analyze_midurethral_sling_patterns <- function(
     specialty_group = classify_provider_specialty(Rndrng_Prvdr_Type)
   )
 
+  # Step 2a: handle "Other" billers (neither OB/GYN nor urology CMS type and not
+  # in ABOG). These are predominantly facilities (ambulatory surgical centers)
+  # and non-physician clinicians (physician assistants, nurse practitioners),
+  # not urologists, so they are no longer assigned to urology. Facilities are
+  # excluded from the specialty analyses; the remaining clinicians form a
+  # distinct "Other/uncertain" group (main analysis) or are excluded, per
+  # `other_handling`. The legacy "urology" option reproduces the old behavior.
+  facility_regex <- stringr::regex(
+    "ambulatory surgical center|clinical laboratory|independent diagnostic|portable x-ray|mass immunization",
+    ignore_case = TRUE)
+  facility_npis <- sling_claims |>
+    dplyr::filter(stringr::str_detect(Rndrng_Prvdr_Type, facility_regex)) |>
+    dplyr::pull(Rndrng_NPI) |>
+    na.omit() |>
+    unique()
+  n_facility <- length(facility_npis)
   if (!is.null(abog_lookup)) {
-    # Step 2a: Reclassify "Other" NPIs not in ABOG → Urology
     other_npis <- sling_claims |>
       dplyr::filter(specialty_group == "Other") |>
       dplyr::pull(Rndrng_NPI) |>
       na.omit() |>
       unique()
-    reassign_to_urology <- setdiff(other_npis, abog_lookup$abog_npi)
-    if (length(reassign_to_urology) > 0) {
-      log_msg(
-        glue::glue(
-          "  Reclassifying {length(reassign_to_urology)} non-ABOG NPIs ",
-          "from 'Other' to 'Urology'."
-        ),
-        verbose
-      )
-      sling_claims <- dplyr::mutate(
-        sling_claims,
-        specialty_group = dplyr::case_when(
-          Rndrng_NPI %in% reassign_to_urology ~ "Urology",
-          TRUE ~ specialty_group
-        )
-      )
+    reassign_to_urology <- setdiff(as.character(other_npis), as.character(abog_lookup$abog_npi))
+    if (other_handling == "urology") {
+      if (length(reassign_to_urology) > 0) {
+        log_msg(glue::glue(
+          "  [legacy] Reclassifying {length(reassign_to_urology)} non-ABOG NPIs ",
+          "from 'Other' to 'Urology'."), verbose)
+        sling_claims <- dplyr::mutate(sling_claims, specialty_group = dplyr::case_when(
+          as.character(Rndrng_NPI) %in% reassign_to_urology ~ "Urology", TRUE ~ specialty_group))
+      }
+    } else {
+      # Exclude facilities regardless; keep non-facility Other clinicians as a
+      # separate group ("separate") or drop them ("exclude").
+      log_msg(glue::glue(
+        "  Excluding {n_facility} facility NPIs (ambulatory surgical centers, ",
+        "laboratories) that cannot be assigned a physician specialty."), verbose)
+      sling_claims <- dplyr::filter(sling_claims, !as.character(Rndrng_NPI) %in% as.character(facility_npis))
+      other_clin <- setdiff(reassign_to_urology, as.character(facility_npis))
+      if (other_handling == "separate") {
+        log_msg(glue::glue(
+          "  Placing {length(other_clin)} non-OB/GYN, non-urology, non-ABOG ",
+          "clinicians (physician assistants, nurse practitioners, etc.) in an ",
+          "'Other/uncertain' group."), verbose)
+        sling_claims <- dplyr::mutate(sling_claims, specialty_group = dplyr::case_when(
+          as.character(Rndrng_NPI) %in% other_clin ~ "Other/uncertain", TRUE ~ specialty_group))
+      }
     }
 
     # Step 2b: Split OB/GYN into URPS, MIGS, and General OB/GYN using ABOG
@@ -1282,6 +1317,11 @@ analyze_midurethral_sling_patterns <- function(
     # Classification transparency counts (reviewer #5): how many providers each
     # reclassification rule moved. Guarded so they are NA when a roster is absent.
     classification_audit  = list(
+      other_handling = other_handling,
+      excluded_facility_npis =
+        if (exists("n_facility")) n_facility else NA_integer_,
+      other_uncertain_clinicians =
+        if (exists("other_clin")) length(other_clin) else NA_integer_,
       reclassified_other_to_urology =
         if (exists("reassign_to_urology")) length(reassign_to_urology) else NA_integer_,
       urps_via_abu_pathway =
