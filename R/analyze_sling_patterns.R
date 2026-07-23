@@ -1100,14 +1100,24 @@ analyze_midurethral_sling_patterns <- function(
   # excluded from the specialty analyses; the remaining clinicians form a
   # distinct "Other/uncertain" group (main analysis) or are excluded, per
   # `other_handling`. The legacy "urology" option reproduces the old behavior.
+  # Facilities/organizations are NPPES entity type 2 (organizations: ambulatory
+  # surgical centers, hospitals, groups, laboratories), flagged in the PUF by the
+  # rendering-provider entity code 'O' (vs 'I' for an individual). This is the
+  # authoritative facility filter; a provider-type regex is a fallback for rows
+  # missing the entity code.
   facility_regex <- stringr::regex(
-    "ambulatory surgical center|clinical laboratory|independent diagnostic|portable x-ray|mass immunization",
+    paste0("ambulatory surgical center|clinical laboratory|independent diagnostic|",
+           "portable x-ray|mass immunization|hospital|skilled nursing"),
     ignore_case = TRUE)
-  facility_npis <- sling_claims |>
+  org_npis <- if ("Rndrng_Prvdr_Ent_Cd" %in% names(sling_claims)) {
+    sling_claims |>
+      dplyr::filter(.data$Rndrng_Prvdr_Ent_Cd == "O") |>
+      dplyr::pull(Rndrng_NPI) |> na.omit() |> unique() |> as.character()
+  } else character(0)
+  regex_npis <- sling_claims |>
     dplyr::filter(stringr::str_detect(Rndrng_Prvdr_Type, facility_regex)) |>
-    dplyr::pull(Rndrng_NPI) |>
-    na.omit() |>
-    unique()
+    dplyr::pull(Rndrng_NPI) |> na.omit() |> unique() |> as.character()
+  facility_npis <- union(org_npis, regex_npis)
   n_facility <- length(facility_npis)
   if (!is.null(abog_lookup)) {
     other_npis <- sling_claims |>

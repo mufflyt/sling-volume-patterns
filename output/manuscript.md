@@ -179,18 +179,21 @@ type and were not in the ABOG registry (323 NPIs) were predominantly
 facilities (ambulatory surgical centers) and non-physician clinicians
 (physician assistants, nurse practitioners), not urologists; none
 matched the ABU roster. We therefore did not assign them to urology.
-Facility NPIs (123 NPIs) were excluded because they cannot be given a
-physician specialty, and the remaining 200 non-physician or
-unclassifiable clinicians were placed in a distinct “Other/uncertain”
-group (8.2% of observable services). The full classification flow, with
-counts at each step, is shown in Figure 3. We report the specialty
-distribution under three handlings of these billers, as a sensitivity
-analysis (Supplementary Table S11): the primary “Other/uncertain”
-grouping, exclusion, and the legacy assignment to urology; the latter
-inflates the apparent non-URPS urology share roughly two-fold and is not
-used. A further small number of provider-year records from
-ABOG-registered NPIs with a miscellaneous CMS type remained “Other” and
-were excluded.
+Organizational NPIs (NPPES entity type 2, flagged in the Public Use File
+by a rendering-provider entity code of “O”: ambulatory surgical centers,
+hospitals, laboratories, and groups; 123 NPIs) were excluded because
+they identify a billing organization rather than an individual clinician
+and cannot be given a physician specialty. The remaining 200 individual
+non-physician or unclassifiable clinicians were placed in a distinct
+“Other/uncertain” group (8.2% of observable services). The full
+classification flow, with counts at each step, is shown in Figure 3. We
+report the specialty distribution under three handlings of these
+billers, as a sensitivity analysis (Supplementary Table S11): the
+primary “Other/uncertain” grouping, exclusion, and the legacy assignment
+to urology; the latter inflates the apparent non-URPS urology share
+roughly two-fold and is not used. A further small number of
+provider-year records from ABOG-registered NPIs with a miscellaneous CMS
+type remained “Other” and were excluded.
 
 We then cross-referenced the American Board of Urology roster (355
 urology-pathway urogynecologist NPIs) to identify urology-pathway
@@ -1085,9 +1088,10 @@ style="width:6.5in" />
 **Figure 3.** Provider-classification flow for CPT 57288. Billers are
 assigned to specialty groups by CMS provider type cross-referenced with
 the ABOG and ABU rosters. Billers with neither an OB/GYN nor urology CMS
-type and no ABOG match (323 NPIs) are predominantly facilities
-(ambulatory surgical centers) and non-physician clinicians; facility
-NPIs (123) are excluded and the remainder (200) form an Other/uncertain
+type and no ABOG match (323 NPIs) are predominantly organizations and
+non-physician clinicians; organizational NPIs (NPPES entity type 2:
+ambulatory surgical centers, hospitals, laboratories; 123) are excluded
+and the remaining individual clinicians (200) form an Other/uncertain
 group, rather than being counted as urologists. Specialty-specific
 counts exceed the analytic cohort because some physicians changed groups
 across years.

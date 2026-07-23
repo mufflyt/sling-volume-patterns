@@ -118,6 +118,11 @@ test_that("other_handling separates facilities/Other from urology (reviewer #1)"
   expect_gt(uro_leg, uro_sep * 1.5)
   # The audit records facility exclusions, and the legacy run does not.
   expect_gt(sep$classification_audit$excluded_facility_npis, 0)
+  # Every excluded NPI is an NPPES entity type 2 organization (entity code "O"),
+  # so no organizational NPI survives into the analytic cohort.
+  org_npis <- unique(as.character(
+    pc$Rndrng_NPI[pc$HCPCS_Cd == "57288" & pc$Rndrng_Prvdr_Ent_Cd == "O"]))
+  expect_false(any(as.character(sp$Rndrng_NPI) %in% org_npis))
   # Reclassification removed real services from urology (facilities/non-physicians).
   uro_svc_sep <- sum(sp$annual_sling_count[sp$specialty_group == "Urology"])
   uro_svc_leg <- sum(lg$annual_sling_count[lg$specialty_group == "Urology"])

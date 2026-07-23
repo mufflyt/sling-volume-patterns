@@ -24,7 +24,7 @@ B <- list(
   obg   = box(1.8, 7.0, 3.2, 1.1, "OB/GYN CMS provider type\nsplit by ABOG registry"),
   uro   = box(5.0, 7.0, 3.0, 1.1, sprintf("Urology CMS provider type\n+ ABU roster fold (%d NPIs → URPS)", v$class_abu_pathway)),
   amb   = box(8.3, 7.0, 3.2, 1.1, sprintf("Neither type, not in ABOG\n%d NPIs (mostly facilities, PAs, NPs)", v$class_reclass_urology)),
-  fac   = box(7.1, 4.9, 3.0, 1.05, sprintf("Facilities (ASC, laboratory)\n%d NPIs — EXCLUDED", v$class_excluded_facility), "#fde2e2", "#b91c1c"),
+  fac   = box(7.1, 4.9, 3.0, 1.05, sprintf("Organizations (entity type 2:\nASC, hospital, lab): %d NPIs — EXCLUDED", v$class_excluded_facility), "#fde2e2", "#b91c1c"),
   oth   = box(9.6, 4.9, 3.0, 1.05, sprintf("Non-physician / other clinicians\n%d NPIs → Other/uncertain", v$other_phys), "#f1f5f9"),
   urps  = box(1.3, 2.4, 2.2, 1.0, sprintf("URPS\n%d", v$urps_phys), "#dbeafe"),
   migs  = box(3.6, 2.4, 1.8, 1.0, sprintf("MIGS*\n%d", v$mig_phys), "#f6e6f2"),
