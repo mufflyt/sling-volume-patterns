@@ -75,6 +75,15 @@ ci   <- function(s, lo, hi, p) sprintf("%+.2f percentage points/year; 95%% CI %.
 
 **Manuscript type:** Original research.
 
+**Running head:** URPS Share of Medicare Sling Surgery
+
+**Precis:** Urogynecologists performed most observable sling procedures in fee-for-service Medicare from 2013 through 2023, and their share rose without a corresponding increase in surgeon-level concentration.
+
+<!-- Word counts are document properties rather than analysis results, so unlike
+     every number below they are not computed from the cache. Re-measure them on
+     the final rendered docx immediately before submission if the text changes. -->
+**Word count:** Abstract 302 words; main text (Introduction through Conclusions) 4,078 words. Tables: 4. Figures: 3. References: 20.
+
 ---
 
 ## Abstract
@@ -117,7 +126,7 @@ We therefore examined specialty distribution, annual clinician volume, and surge
 
 We conducted a repeated cross-sectional analysis of the CMS Medicare Physician and Other Practitioners Public Use File (PUF) from 2013 through 2023. The PUF contains publicly reportable fee-for-service Medicare Part B claims aggregated to the provider-service level. Each row represents a unique combination of National Provider Identifier (NPI), Healthcare Common Procedure Coding System code, place of service, and calendar year. Because the data are public and contain no protected health information, institutional review board approval was not required.
 
-Before analysis, we verified all 11 annual PUF releases against the CMS file specifications and confirmed that each expected year was complete.
+Before analysis, we verified all 11 annual PUF releases against the CMS file specifications and confirmed that each expected year was complete. We report the study in accordance with the Strengthening the Reporting of Observational Studies in Epidemiology (STROBE) guideline for cross-sectional studies.
 
 ### Specialty Classification
 
