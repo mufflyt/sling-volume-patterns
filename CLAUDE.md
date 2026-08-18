@@ -31,15 +31,24 @@ fix travels with the repo and survives future clones.
 **If it happens again anyway** (e.g. a package was added back with the cache on):
 
 ```sh
-# 1. remove any dangling symlinks so restore treats them as missing
-find renv/library -maxdepth 3 -type l ! -exec test -e {} \; -delete
+# 1. remove any dangling symlinks so restore treats them as missing.
+#    The package links sit four levels down
+#    (renv/library/macos/R-4.4/aarch64-apple-darwin20/<pkg>), so -maxdepth
+#    must be at least 4. Too shallow and this silently matches nothing,
+#    restore then sees the dangling links as "installed" and skips them.
+find renv/library -maxdepth 4 -type l ! -exec test -e {} \; -delete
 # 2. reinstall from the lockfile (cache is off, so these land as real dirs)
 Rscript -e 'options(repos=c(PPM="https://packagemanager.posit.co/cran/latest")); renv::restore(prompt=FALSE)'
 # 3. materialize anything still linked
 Rscript -e 'renv::isolate()'
 # verify zero symlinks remain:
-find renv/library -maxdepth 3 -type l | wc -l   # want 0
+find renv/library -maxdepth 4 -type l | wc -l   # want 0
 ```
+
+Sanity-check step 1 before trusting it: print the count first
+(`find renv/library -maxdepth 4 -type l ! -exec test -e {} \; -print | wc -l`).
+A zero here when `Rscript` cannot load packages means the depth is wrong, not
+that the library is healthy.
 
 **System libraries** some packages need to build from source on macOS
 (install with Homebrew if a source build fails): `fribidi harfbuzz freetype`
