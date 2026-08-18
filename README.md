@@ -31,23 +31,41 @@ observable fee-for-service workforce, not the entire national sling market.
 
 ## Figures
 
-### Figure 1. Market Share of CPT 57288 by Specialty, 2013–2023
+These are web-sized copies in `docs/figures/`, committed so they render here.
+The print-resolution originals are written to `output/figures/` by pipeline
+steps 07 and the standalone scripts, and that directory is not tracked in git.
+Numbers are deliberately not repeated in the captions; the manuscript tables
+are the single source of truth.
 
-![Figure 1](output/figures/figure_1_market_share.png)
+### 1. Market share of CPT 57288 by specialty, 2013–2023
 
-URPS physicians, identified through either the ABOG (OB/GYN) or ABU (urology) certification pathway, performed the majority of observable services, and their combined share rose over the decade. OB/GYN-pathway URPS was the largest single group and increased the most; urology-pathway URPS changed comparatively little. Non-URPS urology and other non-URPS OB/GYN declined, and MIGS contributed under 1% throughout. Exact shares and trends are in the manuscript (Table 1); they are not duplicated here to avoid drift.
+![Market share by specialty](docs/figures/figure_market_share.jpg)
 
-### Figure 2. Annual Procedure Volume Distribution by Specialty
+URPS physicians, identified through either the ABOG (OB/GYN) or ABU (urology) certification pathway, performed the majority of observable services, and their combined share rose over the decade. OB/GYN-pathway URPS was the largest single group and increased the most; urology-pathway URPS changed comparatively little. Non-URPS urology and other non-URPS OB/GYN declined, and MIGS contributed under 1% throughout. Exact shares and trends are in the manuscript (Table 1).
 
-![Figure 2](output/figures/figure_2_volume_distribution.png)
+### 2. Annual procedure volume distribution by specialty
 
-Violin plots with embedded box plots and jittered individual observations show the annual volume distribution on a log scale, by specialty group. All groups show right-skewed distributions with outlier high-volume providers, and OB/GYN-pathway URPS carries the highest median. The minimum observable volume is 11 because CMS suppresses records for clinicians treating fewer than 11 beneficiaries. Group-specific medians and interquartile ranges are in the manuscript (Table 1).
+![Volume distribution by specialty](docs/figures/figure_2_volume_distribution.jpg)
 
-### Figure 3. Lorenz Curves of Procedural Concentration by Specialty
+Violin plots with embedded box plots and jittered individual observations show the annual volume distribution on a log scale, by specialty group. All groups are right-skewed with outlier high-volume providers, and OB/GYN-pathway URPS carries the highest median. The floor at 11 is an artifact of CMS suppressing records for clinicians treating fewer than 11 beneficiaries, not a real minimum.
 
-![Figure 3](output/figures/figure_3_lorenz_curve.png)
+### 3. Lorenz curves of procedural concentration by specialty
 
-The dashed diagonal represents perfect equality, where each surgeon performs an equal share of procedures; curves farther from the diagonal indicate greater within-year concentration. Concentration was low and broadly similar across the well-populated specialty groups. Because CMS suppresses low-volume physician-years, these curves describe observable services and do not identify full-market concentration. Gini coefficients and bootstrap intervals are in the manuscript.
+![Lorenz curves by specialty](docs/figures/figure_3_lorenz_curve.jpg)
+
+The dashed diagonal represents perfect equality, where each surgeon performs an equal share of procedures; curves farther from the diagonal indicate greater concentration. Concentration was low and broadly similar across the well-populated specialty groups. Because CMS suppresses low-volume physician-years, these curves describe observable services and do not identify full-market concentration.
+
+### 4. Annual concentration measures by specialty
+
+![Annual concentration trends](docs/figures/figure_4_concentration_trends.jpg)
+
+Gini, HHI, top-20% share and bottom-50% share computed *within each calendar year* and regressed on year. This is the panel that answers the question a single pooled Gini cannot: whether sling surgery concentrated into fewer hands over the decade. It did not. Within-year concentration was low and flat throughout, which is why the pooled multi-year Gini (higher, because it also absorbs how many years each surgeon stayed observable) is reported as secondary.
+
+### 5. Specialty classification flow
+
+![Classification flow](docs/figures/figure_classification_flow.jpg)
+
+How raw CPT 57288 billers become the five analyzed physician groups: organizational NPIs (NPPES entity type 2) and unclassifiable billers are removed, CMS provider type is cross-referenced against the ABOG and ABU rosters, and URPS is split by certification pathway. Worth reading before any other figure, because every downstream number depends on these choices, and the alternative handling of ambiguous billers is a sensitivity analysis rather than the primary cohort.
 
 ---
 
@@ -75,7 +93,7 @@ Rscript 00_run_all.R
 
 ### Reproducible environment
 
-This project uses [`renv`](https://rstudio.github.io/renv/) to lock R package versions. The `renv.lock` file pins 91 packages to the exact versions used for the analysis (R 4.4.0). When returning to this project:
+This project uses [`renv`](https://rstudio.github.io/renv/) to lock R package versions. The `renv.lock` file pins 128 packages to the exact versions used for the analysis (R 4.4.0). When returning to this project:
 
 1. `renv::restore()` — installs all packages at the locked versions
 2. `renv::status()` — checks if anything has drifted
@@ -83,7 +101,7 @@ This project uses [`renv`](https://rstudio.github.io/renv/) to lock R package ve
 
 ### Pipeline steps
 
-All parameters are in `config.yml`. The pipeline runs 7 steps:
+All parameters are in `config.yml`. The pipeline runs 10 steps:
 
 1. **01_build_puf_cache.R** — Read raw CMS PUF CSVs, filter to CPT 57288, merge across years
 2. **02_classify_specialties.R** — Classify providers by CMS provider type
@@ -100,9 +118,9 @@ All parameters are in `config.yml`. The pipeline runs 7 steps:
 
 | File | Description |
 |------|-------------|
-| `output/abstract.txt` | Programmatic abstract (378 words) |
-| `output/tables/table_1_specialty_summary.csv` | Specialty-level summary with Gini |
-| `output/tables/table_2_concentration.csv` | Concentration metrics (Gini + HHI, top 10/20/30%) |
+| `output/abstract.txt` | Programmatic abstract (420 words) |
+| `output/tables/table_1_specialty_summary.csv` | Specialty-level summary; Gini here is across physician-YEAR volumes |
+| `output/tables/table_2_concentration.csv` | Concentration metrics; Gini here is across physicians on AGGREGATE volume, so it runs higher than Table 1 |
 | `output/tables/table_3_time_trends.csv` | Annual trends by specialty |
 | `output/tables/table_4_stats.csv` | Statistical tests (Kruskal-Wallis, Wilcoxon, trend) |
 | `output/tables/table_5_annual_concentration.csv` | Per-year × specialty concentration (surgeons, procedures, median[p25–p75], Gini, HHI, top-10/20%, bottom-50%) |
@@ -139,7 +157,7 @@ All parameters are in `config.yml`. The pipeline runs 7 steps:
 
 2. **Why split OB/GYN?** The ABOG crosswalk revealed that 78% of OB/GYN sling providers are URPS subspecialists. Lumping them together masks a major difference between fellowship-trained urogynecologists and generalists.
 
-3. **Why exclude "Other"?** Only 80 records from General Surgery, undefined types, and osteopathic specialties. Too heterogeneous and small to interpret meaningfully.
+3. **Why exclude "Other"?** `config.yml: other_handling` is `"exclude"`, so the primary cohort is identified physicians only: organizational NPIs (NPPES entity type 2) and billers whose specialty cannot be determined are dropped rather than carried as a sixth group. This makes the five physician groups partition the cohort, so their shares sum to 100%. The inclusive handling (`"separate"`, which retains an Other/uncertain group) is preserved as a sensitivity analysis in Supplementary Table S11, alongside the legacy approach of assigning ambiguous billers to urology. Switching the config key regenerates every downstream number, and the test suite asserts the group set matches the configured mode.
 
 4. **Why 2013 start?** CMS PUF begins in 2013. The 2012 data was published in an earlier format that has been superseded. Extending from 2017–2023 to 2013–2023 made the gynecologic market share trend statistically significant (p=0.10 → p<0.001).
 
@@ -165,7 +183,7 @@ All parameters are in `config.yml`. The pipeline runs 7 steps:
 
 14. **Reproducible manuscript with inline data (`output/manuscript.Rmd`, `R/compute_manuscript_values.R`):** the manuscript is knitted, not hand-typed. `compute_manuscript_values()` reads the frozen `puf_classified` cache and returns one list holding every scalar and every table (~120 values); the Rmd references them with inline `` `r v$...` `` expressions and renders the five tables with `knitr::kable`. Pipeline step 08 renders it to docx. Because the numbers come from the analysis rather than being typed in, the prose can never drift from the data (running `analyze_*()` differently updates the manuscript automatically). To render ad hoc: `Rscript -e 'rmarkdown::render("output/manuscript.Rmd", knit_root_dir=getwd())'` (set the `PUF_CLASSIFIED` env var to point at a cache elsewhere).
 
-15. **2017 was truncated, then fixed (`config.yml: exclude_years`):** the original raw D17 PUF download was truncated (1.5 GB vs the ~2.7 GB expected, cut mid-record, ~376 sling provider-rows instead of the true 745), so 2017 was temporarily set in `exclude_years` and every figure/table skipped it. The complete 2017 file was re-downloaded (full 3.0 GB CSV, 745 CPT 57288 provider-rows / ~16,200 procedures), verified against the schema, and merged into `puf_classified.rds`; the truncated raw file was replaced on disk (backup kept as `*.truncated_backup`). `exclude_years` is now `[]` and all 11 years (2013–2023) are analyzed. The final cohort is 1,789 physicians, 147,632 procedures, 6,937 physician-years. Lesson: after any bulk CMS download, sanity-check each year's file size and CPT-of-interest row count before caching.
+15. **2017 was truncated, then fixed (`config.yml: exclude_years`):** the original raw D17 PUF download was truncated (1.5 GB vs the ~2.7 GB expected, cut mid-record, ~376 sling provider-rows instead of the true 745), so 2017 was temporarily set in `exclude_years` and every figure/table skipped it. The complete 2017 file was re-downloaded (full 3.0 GB CSV, 745 CPT 57288 provider-rows / ~16,200 procedures), verified against the schema, and merged into `puf_classified.rds`; the truncated raw file was replaced on disk (backup kept as `*.truncated_backup`). `exclude_years` is now `[]` and all 11 years (2013–2023) are analyzed. The final cohort is 1,467 physicians, 129,517 services, 6,056 physician-years. Lesson: after any bulk CMS download, sanity-check each year's file size and CPT-of-interest row count before caching.
 
 ---
 
@@ -188,18 +206,106 @@ sling-volume-patterns/
 │   ├── generate_sling_abstract.R   # Abstract section builders
 │   ├── reporting_stats_helpers.R   # Statistical test helpers
 │   └── artifact_manifest.R         # Reproducibility/caching system
+├── scripts/                        # Standalone analyses NOT in 00_run_all.R
+│   ├── make_market_share_figure.R      # -> figure_market_share.png
+│   ├── make_rate_figure.R              # -> figure_rate_per_100k.png
+│   ├── make_classification_flow.R      # -> figure_classification_flow.png
+│   ├── fit_volume_models.R             # GEE / NB mixed volume models
+│   ├── classification_sensitivity.R    # Four classification schemes
+│   └── workforce_and_geography.R       # Entry/exit, state-level shares
+├── templates/
+│   └── urogynecology_reference.docx # Double spacing + line numbers for LWW
+├── tests/testthat/                 # 215 tests, incl. golden-value assertions
+├── docs/figures/                   # Web-sized JPEGs for this README (tracked)
 ├── data/
 │   ├── raw/                        # Original CMS CSVs (not in git)
 │   ├── cache/                      # Pipeline artifacts (.rds)
-│   └── canonical_abog/             # ABOG NPI crosswalk
-└── output/
-    ├── abstract.txt                # Generated abstract
+│   ├── canonical_abog/             # ABOG NPI crosswalk
+│   ├── abu_urology/                # ABU urology-pathway URPS roster
+│   └── denominator/                # Female Part B FFS enrollment
+└── output/                         # NOT tracked in git, except manuscript.*
+    ├── abstract.txt / .docx        # Generated abstract
+    ├── manuscript.Rmd / .docx      # Reproducible manuscript
     ├── tables/                     # CSV + HTML tables
-    └── figures/                    # PNG figures
+    └── figures/                    # Print-resolution PNG + JPEG
 ```
+
+> **Three manuscript figures come from `scripts/`, not from the pipeline.**
+> `manuscript.Rmd` embeds `figure_market_share`, `figure_rate_per_100k` and
+> `figure_classification_flow`, which no numbered step produces. Running
+> `00_run_all.R` alone therefore renders a manuscript missing three figures,
+> and it does so silently, because `show_fig()` degrades to a "Figure not
+> found" note rather than failing. Run those three scripts before step 08.
 
 ---
 
 ## R Dependencies
 
-`readr`, `dplyr`, `purrr`, `glue`, `stringr`, `ggplot2`, `scales`, `kableExtra`, `rmarkdown`, `broom`, `assertthat`, `config`, `here`, `vroom`, `furrr`, `future`, `tibble`, `rlang`
+Core: [`dplyr`](https://dplyr.tidyverse.org/), [`readr`](https://readr.tidyverse.org/),
+[`purrr`](https://purrr.tidyverse.org/), [`tibble`](https://tibble.tidyverse.org/),
+[`stringr`](https://stringr.tidyverse.org/), [`glue`](https://glue.tidyverse.org/),
+[`rlang`](https://rlang.r-lib.org/), [`vroom`](https://vroom.r-lib.org/),
+[`furrr`](https://furrr.futureverse.org/) / [`future`](https://future.futureverse.org/),
+[`config`](https://rstudio.github.io/config/), [`here`](https://here.r-lib.org/),
+[`assertthat`](https://github.com/hadley/assertthat).
+
+Reporting: [`ggplot2`](https://ggplot2.tidyverse.org/),
+[`scales`](https://scales.r-lib.org/), [`kableExtra`](https://haozhu233.github.io/kableExtra/),
+[`knitr`](https://yihui.org/knitr/), [`rmarkdown`](https://rmarkdown.rstudio.com/),
+[`broom`](https://broom.tidymodels.org/).
+
+Models (optional; the pipeline skips gracefully if absent):
+[`glmmTMB`](https://cran.r-project.org/package=glmmTMB),
+[`geepack`](https://cran.r-project.org/package=geepack),
+[`TMB`](https://cran.r-project.org/package=TMB).
+
+The authoritative list is [`renv.lock`](renv.lock), which pins 128 packages
+against R 4.4.0. Do not install from this section; run `renv::restore()`.
+
+> **A cold restore needs a Fortran compiler.** `RcppArmadillo`, `lme4`,
+> `Matrix`, `TMB`, `mgcv`, `nlme` and `fracdiff` all build from source and link
+> against Fortran. Without gfortran the link fails and renv aborts the whole
+> staged install, leaving an empty library that resembles an unrelated
+> cache-wipe failure. Install the
+> [official R toolchain build](https://mac.r-project.org/tools/), which unpacks
+> to `/opt/gfortran`, the path R's `Makeconf` hardcodes. See `CLAUDE.md` for the
+> binary-only workarounds that do not work and why.
+
+---
+
+## References
+
+**Data sources**
+
+- [CMS Medicare Physician & Other Practitioners, by Provider and Service](https://data.cms.gov/provider-summary-by-type-of-service/medicare-physician-other-practitioners/medicare-physician-other-practitioners-by-provider-and-service) — the primary dataset, annual releases 2013-2023.
+- [CMS Program Statistics, Medicare enrollment](https://data.cms.gov/summary-statistics-on-beneficiary-enrollment/medicare-and-medicaid-reports/medicare-monthly-enrollment) — female Part B fee-for-service denominators.
+- [NPPES NPI Registry](https://nppes.cms.hhs.gov/) — entity type, used to exclude organizational NPIs.
+- [American Board of Obstetrics and Gynecology](https://www.abog.org/) — OB/GYN-pathway URPS and MIGS subspecialty certification.
+- [American Board of Urology](https://www.abu.org/) — urology-pathway URPS certification.
+
+**Standards and methods**
+
+- [STROBE Statement](https://www.strobe-statement.org/) — reporting guideline for observational studies. The completed checklist for this manuscript is [`docs/STROBE_checklist.md`](docs/STROBE_checklist.md); pipeline-adjacent, it renders to `output/STROBE_checklist.docx` for upload with the submission.
+- [Gini coefficient](https://en.wikipedia.org/wiki/Gini_coefficient) and [Herfindahl-Hirschman Index](https://www.justice.gov/atr/herfindahl-hirschman-index) — the two concentration measures. Both are computed surgeon-level here and are **not** comparable to antitrust thresholds.
+- [AUA/SUFU guideline on surgical treatment of female stress urinary incontinence](https://www.auanet.org/guidelines-and-quality/guidelines) — clinical context.
+- [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Citation File Format](https://citation-file-format.github.io/) — formats used by `CHANGELOG.md` and `CITATION.cff`.
+
+**Target venue**
+
+- [*Urogynecology*](https://journals.lww.com/fpmrs/) (Lippincott Williams & Wilkins), official journal of the [American Urogynecologic Society](https://www.augs.org/).
+
+---
+
+## Citing
+
+See [`CITATION.cff`](CITATION.cff). Please cite the manuscript once published;
+until then cite this repository.
+
+## License
+
+[MIT](LICENSE) for the code and documentation.
+
+The license does **not** extend to the underlying data. CMS files are public
+U.S. government data governed by [their own terms](https://data.cms.gov); the
+ABOG and ABU certification rosters are subject to source-specific permissions,
+are not redistributable, and are excluded from version control.

@@ -1,0 +1,51 @@
+cff-version: 1.2.0
+title: >-
+  Specialty Distribution and Surgeon-Level Concentration of Sling Surgery for
+  Stress Urinary Incontinence in Fee-for-Service Medicare, 2013-2023
+message: >-
+  If you use this analysis pipeline or its derived outputs, please cite the
+  manuscript once published. Until then, cite this repository.
+type: software
+authors:
+  - family-names: Muffly
+    given-names: Tyler
+    name-suffix: MD
+    email: tyler.muffly@dhha.org
+repository-code: https://github.com/mufflyt/sling-volume-patterns
+abstract: >-
+  A reproducible R pipeline characterizing which physicians perform sling
+  surgery for stress urinary incontinence (CPT 57288) in fee-for-service
+  Medicare, how annual case volume is distributed across surgeons, and how both
+  changed between 2013 and 2023. Physicians are classified from CMS provider
+  type cross-referenced against the American Board of Obstetrics and Gynecology
+  and American Board of Urology certification rosters, which splits
+  Urogynecology and Reconstructive Pelvic Surgery by training pathway rather
+  than collapsing it into a single group. Concentration is reported both within
+  calendar year (primary) and pooled across years (secondary). Every number in
+  the manuscript is computed from a frozen analysis cache at render time rather
+  than typed in, so the prose cannot drift from the analysis.
+keywords:
+  - stress urinary incontinence
+  - midurethral sling
+  - urogynecology
+  - Medicare
+  - surgical workforce
+  - procedural concentration
+  - health services research
+  - reproducible research
+license: MIT
+license-url: https://github.com/mufflyt/sling-volume-patterns/blob/main/LICENSE
+version: 0.9.0
+date-released: '2026-08-17'
+references:
+  - type: data
+    title: >-
+      Medicare Physician & Other Practitioners - by Provider and Service
+    authors:
+      - name: Centers for Medicare & Medicaid Services
+    url: >-
+      https://data.cms.gov/provider-summary-by-type-of-service/medicare-physician-other-practitioners/medicare-physician-other-practitioners-by-provider-and-service
+    notes: >-
+      Annual releases 2013 through 2023. Cells covering fewer than 11
+      beneficiaries are suppressed, so low-volume surgeons are systematically
+      absent from the data.
