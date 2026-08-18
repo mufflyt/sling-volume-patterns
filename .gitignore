@@ -1,5 +1,6 @@
 # Data (raw CSVs are large and should not be in git)
 data/raw/*.csv
+data/raw/*.truncated_backup
 data/cache/
 data/processed/
 
