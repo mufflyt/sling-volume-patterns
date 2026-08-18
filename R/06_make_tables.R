@@ -82,7 +82,13 @@ table_1 <- specialty_summary |>
     `% of all slings`            = sprintf("%.1f%%", pct_of_all_slings),
     `Median annual volume`       = round(median_annual_volume, 1),
     `Mean annual volume`         = round(mean_annual_volume, 1),
-    `Gini coefficient`           = round(gini_coefficient, 3)
+    # Computed across physician-YEAR rows, so a physician observable in eight
+    # years contributes eight observations. Table 2 instead computes Gini across
+    # physicians on their aggregate multi-year volume, which runs higher because
+    # it also absorbs how many years each physician stayed observable. Both
+    # columns were previously labelled "Gini coefficient", so the same specialty
+    # appeared with two different values and no way to tell why.
+    `Gini coefficient (physician-year volumes)` = round(gini_coefficient, 3)
   )
 
 artifact_csv(
@@ -112,7 +118,8 @@ table_2 <- concentration_metrics |>
     Specialty            = specialty_group,
     `N providers`        = format(n_providers, big.mark = ","),
     `Total slings`       = format(total_slings, big.mark = ","),
-    `Gini coefficient`   = round(gini_coefficient, 3),
+    # Across physicians, on aggregate multi-year volume. See the note in Table 1.
+    `Gini coefficient (aggregate provider volume)` = round(gini_coefficient, 3),
     `HHI (0-10,000)`     = if ("hhi" %in% names(concentration_metrics)) {
       round(hhi, 0)
     } else {
