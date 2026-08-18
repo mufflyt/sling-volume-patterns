@@ -92,19 +92,28 @@ jobs:
       # a gitignored directory, so they rendered as broken on GitHub.
       - name: Check local file references resolve
         run: |
-          set -euo pipefail
-          status=0
-          for f in README.md NEWS.md CHANGELOG.md docs/STROBE_checklist.md; do
+          set -uo pipefail
+          broken=0
+          for f in README.md NEWS.md CHANGELOG.md docs/STROBE_checklist.md data/README.md; do
             [ -f "$f" ] || continue
-            grep -oE '\]\(([^)#:]+)\)' "$f" | sed -E 's/^\]\(//; s/\)$//' | while read -r p; do
-              case "$p" in http*|mailto:*) continue ;; esac
+            # The regex excludes ':' so absolute URLs never match here; they are
+            # the next step's job. A file with only absolute URLs therefore
+            # yields no matches and grep exits 1, which is not an error. Without
+            # the `|| true` that exit status trips pipefail and fails the job.
+            links=$(grep -oE '\]\(([^)#:]+)\)' "$f" | sed -E 's/^\]\(//; s/\)$//' || true)
+            [ -n "$links" ] || continue
+            # Fed by here-string rather than a pipe so the loop runs in this
+            # shell and `broken` survives it.
+            while IFS= read -r p; do
+              [ -n "$p" ] || continue
               if [ ! -e "$p" ]; then
                 echo "BROKEN in $f -> $p"
-                exit 1
+                broken=1
               fi
-            done || status=1
+            done <<< "$links"
           done
-          exit $status
+          [ "$broken" -eq 0 ] && echo "all local file references resolve"
+          exit $broken
 
       - name: Check external URLs
         continue-on-error: true
