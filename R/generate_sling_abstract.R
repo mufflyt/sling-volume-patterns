@@ -334,7 +334,14 @@ build_abstract_results <- function(
     verbose = TRUE
 ) {
   # ── Pull key stats ────────────────────────────────────────────────────────
-  grand_total_providers <- sum(specialty_summary_tbl$n_providers)
+  # Count distinct NPIs directly rather than summing the per-group provider
+  # counts. Under the time-varying cert-gated classifier a physician can occupy
+  # two groups across the study period (General OB/GYN before certification,
+  # URPS after), so the per-group counts overlap and summing them double-counts
+  # those individuals. The prose calls this figure "unique providers", and the
+  # manuscript reports the same cohort as analytic_physicians, so it has to be
+  # the distinct count.
+  grand_total_providers <- dplyr::n_distinct(provider_volume_tbl$Rndrng_NPI)
   grand_total_slings    <- sum(specialty_summary_tbl$total_slings)
 
   # Data-driven: build per-group sentences for all focal specialties
@@ -895,7 +902,8 @@ generate_sling_abstract <- function(
   # ── 4. Capture filled values for audit ───────────────────────────────────
   # Build audit values dynamically for all focal groups
   filled_values <- list(
-    grand_total_providers = sum(specialty_summary_tbl$n_providers),
+    # Distinct NPIs, matching the prose above (see build_abstract_results).
+    grand_total_providers = dplyr::n_distinct(provider_volume_tbl$Rndrng_NPI),
     grand_total_slings    = sum(specialty_summary_tbl$total_slings),
     kruskal_h             = as.numeric(kruskal_result$statistic),
     kruskal_p             = kruskal_result$p.value,
