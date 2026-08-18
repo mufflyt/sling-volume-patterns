@@ -3,7 +3,13 @@ title: "Specialty Distribution and Surgeon-Level Concentration of Sling Surgery 
 author: "Tyler Muffly, MD"
 output:
   word_document:
-    reference_docx: null
+    # Urogynecology (LWW) submissions are double-spaced with continuous line
+    # numbering. Pandoc's default reference doc is single-spaced and unnumbered,
+    # so the template carries both. The path is relative to this Rmd's own
+    # folder (output/), not to knit_root_dir: pandoc resolves resource paths
+    # from where the Rmd lives, which is the same quirk show_fig() works around
+    # with absolute paths below.
+    reference_docx: ../templates/urogynecology_reference.docx
 ---
 
 ```{r setup, include=FALSE}
