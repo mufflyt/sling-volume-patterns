@@ -2,6 +2,14 @@
 data/raw/*.csv
 data/raw/*.truncated_backup
 data/cache/
+
+# Board-certification rosters: NOT redistributable.
+# These are bulk compilations of named physicians with certification and MOC
+# status sourced from ABOG and ABU. They were purged from git history on
+# 2026-08-17 before the repository was made public. Keep them local. See
+# data/README.md for how to obtain and rebuild them.
+data/canonical_abog/
+data/abu_urology/
 data/processed/
 
 # Pipeline outputs
