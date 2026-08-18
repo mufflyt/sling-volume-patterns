@@ -65,7 +65,7 @@ ci   <- function(s, lo, hi, p) sprintf("%+.2f percentage points/year; 95%% CI %.
 
 **Corresponding author:** Tyler Muffly, MD. *[mailing address, telephone, and email to be completed]*
 
-**Funding:** *[to be completed; state "None" if not applicable]*
+**Funding:** None.
 
 **Conflicts of interest:** *[to be completed; state "The author reports no conflicts of interest" if applicable]*
 
