@@ -85,7 +85,7 @@ were environment repair, one real analytic bug, and journal formatting.
 
 - **URPS split by certification pathway.** URPS is certifiable from either an
   OB/GYN or a urology residency, and the CMS PUF reports urology-pathway URPS
-  surgeons only as "Urology". Cross-referencing the ABU roster separates
+  surgeons only as "Urology". Cross-referencing the urology-pathway certification roster separates
   OB/GYN-pathway from urology-pathway URPS instead of collapsing them.
 - Fee-for-service enrollment denominator, which is what separates the raw 30.7%
   decline in reported services from the much smaller enrollment-adjusted
@@ -131,7 +131,7 @@ were environment repair, one real analytic bug, and journal formatting.
 - HHI alongside Gini, both surgeon-level.
 - Repeated-measures volume models (negative-binomial mixed, Poisson GEE
   clustered by NPI), since provider-year rows are not independent.
-- Time-varying cert-gated classification using the ABOG `sub1startdate` field,
+- Time-varying cert-gated classification using the subspecialty certification start-date field,
   assigning URPS only from each physician's certification year onward.
 - Workforce entry/exit dynamics, specialty-specific trends, and state-level
   geography.
@@ -144,7 +144,7 @@ Initial analysis pipeline.
 
 - Multi-year CMS PUF cache, specialty classification, concentration metrics,
   programmatic abstract, publication tables and figures.
-- ABOG registry linkage splitting OB/GYN into URPS, MIGS and general.
+- certification registry linkage splitting OB/GYN into URPS, MIGS and general.
 - Study period extended to 2013-2023.
 - renv lockfile and the first README.
 

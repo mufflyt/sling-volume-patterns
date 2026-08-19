@@ -488,7 +488,7 @@ compute_manuscript_values <- function(
   v$ever_urps_slope  <- esl$slope; v$ever_urps_p  <- esl$p
   bold_p <- function(p) sprintf("**%s**", p)
   tab$t4 <- data.frame(
-    Analysis = c("Fixed membership: OB/GYN-based share (ABOG-URPS + MIGS + Gen OB/GYN)",
+    Analysis = c("Fixed membership: OB/GYN-based share (OB/GYN-pathway URPS + MIGS + Gen OB/GYN)",
                  "Fixed membership: all-pathway URPS share",
                  "Modal: URPS share",
                  "Ever-URPS/MIGS: URPS share",

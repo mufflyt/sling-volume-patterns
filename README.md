@@ -19,7 +19,7 @@ a second copy that can go stale, the abstract is not duplicated here.
 
 In brief: among physicians billing CPT 57288 (sling surgery for stress urinary
 incontinence) in fee-for-service Medicare, 2013-2023, all-pathway URPS
-physicians (identified through both the ABOG and ABU certification pathways)
+physicians (identified through both certification pathways)
 performed most operations and their share rose over the decade. Raw service
 counts fell, but after adjusting for the shrinking female Part B fee-for-service
 population the utilization rate declined only modestly and its trend was not
@@ -41,7 +41,7 @@ are the single source of truth.
 
 ![Market share by specialty](docs/figures/figure_market_share.jpg)
 
-URPS physicians, identified through either the ABOG (OB/GYN) or ABU (urology) certification pathway, performed the majority of observable services, and their combined share rose over the decade. OB/GYN-pathway URPS was the largest single group and increased the most; urology-pathway URPS changed comparatively little. Non-URPS urology and other non-URPS OB/GYN declined, and MIGS contributed under 1% throughout. Exact shares and trends are in the manuscript (Table 1).
+URPS physicians, identified through either the OB/GYN or urology certification pathway, performed the majority of observable services, and their combined share rose over the decade. OB/GYN-pathway URPS was the largest single group and increased the most; urology-pathway URPS changed comparatively little. Non-URPS urology and other non-URPS OB/GYN declined, and MIGS contributed under 1% throughout. Exact shares and trends are in the manuscript (Table 1).
 
 ### 2. Annual procedure volume distribution by specialty
 
@@ -65,7 +65,7 @@ Gini, HHI, top-20% share and bottom-50% share computed *within each calendar yea
 
 ![Classification flow](docs/figures/figure_classification_flow.jpg)
 
-How raw CPT 57288 billers become the five analyzed physician groups: organizational NPIs (NPPES entity type 2) and unclassifiable billers are removed, CMS provider type is cross-referenced against the ABOG and ABU rosters, and URPS is split by certification pathway. Worth reading before any other figure, because every downstream number depends on these choices, and the alternative handling of ambiguous billers is a sensitivity analysis rather than the primary cohort.
+How raw CPT 57288 billers become the five analyzed physician groups: organizational NPIs (NPPES entity type 2) and unclassifiable billers are removed, CMS provider type is cross-referenced against the subspecialty certification rosters, and URPS is split by certification pathway. Worth reading before any other figure, because every downstream number depends on these choices, and the alternative handling of ambiguous billers is a sensitivity analysis rather than the primary cohort.
 
 ---
 
@@ -105,7 +105,7 @@ All parameters are in `config.yml`. The pipeline runs 10 steps:
 
 1. **01_build_puf_cache.R** — Read raw CMS PUF CSVs, filter to CPT 57288, merge across years
 2. **02_classify_specialties.R** — Classify providers by CMS provider type
-3. **03_run_primary_analysis.R** — Split OB/GYN into URPS/MIGS/General using ABOG registry, compute Gini and concentration metrics, exclude "Other" group
+3. **03_run_primary_analysis.R** — Split OB/GYN into URPS/MIGS/General using the subspecialty certification registry, compute Gini and concentration metrics, exclude "Other" group
 4. **03_run_primary_analysis_sens.R** — Sensitivity: alternative specialty groupings (gynecologic-merged, binary URPS/non-URPS)
 5. **04_run_sensitivity_analyses.R** — Cross-sectional vs multi-year Gini comparison
 6. **05_generate_abstract.R** — Programmatic abstract with all statistics computed from data
@@ -146,8 +146,8 @@ All parameters are in `config.yml`. The pipeline runs 10 steps:
 ## Data Sources
 
 - **CMS Medicare Physician & Other Practitioners PUF** (2013–2023): Provider-and-service level claims data. Raw CSVs (~2.7GB each) in `data/raw/`, downloaded from [data.cms.gov](https://data.cms.gov/provider-summary-by-type-of-service/medicare-physician-other-practitioners/medicare-physician-other-practitioners-by-provider-and-service). Not tracked in git.
-- **ABOG Subspecialty Registry**: `data/canonical_abog/canonical_abog_npi_LATEST.csv` — NPI-to-subspecialty crosswalk from the American Board of Obstetrics and Gynecology. Used to split OB/GYN providers into URPS, MIGS, and General OB/GYN.
-- **ABU urology-pathway URPS roster**: `data/abu_urology/abu_urps_npi_LATEST.csv` — NPIs of fellowship-trained URPS surgeons who entered via a urology residency (American Board of Urology), sourced from the `isochrones` ABU pipeline. The CMS PUF reports these surgeons only as "Urology"; cross-referencing this list folds them into the combined URPS group (config key `urps_urology_npi_csv`; set to empty/remove to keep them in Urology).
+- **Subspecialty certification registry**: `data/canonical_abog/canonical_abog_npi_LATEST.csv` — NPI-to-subspecialty crosswalk from the subspecialty certification registry. Used to split OB/GYN providers into URPS, MIGS, and General OB/GYN.
+- **Urology-pathway URPS certification roster**: `data/abu_urology/abu_urps_npi_LATEST.csv` — NPIs of fellowship-trained URPS surgeons who entered via a urology residency (the urology certifying board), sourced from the `isochrones` the urology-pathway certification roster pipeline. The CMS PUF reports these surgeons only as "Urology"; cross-referencing this list folds them into the combined URPS group (config key `urps_urology_npi_csv`; set to empty/remove to keep them in Urology).
 
 ---
 
@@ -155,7 +155,7 @@ All parameters are in `config.yml`. The pipeline runs 10 steps:
 
 1. **Why Gini instead of low-volume thresholds?** CMS suppresses provider-level data when <11 beneficiaries are served. With a low-volume threshold of 10, no providers can be classified as low-volume because they're already removed from the PUF. Gini coefficients and top-N% shares measure concentration within the observable distribution.
 
-2. **Why split OB/GYN?** The ABOG crosswalk revealed that 78% of OB/GYN sling providers are URPS subspecialists. Lumping them together masks a major difference between fellowship-trained urogynecologists and generalists.
+2. **Why split OB/GYN?** The the certification crosswalk revealed that 78% of OB/GYN sling providers are URPS subspecialists. Lumping them together masks a major difference between fellowship-trained urogynecologists and generalists.
 
 3. **Why exclude "Other"?** `config.yml: other_handling` is `"exclude"`, so the primary cohort is identified physicians only: organizational NPIs (NPPES entity type 2) and billers whose specialty cannot be determined are dropped rather than carried as a sixth group. This makes the five physician groups partition the cohort, so their shares sum to 100%. The inclusive handling (`"separate"`, which retains an Other/uncertain group) is preserved as a sensitivity analysis in Supplementary Table S11, alongside the legacy approach of assigning ambiguous billers to urology. Switching the config key regenerates every downstream number, and the test suite asserts the group set matches the configured mode.
 
@@ -163,7 +163,7 @@ All parameters are in `config.yml`. The pipeline runs 10 steps:
 
 5. **FPMRS → URPS rename:** The subspecialty was renamed from "Female Pelvic Medicine and Reconstructive Surgery" to "Urogynecology and Reconstructive Pelvic Surgery" by ABMS. The code uses "URPS" throughout.
 
-6. **Combined URPS (both training pathways):** URPS is certifiable from either an OB/GYN or a urology residency. The ABOG registry captures only the OB/GYN pathway; urology-pathway URPS surgeons appear as "Urology" in the CMS PUF. Step 2c of `analyze_midurethral_sling_patterns()` cross-references the ABU roster (`urps_urology_npi_csv`) and promotes those NPIs into a single combined URPS group, leaving Urology as non-URPS urology. Note: this makes "URPS + MIGS + General OB/GYN" no longer purely OB/GYN-trained, so revisit any "gynecologic share" wording.
+6. **Combined URPS (both training pathways):** URPS is certifiable from either an OB/GYN or a urology residency. The the subspecialty certification registry captures only the OB/GYN pathway; urology-pathway URPS surgeons appear as "Urology" in the CMS PUF. Step 2c of `analyze_midurethral_sling_patterns()` cross-references the urology-pathway certification roster (`urps_urology_npi_csv`) and promotes those NPIs into a single combined URPS group, leaving Urology as non-URPS urology. Note: this makes "URPS + MIGS + General OB/GYN" no longer purely OB/GYN-trained, so revisit any "gynecologic share" wording.
 
 7. **Annual concentration, not just one pooled Gini:** `build_annual_concentration_metrics()` computes every concentration measure per calendar year (overall and by specialty) — total procedures, observable surgeons, median[p25–p75], Gini, HHI, top-10/20% and bottom-50% shares — and `build_concentration_trend_regressions()` regresses each on year. This distinguishes *within-year* concentration (was ~0.27 and stable) from cumulative *multi-year* concentration (~0.52), answering whether care concentrated over time rather than reporting a single pooled value. Refresh from the cached `provider_volume`/`puf_classified` without re-reading raw CSVs via `scripts/refresh_annual_concentration.R`.
 
@@ -173,7 +173,7 @@ All parameters are in `config.yml`. The pipeline runs 10 steps:
 
 10. **Specialty-classification sensitivity (`R/classification_schemes.R`):** because the headline concerns *changes* in specialty market share, `assign_specialty_scheme()` supports three assignments — `time_varying` (one specialty per physician-year; the primary, already time-varying at the CMS level), `modal` (single most-frequent specialty per physician), and `ever_urps_migs` (URPS if ever URPS, else MIGS if ever MIGS, else modal). `scripts/classification_sensitivity.R` compares the specialty distribution and market-share trends across all three. **Result:** distribution differs by <1 percentage point and the URPS/gynecologic share trend stays significant in every scheme (URPS +0.90 to +0.98 pp/yr, all p ≤ 0.001), so the conclusion is robust to classification.
 
-    A fully time-varying subspecialty hierarchy (ABOG URPS active by year → ABOG MIGS active by year → CMS urology → CMS general OB/GYN) is implemented in `assign_time_varying_certgated()`: pass an `npi → subspecialty → cert_year` table and each physician is assigned URPS/MIGS only from their certification year onward. The certification years come from the ABOG **`sub1startdate`** field — the true FPMRS/MIG subspecialty certification date (range 2013–2024, none before 2011), distinct from the initial OB/GYN/urology board date (`startdate`). `scripts/build_abog_certyear_crosswalk.R` derives `data/canonical_abog/abog_subspecialty_certyear_LATEST.csv` (config `abog_subspecialty_certyear_csv`), and `scripts/classification_sensitivity.R` adds the cert-gated scheme as a fourth arm. **Result — the two schemes bracket the rate of increase (computed on a common denominator):** fixed membership (retroactively counting each physician as URPS in all years) gives the shallower slope, URPS 53.4% → 63.8% (+0.90 pp/yr); time-varying cert-gating gives the steeper slope, URPS 42.2% → 62.8% (+1.54 pp/yr, p < 0.001), because it removes not-yet-certified physicians from the early URPS count (board certification lags practice onset: the 2013 inaugural exam certified an already-practicing cohort; later diplomates practiced before boarding). The two estimates converge near 63% by 2023, so the bracket is on the slope (~+0.9 to ~+1.5 pp/yr), not the endpoint. Both schemes require the same cohort denominator; computing the cert-gated share on a smaller (Other-excluded) base spuriously inflates it. A point estimate would need fellowship-completion dates (unavailable). Caveats: ~8% of URPS unmatched to a cert year and urology-pathway URPS held fixed.
+    A fully time-varying subspecialty hierarchy (registry URPS active by year → registry MIGS active by year → CMS urology → CMS general OB/GYN) is implemented in `assign_time_varying_certgated()`: pass an `npi → subspecialty → cert_year` table and each physician is assigned URPS/MIGS only from their certification year onward. The certification years come from the subspecialty certification registry **the subspecialty certification start-date field** field — the true FPMRS/MIG subspecialty certification date (range 2013–2024, none before 2011), distinct from the initial OB/GYN/urology board date (`startdate`). `scripts/build_abog_certyear_crosswalk.R` derives `data/canonical_abog/abog_subspecialty_certyear_LATEST.csv` (config `abog_subspecialty_certyear_csv`), and `scripts/classification_sensitivity.R` adds the cert-gated scheme as a fourth arm. **Result — the two schemes bracket the rate of increase (computed on a common denominator):** fixed membership (retroactively counting each physician as URPS in all years) gives the shallower slope, URPS 53.4% → 63.8% (+0.90 pp/yr); time-varying cert-gating gives the steeper slope, URPS 42.2% → 62.8% (+1.54 pp/yr, p < 0.001), because it removes not-yet-certified physicians from the early URPS count (board certification lags practice onset: the 2013 inaugural exam certified an already-practicing cohort; later diplomates practiced before boarding). The two estimates converge near 63% by 2023, so the bracket is on the slope (~+0.9 to ~+1.5 pp/yr), not the endpoint. Both schemes require the same cohort denominator; computing the cert-gated share on a smaller (Other-excluded) base spuriously inflates it. A point estimate would need fellowship-completion dates (unavailable). Caveats: ~8% of URPS unmatched to a cert year and urology-pathway URPS held fixed.
 
 11. **Workforce entry/continuation/exit (`R/workforce_dynamics.R`):** `build_workforce_dynamics()` classifies each observable surgeon per year, using a two-year washout, as entrant (absent both prior observable years), continuing, or apparently exiting (absent both subsequent observable years), plus the entrant volume share, median entrant volume, and entrants by specialty. Because CMS suppresses <11-beneficiary providers, these are *newly observable* surgeons, not definitively new. Result: URPS contributed the most entrants (440) but urology showed heavy churn (373 entrants despite a net decline); entrants performed 7–23% of annual volume at low median (~13). `scripts/workforce_and_geography.R`.
 
@@ -196,7 +196,7 @@ sling-volume-patterns/
 ├── R/
 │   ├── 01_build_puf_cache.R        # Step 1: Read/merge PUF CSVs
 │   ├── 02_classify_specialties.R   # Step 2: CMS provider type classification
-│   ├── 03_run_primary_analysis.R   # Step 3: ABOG split + concentration analysis
+│   ├── 03_run_primary_analysis.R   # Step 3: the subspecialty certification registry split + concentration analysis
 │   ├── 03_run_primary_analysis_sens.R  # Step 3s: Sensitivity specialty schemes
 │   ├── 04_run_sensitivity_analyses.R   # Step 4: Cross-sectional vs multi-year
 │   ├── 05_generate_abstract.R      # Step 5: Programmatic abstract
@@ -220,8 +220,8 @@ sling-volume-patterns/
 ├── data/
 │   ├── raw/                        # Original CMS CSVs (not in git)
 │   ├── cache/                      # Pipeline artifacts (.rds)
-│   ├── canonical_abog/             # ABOG NPI crosswalk
-│   ├── abu_urology/                # ABU urology-pathway URPS roster
+│   ├── canonical_abog/             # certification NPI crosswalk
+│   ├── abu_urology/                # Urology-pathway URPS certification roster
 │   └── denominator/                # Female Part B FFS enrollment
 └── output/                         # NOT tracked in git, except manuscript.*
     ├── abstract.txt / .docx        # Generated abstract
@@ -280,8 +280,8 @@ against R 4.4.0. Do not install from this section; run `renv::restore()`.
 - [CMS Medicare Physician & Other Practitioners, by Provider and Service](https://data.cms.gov/provider-summary-by-type-of-service/medicare-physician-other-practitioners/medicare-physician-other-practitioners-by-provider-and-service) — the primary dataset, annual releases 2013-2023.
 - [CMS Program Statistics, Medicare enrollment](https://data.cms.gov/summary-statistics-on-beneficiary-enrollment/medicare-and-medicaid-reports/medicare-monthly-enrollment) — female Part B fee-for-service denominators.
 - [NPPES NPI Registry](https://nppes.cms.hhs.gov/) — entity type, used to exclude organizational NPIs.
-- [American Board of Obstetrics and Gynecology](https://www.abog.org/) — OB/GYN-pathway URPS and MIGS subspecialty certification.
-- [American Board of Urology](https://www.abu.org/) — urology-pathway URPS certification.
+- the obstetrics and gynecology certifying board — OB/GYN-pathway URPS and MIGS subspecialty certification.
+- the urology certifying board — urology-pathway URPS certification.
 
 **Standards and methods**
 
@@ -307,5 +307,5 @@ until then cite this repository.
 
 The license does **not** extend to the underlying data. CMS files are public
 U.S. government data governed by [their own terms](https://data.cms.gov); the
-ABOG and ABU certification rosters are subject to source-specific permissions,
+subspecialty certification rosters are subject to source-specific permissions,
 are not redistributable, and are excluded from version control.

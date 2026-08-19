@@ -34,13 +34,11 @@ repository was made public.
 
 | Path | Contents |
 |---|---|
-| `canonical_abog/canonical_abog_npi_LATEST.csv` | ABOG diplomates: NPI, name, subspecialty, city, state, certification status, MOC status. Roughly 59,000 rows. |
-| `canonical_abog/abog_subspecialty_certyear_LATEST.csv` | NPI to subspecialty certification year, derived from the ABOG `sub1startdate` field. Built by `scripts/build_abog_certyear_crosswalk.R`. |
+| `canonical_abog/canonical_abog_npi_LATEST.csv` | board diplomates: NPI, name, subspecialty, city, state, certification status, MOC status. Roughly 59,000 rows. |
+| `canonical_abog/abog_subspecialty_certyear_LATEST.csv` | NPI to subspecialty certification year, derived from the subspecialty certification start-date field. Built by `scripts/build_abog_certyear_crosswalk.R`. |
 | `abu_urology/abu_urps_npi_LATEST.csv` | Urology-pathway URPS surgeons: NPI, name, city, state. |
 
-To reconstruct them, obtain certification data directly from the
-[American Board of Obstetrics and Gynecology](https://www.abog.org/) and the
-[American Board of Urology](https://www.abu.org/) under their own terms, then
+To reconstruct them, obtain equivalent certification data directly from the relevant certifying boards under their own terms, then
 produce files with these column names:
 
 ```
@@ -59,7 +57,7 @@ Paths are configured in `config.yml` under `abog_npi_csv`,
 `abog_subspecialty_certyear_csv` and `urps_urology_npi_csv`. Setting
 `urps_urology_npi_csv` to empty keeps urology-pathway URPS surgeons in the
 non-URPS urology group rather than promoting them, which is the behavior you
-get without the ABU roster.
+get without the urology-pathway certification roster.
 
 ### Analysis cache, `cache/`
 

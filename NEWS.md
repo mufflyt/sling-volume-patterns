@@ -70,10 +70,7 @@ as sensitivity analyses.
 ## 0.7.0 — Two certification pathways, and a denominator (22 July 2026) {#classification}
 
 **URPS is not one group.** The subspecialty is certifiable from either an
-OB/GYN residency, through the
-[American Board of Obstetrics and Gynecology](https://www.abog.org/), or a
-urology residency, through the
-[American Board of Urology](https://www.abu.org/). The CMS file reports
+OB/GYN residency or a urology residency, each with its own certifying board. The CMS file reports
 urology-pathway URPS surgeons only as "Urology", so any analysis that trusts
 CMS provider type alone will undercount urogynecologists and inflate urology.
 Cross-referencing both rosters splits them properly.
@@ -128,6 +125,6 @@ rows are not independent.
 ## 0.1.0 — Initial pipeline (3 April 2026)
 
 Multi-year CMS Public Use File cache, specialty classification, concentration
-metrics, programmatic abstract, tables and figures. ABOG registry linkage split
+metrics, programmatic abstract, tables and figures. certification registry linkage split
 OB/GYN into URPS, MIGS and general. FPMRS was renamed URPS throughout, following
 the [ABMS](https://www.abms.org/) subspecialty rename.
