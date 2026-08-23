@@ -28,11 +28,9 @@ pv <- analyze_midurethral_sling_patterns(
   urps_urology_npi_csv = "data/abu_urology/abu_urps_npi_LATEST.csv",
   other_handling = "separate", split_urps_pathway = TRUE, verbose = FALSE)$provider_volume
 
-lvl <- c("URPS, OB/GYN pathway", "URPS, urology pathway", "Urology",
-         "Other non-URPS OB/GYN", "Other/uncertain", "MIGS")
-relab <- function(x) dplyr::recode(x,
-  "URPS (OB/GYN)" = "URPS, OB/GYN pathway", "URPS (urology)" = "URPS, urology pathway",
-  "General OB/GYN" = "Other non-URPS OB/GYN")
+source("R/specialty_groups.R")
+lvl <- sg_display(sg_codes("all"))
+relab <- function(x) sg_display(x)
 
 area <- pv %>%
   mutate(grp = factor(relab(specialty_group), levels = lvl)) %>%
@@ -47,9 +45,12 @@ traj <- p %>% group_by(year) %>% summarise(
   .groups = "drop") %>%
   tidyr::pivot_longer(-year, names_to = "scheme", values_to = "share") %>% as.data.frame()
 
-pal <- c("URPS, OB/GYN pathway" = "#1f6feb", "URPS, urology pathway" = "#7ba9f5",
-         "Urology" = "#d1741f", "Other non-URPS OB/GYN" = "#2a9d5c",
-         "Other/uncertain" = "#8a8f98", "MIGS" = "#c65fb0")
+# Keyed by display label from the taxonomy; this figure keeps its own hues
+# rather than the Okabe-Ito set used by the supplementary panels.
+pal <- stats::setNames(
+  c("#1f6feb", "#7ba9f5", "#d1741f", "#2a9d5c", "#8a8f98", "#c65fb0"),
+  sg_display(c("URPS (OB/GYN)", "URPS (urology)", "Urology",
+               "General OB/GYN", "Other/uncertain", "MIGS")))
 
 pl <- ggplot() +
   geom_area(data = area, aes(year, share, fill = grp), alpha = 0.9) +
@@ -63,14 +64,21 @@ pl <- ggplot() +
   scale_x_continuous(breaks = seq(2013, 2023, 2)) +
   scale_y_continuous(breaks = seq(0, 100, 25)) +
   coord_cartesian(ylim = c(0, 100), expand = FALSE) +
+  guides(fill = guide_legend(nrow = 2, order = 2, byrow = TRUE),
+         linetype = guide_legend(nrow = 2, order = 1, byrow = TRUE)) +
   labs(title = "URPS performs the largest share of Medicare sling services",
-       subtitle = "CPT 57288, fee-for-service Medicare, 2013-2023. URPS split by certification pathway; black lines = combined URPS share under two scenarios.",
+       subtitle = paste0("CPT 57288, fee-for-service Medicare, 2013-2023. URPS split by certification pathway;\n",
+                         "black lines = combined URPS share under two scenarios."),
        x = NULL, y = "Share of reported services (%)") +
   theme_minimal(base_size = 15) +
   theme(plot.title = element_text(face = "bold", size = 17),
         plot.subtitle = element_text(size = 10.5, color = "grey40"),
         legend.position = "bottom",
-        panel.grid.minor = element_blank())
+        legend.box = "vertical",
+        legend.text = element_text(size = 11),
+        legend.key.width = unit(0.9, "cm"),
+        panel.grid.minor = element_blank(),
+        plot.margin = margin(t = 10, r = 16, b = 10, l = 10))
 
 dir.create("output/figures", showWarnings = FALSE, recursive = TRUE)
 out <- "output/figures/figure_market_share.png"

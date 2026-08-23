@@ -58,17 +58,11 @@ theme_publication <- function() {
     )
 }
 
-# Color palette: colorblind-safe, distinct for specialty groups
-specialty_colors <- c(
-  "URPS"          = "#E69F00",
-  "URPS (OB/GYN)"  = "#E69F00",
-  "URPS (urology)" = "#D55E00",
-  "MIGS"           = "#CC79A7",
-  "General OB/GYN" = "#56B4E9",
-  "OB/GYN"         = "#56B4E9",
-  "Urology"        = "#009E73",
-  "Other"          = "#999999"
-)
+# Palette and display labels both come from the taxonomy in
+# R/specialty_groups.R so figure legends match the manuscript wording.
+source("R/specialty_groups.R")
+
+specialty_colors <- sg_palette(include_all = FALSE)
 
 # =============================================================================
 # FIGURE 1: URPS Market Share Time Trend
@@ -176,7 +170,7 @@ if (nrow(provider_volume) > 0) {
 
   plot_data <- dplyr::mutate(
     provider_volume,
-    specialty_group = factor(specialty_group, levels = specialty_order)
+    specialty_group = sg_factor(specialty_group, include_all = FALSE)
   )
 
   fig2 <- ggplot2::ggplot(
@@ -266,7 +260,8 @@ if (nrow(provider_volume) > 0) {
       total_vol     = NA_real_,
       Rndrng_NPI    = NA_character_
     )
-  lorenz_data <- dplyr::bind_rows(origin_rows, lorenz_data)
+  lorenz_data <- dplyr::bind_rows(origin_rows, lorenz_data) |>
+    dplyr::mutate(specialty_group = sg_factor(specialty_group, include_all = FALSE))
 
   fig3 <- ggplot2::ggplot(
     lorenz_data,

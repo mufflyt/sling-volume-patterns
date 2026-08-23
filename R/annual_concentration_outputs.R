@@ -13,19 +13,13 @@
 # Authors: Tyler Muffly, MD
 # =============================================================================
 
-# Colorblind-safe palette, shared with 07_make_figures.R. "All" (pooled) is a
-# neutral dark line so it reads as the reference rather than a specialty.
-.annual_specialty_colors <- c(
-  "All"            = "#222222",
-  "URPS"           = "#E69F00",
-  "URPS (OB/GYN)"  = "#E69F00",
-  "URPS (urology)" = "#D55E00",
-  "MIGS"           = "#CC79A7",
-  "General OB/GYN" = "#56B4E9",
-  "OB/GYN"         = "#56B4E9",
-  "Urology"        = "#009E73",
-  "Other"          = "#999999"
-)
+# Palette and display labels both come from the taxonomy in
+# R/specialty_groups.R, so figure legends read exactly like the manuscript and
+# a label change is still a one-line edit there rather than a hunt through the
+# figure scripts.
+source("R/specialty_groups.R")
+
+.annual_specialty_colors <- sg_palette(include_all = TRUE)
 
 # Human-readable labels for the measures produced by
 # build_annual_concentration_metrics(); also fixes facet/row ordering.
@@ -122,10 +116,7 @@ make_concentration_trend_figure <- function(annual_concentration, year_col,
     dplyr::mutate(
       panel = factor(.annual_measure_labels[measure],
                      levels = .annual_measure_labels[measures]),
-      specialty_group = factor(
-        specialty_group,
-        levels = c("All", "URPS (OB/GYN)", "URPS (urology)", "Urology", "General OB/GYN", "MIGS")
-      )
+      specialty_group = sg_factor(specialty_group, include_all = TRUE)
     )
 
   excl_note <- if (length(exclude_groups)) {
@@ -168,10 +159,7 @@ make_supply_trend_figure <- function(annual_concentration, year_col,
     dplyr::mutate(
       panel = factor(.annual_measure_labels[measure],
                      levels = .annual_measure_labels[measures]),
-      specialty_group = factor(
-        specialty_group,
-        levels = c("URPS (OB/GYN)", "URPS (urology)", "Urology", "General OB/GYN", "MIGS")
-      )
+      specialty_group = sg_factor(specialty_group, include_all = FALSE)
     )
 
   ggplot2::ggplot(

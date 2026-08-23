@@ -58,3 +58,31 @@ sg_display <- function(codes) {
 #' TRUE for any URPS pathway (or the combined "URPS" label).
 #' @noRd
 sg_is_urps <- function(x) grepl("^URPS", x)
+
+#' Colourblind-safe (Okabe-Ito) palette, keyed by DISPLAY label so it can be
+#' handed straight to scale_colour_manual()/scale_fill_manual() on a vector
+#' produced by sg_factor(). "All" is a neutral dark line: it is a pooled
+#' reference, not a specialty.
+#' @noRd
+sg_palette <- function(include_all = TRUE) {
+  tx <- specialty_group_taxonomy()
+  cols <- c("URPS (OB/GYN)"   = "#E69F00",
+            "URPS (urology)"  = "#D55E00",
+            "Urology"         = "#009E73",
+            "General OB/GYN"  = "#56B4E9",
+            "Other/uncertain" = "#999999",
+            "MIGS"            = "#CC79A7")
+  out <- stats::setNames(unname(cols[tx$code]), tx$display)
+  if (include_all) out <- c("All" = "#222222", out)
+  out
+}
+
+#' Map group codes to an ordered factor of display labels, so every figure
+#' legend reads the way the manuscript does. Unknown values (e.g. the pooled
+#' "All" row) pass through unchanged and sort last unless include_all = TRUE.
+#' @noRd
+sg_factor <- function(x, include_all = TRUE) {
+  lv <- sg_display(sg_codes("all"))
+  if (include_all) lv <- c("All", lv)
+  factor(sg_display(x), levels = lv)
+}
