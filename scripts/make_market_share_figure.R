@@ -45,12 +45,8 @@ traj <- p %>% group_by(year) %>% summarise(
   .groups = "drop") %>%
   tidyr::pivot_longer(-year, names_to = "scheme", values_to = "share") %>% as.data.frame()
 
-# Keyed by display label from the taxonomy; this figure keeps its own hues
-# rather than the Okabe-Ito set used by the supplementary panels.
-pal <- stats::setNames(
-  c("#1f6feb", "#7ba9f5", "#d1741f", "#2a9d5c", "#8a8f98", "#c65fb0"),
-  sg_display(c("URPS (OB/GYN)", "URPS (urology)", "Urology",
-               "General OB/GYN", "Other/uncertain", "MIGS")))
+# Same Okabe-Ito palette as every other figure, from the taxonomy.
+pal <- sg_palette(include_all = FALSE)
 
 pl <- ggplot() +
   geom_area(data = area, aes(year, share, fill = grp), alpha = 0.9) +

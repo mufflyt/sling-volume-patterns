@@ -86,3 +86,15 @@ sg_factor <- function(x, include_all = TRUE) {
   if (include_all) lv <- c("All", lv)
   factor(sg_display(x), levels = lv)
 }
+
+#' Pale tints of sg_palette(), for filled shapes that carry text (e.g. the
+#' classification flow diagram) where the saturated hue would be unreadable.
+#' `strength` is how much of the full colour survives; lower is paler.
+#' @noRd
+sg_palette_light <- function(strength = 0.20, include_all = FALSE) {
+  p <- sg_palette(include_all = include_all)
+  m <- grDevices::col2rgb(p)
+  m <- 255 - (255 - m) * strength
+  stats::setNames(
+    grDevices::rgb(m[1, ], m[2, ], m[3, ], maxColorValue = 255), names(p))
+}

@@ -12,6 +12,8 @@
 
 suppressWarnings(suppressMessages({library(dplyr); library(ggplot2)}))
 source("R/compute_manuscript_values.R")
+source("R/specialty_groups.R")
+LT <- sg_palette_light()
 cache_dir <- tryCatch(config::get("cache_dir"), error = function(e) "data/cache")
 v <- compute_manuscript_values(file.path(cache_dir, "puf_classified.rds"))$v
 
@@ -20,18 +22,18 @@ box <- function(x, y, w, h, label, fill = "#eef2f7", col = "#334155", lwd = 0.6)
   list(x = x, y = y, w = w, h = h, label = label, fill = fill, col = col, lwd = lwd)
 
 B <- list(
-  top   = box(5.0, 9.2, 6.6, 1.0, sprintf("Billers of CPT 57288, 2013–2023\n1,799 unique NPIs"), "#dbeafe"),
+  top   = box(5.0, 9.2, 6.6, 1.0, sprintf("Billers of CPT 57288, 2013–2023\n1,799 unique NPIs"), "#e8edf3"),
   obg   = box(1.8, 7.0, 3.2, 1.1, "OB/GYN CMS provider type\nsplit by ABOG registry"),
   uro   = box(5.0, 7.0, 3.0, 1.3, sprintf("Urology CMS provider type\n+ ABU roster fold\n(%d NPIs → URPS)", v$class_abu_pathway)),
   amb   = box(8.3, 7.0, 3.2, 1.1, sprintf("Neither type, not in ABOG\n%d NPIs (mostly facilities, PAs, NPs)", v$class_reclass_urology)),
   fac   = box(6.6, 4.9, 3.3, 1.30, sprintf("Organizations (entity type 2:\nASC, hospital, lab)\n%d NPIs — EXCLUDED", v$class_excluded_facility), "#fde2e2", "#b91c1c"),
   oth   = box(10.4, 4.9, 3.3, 1.30, sprintf("Non-physician / other\nclinicians\n%d NPIs → Other/uncertain", v$other_phys), "#f1f5f9"),
-  urps  = box(1.2, 2.4, 2.1, 1.0, sprintf("URPS, OB/GYN\npathway: %d", v$urps_phys), "#dbeafe"),
-  urpu  = box(3.4, 2.4, 2.0, 1.0, sprintf("URPS, urology\npathway: %d", v$urpsuro_phys), "#cfe0fb"),
-  migs  = box(5.25, 2.4, 1.3, 1.0, sprintf("MIGS*\n%d", v$mig_phys), "#f6e6f2"),
-  goth  = box(7.2, 2.4, 2.2, 1.0, sprintf("Other non-URPS\nOB/GYN: %d", v$gob_phys), "#e3f0e8"),
-  urol  = box(9.35, 2.4, 1.8, 1.0, sprintf("Non-URPS\nurology: %d", v$uro_phys), "#fbe9d8"),
-  ouc   = box(11.3, 2.4, 1.8, 1.0, sprintf("Other/\nuncertain: %d", v$other_phys), "#eef1f4"),
+  urps  = box(1.2, 2.4, 2.1, 1.0, sprintf("URPS, OB/GYN\npathway: %d", v$urps_phys), LT[[sg_display("URPS (OB/GYN)")]]),
+  urpu  = box(3.4, 2.4, 2.0, 1.0, sprintf("URPS, urology\npathway: %d", v$urpsuro_phys), LT[[sg_display("URPS (urology)")]]),
+  migs  = box(5.25, 2.4, 1.3, 1.0, sprintf("MIGS*\n%d", v$mig_phys), LT[[sg_display("MIGS")]]),
+  goth  = box(7.2, 2.4, 2.2, 1.0, sprintf("Other non-URPS\nOB/GYN: %d", v$gob_phys), LT[[sg_display("General OB/GYN")]]),
+  urol  = box(9.35, 2.4, 1.8, 1.0, sprintf("Non-URPS\nurology: %d", v$uro_phys), LT[[sg_display("Urology")]]),
+  ouc   = box(11.3, 2.4, 1.8, 1.0, sprintf("Other/\nuncertain: %d", v$other_phys), LT[[sg_display("Other/uncertain")]]),
   final = box(6.2, 0.5, 8.5, 0.9, sprintf("Analytic cohort: %s clinicians (facilities excluded)", n(v$analytic_physicians)), "#dcfce7", "#166534"))
 
 rects <- do.call(rbind, lapply(B, function(b) data.frame(
