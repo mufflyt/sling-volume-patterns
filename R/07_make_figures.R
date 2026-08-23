@@ -61,6 +61,8 @@ theme_publication <- function() {
 # Color palette: colorblind-safe, distinct for specialty groups
 specialty_colors <- c(
   "URPS"          = "#E69F00",
+  "URPS (OB/GYN)"  = "#E69F00",
+  "URPS (urology)" = "#D55E00",
   "MIGS"           = "#CC79A7",
   "General OB/GYN" = "#56B4E9",
   "OB/GYN"         = "#56B4E9",

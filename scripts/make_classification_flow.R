@@ -22,16 +22,16 @@ box <- function(x, y, w, h, label, fill = "#eef2f7", col = "#334155", lwd = 0.6)
 B <- list(
   top   = box(5.0, 9.2, 6.6, 1.0, sprintf("Billers of CPT 57288, 2013–2023\n1,799 unique NPIs"), "#dbeafe"),
   obg   = box(1.8, 7.0, 3.2, 1.1, "OB/GYN CMS provider type\nsplit by ABOG registry"),
-  uro   = box(5.0, 7.0, 3.0, 1.1, sprintf("Urology CMS provider type\n+ ABU roster fold (%d NPIs → URPS)", v$class_abu_pathway)),
+  uro   = box(5.0, 7.0, 3.0, 1.3, sprintf("Urology CMS provider type\n+ ABU roster fold\n(%d NPIs → URPS)", v$class_abu_pathway)),
   amb   = box(8.3, 7.0, 3.2, 1.1, sprintf("Neither type, not in ABOG\n%d NPIs (mostly facilities, PAs, NPs)", v$class_reclass_urology)),
-  fac   = box(7.1, 4.9, 3.0, 1.05, sprintf("Organizations (entity type 2:\nASC, hospital, lab): %d NPIs — EXCLUDED", v$class_excluded_facility), "#fde2e2", "#b91c1c"),
-  oth   = box(9.6, 4.9, 3.0, 1.05, sprintf("Non-physician / other clinicians\n%d NPIs → Other/uncertain", v$other_phys), "#f1f5f9"),
+  fac   = box(6.6, 4.9, 3.3, 1.30, sprintf("Organizations (entity type 2:\nASC, hospital, lab)\n%d NPIs — EXCLUDED", v$class_excluded_facility), "#fde2e2", "#b91c1c"),
+  oth   = box(10.4, 4.9, 3.3, 1.30, sprintf("Non-physician / other\nclinicians\n%d NPIs → Other/uncertain", v$other_phys), "#f1f5f9"),
   urps  = box(1.2, 2.4, 2.1, 1.0, sprintf("URPS, OB/GYN\npathway: %d", v$urps_phys), "#dbeafe"),
   urpu  = box(3.4, 2.4, 2.0, 1.0, sprintf("URPS, urology\npathway: %d", v$urpsuro_phys), "#cfe0fb"),
-  migs  = box(5.4, 2.4, 1.5, 1.0, sprintf("MIGS*\n%d", v$mig_phys), "#f6e6f2"),
-  goth  = box(7.1, 2.4, 2.1, 1.0, sprintf("Other non-URPS\nOB/GYN: %d", v$gob_phys), "#e3f0e8"),
-  urol  = box(9.2, 2.4, 1.8, 1.0, sprintf("Non-URPS\nurology: %d", v$uro_phys), "#fbe9d8"),
-  ouc   = box(11.1, 2.4, 1.8, 1.0, sprintf("Other/\nuncertain: %d", v$other_phys), "#eef1f4"),
+  migs  = box(5.25, 2.4, 1.3, 1.0, sprintf("MIGS*\n%d", v$mig_phys), "#f6e6f2"),
+  goth  = box(7.2, 2.4, 2.2, 1.0, sprintf("Other non-URPS\nOB/GYN: %d", v$gob_phys), "#e3f0e8"),
+  urol  = box(9.35, 2.4, 1.8, 1.0, sprintf("Non-URPS\nurology: %d", v$uro_phys), "#fbe9d8"),
+  ouc   = box(11.3, 2.4, 1.8, 1.0, sprintf("Other/\nuncertain: %d", v$other_phys), "#eef1f4"),
   final = box(6.2, 0.5, 8.5, 0.9, sprintf("Analytic cohort: %s clinicians (facilities excluded)", n(v$analytic_physicians)), "#dcfce7", "#166534"))
 
 rects <- do.call(rbind, lapply(B, function(b) data.frame(
@@ -57,13 +57,15 @@ p <- ggplot() +
   geom_rect(data = rects, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
             fill = rects$fill, color = rects$col, linewidth = rects$lwd) +
   geom_text(data = labs, aes(x, y, label = label), size = 3.5, lineheight = 0.95, color = "#0f172a") +
-  annotate("text", x = 6.2, y = 0.02, size = 2.7, color = "#475569",
-           label = "*MIGS estimates are exploratory (10 physicians). Specialty-specific counts exceed the cohort total because some physicians changed groups across years.") +
-  coord_cartesian(xlim = c(-0.2, 13.2), ylim = c(-0.3, 9.9), expand = FALSE) +
+  annotate("text", x = 6.5, y = -0.35, size = 2.9, color = "#475569", lineheight = 1.05,
+           label = paste0("*MIGS estimates are exploratory (10 physicians).\n",
+                          "Specialty-specific counts exceed the cohort total because some physicians changed groups across years.")) +
+  coord_cartesian(xlim = c(-0.2, 13.6), ylim = c(-0.9, 10.1), expand = FALSE) +
   labs(title = "Provider classification for CPT 57288 (sling for stress urinary incontinence)") +
   theme_void(base_size = 13) +
   theme(plot.title = element_text(face = "bold", size = 15, hjust = 0.5,
-                                  margin = margin(b = 6)))
+                                  margin = margin(b = 10)),
+        plot.margin = margin(t = 12, r = 12, b = 12, l = 12))
 
 dir.create("output/figures", showWarnings = FALSE, recursive = TRUE)
 out <- "output/figures/figure_classification_flow.png"

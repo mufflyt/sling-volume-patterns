@@ -18,6 +18,8 @@
 .annual_specialty_colors <- c(
   "All"            = "#222222",
   "URPS"           = "#E69F00",
+  "URPS (OB/GYN)"  = "#E69F00",
+  "URPS (urology)" = "#D55E00",
   "MIGS"           = "#CC79A7",
   "General OB/GYN" = "#56B4E9",
   "OB/GYN"         = "#56B4E9",
@@ -122,7 +124,7 @@ make_concentration_trend_figure <- function(annual_concentration, year_col,
                      levels = .annual_measure_labels[measures]),
       specialty_group = factor(
         specialty_group,
-        levels = c("All", "URPS", "Urology", "General OB/GYN", "MIGS")
+        levels = c("All", "URPS (OB/GYN)", "URPS (urology)", "Urology", "General OB/GYN", "MIGS")
       )
     )
 
@@ -168,7 +170,7 @@ make_supply_trend_figure <- function(annual_concentration, year_col,
                      levels = .annual_measure_labels[measures]),
       specialty_group = factor(
         specialty_group,
-        levels = c("URPS", "Urology", "General OB/GYN", "MIGS")
+        levels = c("URPS (OB/GYN)", "URPS (urology)", "Urology", "General OB/GYN", "MIGS")
       )
     )
 
